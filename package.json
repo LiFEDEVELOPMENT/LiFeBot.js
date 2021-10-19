@@ -6,9 +6,9 @@
     "discord.js": "^13.2.0",
     "dotenv": "^10.0.0"
   },
-  "name": "javascripttest",
+  "name": "lifebot.js",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "LiFeBot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
