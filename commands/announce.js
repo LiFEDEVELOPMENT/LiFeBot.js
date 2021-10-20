@@ -14,9 +14,8 @@ module.exports = {
                 .setDescription('Die Rolle, die in der Nachricht erwähnt werden soll')
                 .setRequired(false)),
     async execute(interaction) {
-        console.log(interaction.member)
         const announceEmbed = new MessageEmbed()
-            .setColor('#FFFF00')
+            .setColor("YELLOW")
             .setTitle('Announce')
             .setDescription((interaction.options.getRole('rolle') != null ? "<@&" + interaction.options.getRole('rolle') + "> \n\n" : "") + interaction.options.getString('nachricht'))
             .setFooter(interaction.member.nickname != null ? `${interaction.member.nickname}` : `${interaction.member.user.username}`)
