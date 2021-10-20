@@ -11,7 +11,7 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         // Deletes the given amount of messages and replys with a confirmation
-        interaction.channel.bulkDelete(interaction.options.getNumber('amount')).catch(err => { console.err(err) })
-        interaction.reply(`Es wurden ${interaction.options.getNumber('amount')} Nachricht(en) gelöscht.`, true)
+        interaction.channel.bulkDelete(interaction.options.getNumber('amount')).catch(err => { console.err(err) });
+        interaction.reply(`Es wurden ${interaction.options.getNumber('amount')} Nachricht(en) gelöscht.`, true);
     }
 }
