@@ -49,4 +49,4 @@ Before you follow this, make sure you use [NodeJS](#nodejs) version 16 or higher
 ## NodeJS
 
 - Go to the [NodeJS Website](https://nodejs.org/en/) and download the current version
-- Install the downloaded file
+- Install the downloaded file. This includes npm
