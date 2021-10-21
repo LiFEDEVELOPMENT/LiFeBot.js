@@ -5,7 +5,7 @@ module.exports = {
     // Creates a new SlashCommand
     data: new SlashCommandBuilder()
         .setName('kick')
-        .setDescription('Kickt einen User vom Server!')
+        .setDescription('Kickt einen User vom Server')
         .addUserOption(option =>
             option.setName('target')
                 .setDescription('Der User, der gekickt werden soll')
@@ -18,7 +18,7 @@ module.exports = {
         // Prepares constants for the information in the confirmation MessageEmbed
         const target = interaction.options.getUser('target');
         const member = interaction.guild.members.cache.get(target.id) || await interaction.guild.members.fetch(target.id).catch(err => { });
-        const reason = interaction.options.getString('reason') != null ? interaction.options.getString('reason') : "No reason provided";
+        const reason = interaction.options.getString('reason') != null ? interaction.options.getString('reason') : "Es wurde kein Grund angegeben";
         const moderator = interaction.member.nickname != null ? `${interaction.member.nickname}` : `${interaction.member.user.username}`;
 
         // Prepares an MessageEmbed containing information about the kick

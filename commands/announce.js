@@ -7,11 +7,11 @@ module.exports = {
         .setName('announce')
         .setDescription('Announced eine Nachricht!')
         .addStringOption(option =>
-            option.setName('nachricht')
+            option.setName('message')
                 .setDescription('Die Nachricht, die announced werden soll')
                 .setRequired(true))
         .addRoleOption(option =>
-            option.setName('rolle')
+            option.setName('role')
                 .setDescription('Die Rolle, die in der Nachricht erwähnt werden soll')
                 .setRequired(false)),
     async execute(interaction) {
@@ -19,7 +19,7 @@ module.exports = {
         const announceEmbed = new MessageEmbed()
             .setColor("YELLOW")
             .setTitle('Announce')
-            .setDescription((interaction.options.getRole('rolle') != null ? "<@&" + interaction.options.getRole('rolle') + "> \n\n" : "") + interaction.options.getString('nachricht'))
+            .setDescription((interaction.options.getRole('role') != null ? "<@&" + interaction.options.getRole('role') + "> \n\n" : "") + interaction.options.getString('message'))
             .setFooter(interaction.member.nickname != null ? `${interaction.member.nickname}` : `${interaction.member.user.username}`);
 
         // Send the MessageEmbed and reply with a confirmation for the executor

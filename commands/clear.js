@@ -4,7 +4,7 @@ module.exports = {
     // Creates a new SlashCommand
     data: new SlashCommandBuilder()
         .setName('clear')
-        .setDescription('Deletes a given amount of messages in the channel.')
+        .setDescription('Entfernt eine angegebene Anzahl an Nachrichten im aktuellen Channel')
         .addNumberOption(option =>
             option.setName('amount')
                 .setDescription('Die Anzahl an Nachrichten, die du entfernen möchtest')

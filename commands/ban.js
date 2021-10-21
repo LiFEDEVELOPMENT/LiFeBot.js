@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Bannt einen User vom Server!')
         .addUserOption(option =>
             option.setName('target')
-                .setDescription('Der User, der ebannt werden soll')
+                .setDescription('Der User, der gebannt werden soll')
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('reason')
@@ -18,7 +18,7 @@ module.exports = {
         // Prepares constants for the information in the confirmation MessageEmbed
         const target = interaction.options.getUser('target');
         const member = interaction.guild.members.cache.get(target.id) || await interaction.guild.members.fetch(target.id).catch(err => { });
-        const reason = interaction.options.getString('reason') != null ? interaction.options.getString('reason') : "No reason provided";
+        const reason = interaction.options.getString('reason') != null ? interaction.options.getString('reason') : "Es wurde kein Grund angegeben";
         const moderator = interaction.member.nickname != null ? `${interaction.member.nickname}` : `${interaction.member.user.username}`;
 
         // Prepares an MessageEmbed containing information about the ban
@@ -38,7 +38,7 @@ module.exports = {
         if (!member.bannable || member.user.id === interaction.client.user.id)
             return interaction.reply("Dieser User kann nicht gebannt werden!");
         if (interaction.member.roles.highest.position <= member.roles.highest.position || !interaction.member.permissions.has("BAN_MEMBERS"))
-            return interaction.reply('Du hast nicht die Berechtigung, diesen User zu bannen');
+            return interaction.reply('Du hast nicht die Berechtigung, diesen User zu bannen!');
 
         // Sends the previously created banMessage via DM and bans the target
         await member.user.send(banMessage).catch(err => { console.err(err) });
