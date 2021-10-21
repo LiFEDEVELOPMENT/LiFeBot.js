@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { Client, Collection, Intents } = require('discord.js');
 require('dotenv').config();
+const { Client, Collection, Intents } = require('discord.js');
 
 // Create a new Client and fetch all event files
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
@@ -15,6 +15,12 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+// Create a database file
+fs.appendFile("LiFeDB.db", "", function (err) {
+	if (err) throw err;
+	console.log('DB erstellt!');
+  });
 
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);
