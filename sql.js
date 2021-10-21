@@ -16,7 +16,7 @@ function disconnect() {
   connection.end();
 }
 
-function query(sql) {
+export function query(sql) {
   return connection.query(sql, function (err, result) {
     if(err) throw err;
     return result
