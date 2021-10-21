@@ -6,14 +6,14 @@
 - [Finding your Bot Token](#find-your-bot-token)
 - [Finding your Bot ID](#find-your-bot-id)
 - [Inviting your Bot](#invite-your-bot)
-- [Installing NodeJS/npm](#install-nodejs/npm)
+- [Installing NodeJS/npm](#install-nodejs-and-npm)
 - [Updating NodeJS](#update-nodejs)
 - [Updating npm](#update-npm)
 - [Installing git](#install-git)
 
 ## Install
 
-Before you follow this, make sure you use [NodeJS](#install-nodejs/npm) version 16.6.0 or higher and [npm](#install-nodejs/npm) version 8 or higher. You can check the versions of both by running `npm version`
+Before you follow this, make sure you use [NodeJS](#install-nodejs-and-npm) version 16.6.0 or higher and [npm](#install-nodejs-and-npm) version 8 or higher. You can check the versions of both by running `npm version`
 
 - `git clone https://github.com/LIFEBOTDEV/LiFeBot.js.git`
 - `cd LiFeBot.js`
@@ -52,7 +52,7 @@ NOTE: Do not share this token with anyone!
 - Go back to the `Scopes` section and click on `Copy`
 - Now paste the copied url into a new tab and add the bot to your server
 
-## Install NodeJS/NPM
+## Install NodeJS and npm
 
 - Go to the [NodeJS Website](https://nodejs.org/en/) and download the current version
 - Install the downloaded file. This includes npm
