@@ -8,7 +8,6 @@ module.exports = {
         .setDescription('Sendet ein Bild der angegeben Farbe')
         .addStringOption(option =>
             option.setName('hex')
-                .setDescription('The hex code of the color you want displayed. Please use the format #RRGGBB')
                 .setDescription('Der Hex Code der Farbe, welche du sehen möchtest. Bitte benutze das Format #RRGGBB')
                 .setRequired(true)),
     async execute(interaction) {
