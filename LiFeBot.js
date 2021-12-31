@@ -1,6 +1,6 @@
-const fs = require('fs');
 require('dotenv').config();
-const sql = require('./sql.js');
+const fs = require('fs');
+const sql = require('./db/sql.js');
 const { Client, Collection, Intents } = require('discord.js');
 
 // Create a new Client and fetch all event files
@@ -18,19 +18,25 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-const initDB = async () => {
+
+// Open DB-Connection and create necessary tables
+async function initDB() {
 	await sql.openConnection();
 	await sql.execute(
-		'CREATE TABLE IF NOT EXISTS memes (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, meme STRING)'
+		'CREATE TABLE IF NOT EXISTS zitate(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, zitat STRING, time STRING, author INTEGER)'
 	);
+	await sql.execute(
+		'CREATE TABLE IF NOT EXISTS memes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, meme STRING)'
+	);
+	await sql.execute(
+		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, messageid INTEGER, userid INTEGER, answercount INTEGER)'
+	);
+	await sql.execute(
+		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid INTEGER, vote INTEGER)'
+	);
+}
 
-	await sql.execute('INSERT INTO memes (guildid,meme) VALUES (42,"Test")');
-
-	let queryResults = await sql.query('SELECT * from memes');
-
-	console.log(queryResults);
-
-	// Login with the environment data
-	client.login(process.env.BOT_TOKEN);
-};
 initDB();
+
+// Login with the environment data
+client.login(process.env.BOT_TOKEN);

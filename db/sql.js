@@ -8,14 +8,15 @@ module.exports = {
 			filename: './db/LiFeDB.db',
 			driver: sqlite3.Database,
 		});
+		console.log('Connected to LiFe-database');
 	},
-	async query(sql) {
-		return await db.all(sql);
+	query(sql) {
+		return db.all(sql);
 	},
-	async execute(sql) {
+	execute(sql) {
 		db.exec(sql);
 	},
-	async close() {
+	close() {
 		db.each((err) => {
 			if (err) {
 				console.error(err.message);
