@@ -1,5 +1,6 @@
 const fs = require('fs');
 require('dotenv').config();
+const sql = require('./sql.js');
 const { Client, Collection, Intents } = require('discord.js');
 
 // Create a new Client and fetch all event files
@@ -18,11 +19,12 @@ for (const file of eventFiles) {
 	}
 }
 
-// Create a database file
-fs.appendFile('LiFeDB.db', '', function (err) {
-	if (err) throw err;
-	console.log('DB erstellt!');
-});
+sql.openConnection();
+sql.execute(
+	'CREATE TABLE IF NOT EXISTS memes (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, meme STRING)'
+);
+//sql.execute('INSERT INTO memes (guildid,meme) VALUES (42,"Test")');
+sql.query('SELECT * from memes').then((memes) => console.log(memes));
 
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);
