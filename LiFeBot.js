@@ -18,13 +18,19 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+const initDB = async () => {
+	await sql.openConnection();
+	await sql.execute(
+		'CREATE TABLE IF NOT EXISTS memes (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, meme STRING)'
+	);
 
-sql.openConnection();
-sql.execute(
-	'CREATE TABLE IF NOT EXISTS memes (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, meme STRING)'
-);
-//sql.execute('INSERT INTO memes (guildid,meme) VALUES (42,"Test")');
-sql.query('SELECT * from memes').then((memes) => console.log(memes));
+	await sql.execute('INSERT INTO memes (guildid,meme) VALUES (42,"Test")');
 
-// Login with the environment data
-client.login(process.env.BOT_TOKEN);
+	let queryResults = await sql.query('SELECT * from memes');
+
+	console.log(queryResults);
+
+	// Login with the environment data
+	client.login(process.env.BOT_TOKEN);
+};
+initDB();

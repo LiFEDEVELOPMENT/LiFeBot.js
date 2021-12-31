@@ -1,33 +1,19 @@
 const sqlite3 = require('sqlite3').verbose();
+const sqlite = require('sqlite');
 let db;
 
 module.exports = {
 	async openConnection() {
-		db = new sqlite3.Database(
-			'./db/LiFeDB.db',
-			sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-			(err) => {
-				if (err) {
-					console.error(err.message);
-				}
-				console.log('Connected to the LiFe-database.');
-			}
-		);
+		db = await sqlite.open({
+			filename: './db/LiFeDB.db',
+			driver: sqlite3.Database,
+		});
 	},
 	async query(sql) {
-		db.serialize(() => {
-			db.all(sql, (err, row) => {
-				if (err) {
-					throw err;
-				}
-				return row;
-			});
-		});
+		return await db.all(sql);
 	},
 	async execute(sql) {
-		db.serialize(() => {
-			db.run(sql);
-		});
+		db.exec(sql);
 	},
 	async close() {
 		db.each((err) => {
@@ -36,8 +22,5 @@ module.exports = {
 			}
 			console.log('Close the database connection.');
 		});
-	},
-	async test() {
-		return 'lol';
 	},
 };
