@@ -16,7 +16,6 @@ module.exports = {
 			option
 				.setName('reason')
 				.setDescription('Der Grund, weswegen der angegebene User gebannt wird')
-				.setRequired(false)
 		),
 	async execute(interaction) {
 		// Prepares constants for the information in the confirmation MessageEmbed
@@ -50,7 +49,9 @@ module.exports = {
 				'Beim Abrufen dieses Users ist ein Fehler aufgetreten!'
 			);
 		if (!member.bannable || member.user.id === interaction.client.user.id)
-			return interaction.reply('Dieser User kann nicht gebannt werden!');
+			return interaction.reply(
+				'Diesen User werde ich nicht für dich bannen! lol'
+			);
 		if (
 			interaction.member.roles.highest.position <=
 				member.roles.highest.position ||
@@ -66,7 +67,6 @@ module.exports = {
 		});
 		member.ban({ reason });
 
-		// Sends the previously created MessageEmbed to the server
 		await interaction.reply({ embeds: [banEmbed] });
 	},
 };
