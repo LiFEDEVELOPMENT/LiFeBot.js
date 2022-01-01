@@ -17,13 +17,13 @@ module.exports = {
 		const amount = interaction.options.getNumber('amount');
 
 		// Deletes the given amount of messages
-		interaction.channel.bulkDelete(amount).catch((err) => {
+		await interaction.channel.bulkDelete(amount).catch((err) => {
 			console.err(err);
 		});
 
 		interaction.reply({
 			content: `Es wurden ${amount} Nachricht(en) gelöscht.`,
-			empheral: true,
+			ephemeral: true,
 		});
 	},
 };
