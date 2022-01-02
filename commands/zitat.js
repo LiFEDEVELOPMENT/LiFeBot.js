@@ -61,6 +61,7 @@ module.exports = {
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
 		let actionRow;
+		let zitateEmbed;
 		let answer = {
 			content: `Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...`,
 			ephemeral: true,
@@ -127,7 +128,7 @@ module.exports = {
 					break;
 				}
 
-				const zitateEmbed = new MessageEmbed()
+				zitateEmbed = new MessageEmbed()
 					.setTitle(`Alle Zitate von ${interaction.guild.name} - Seite 1`)
 					.setDescription(zitatList[0])
 					.setTimestamp();
@@ -176,7 +177,7 @@ module.exports = {
 					year: 'numeric',
 				});
 
-				const zitatEmbed = new MessageEmbed()
+				zitateEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Zitat')
 					.setDescription(randomZitat.zitat)
 					.setFooter(
