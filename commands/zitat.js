@@ -3,8 +3,7 @@ const {
 	SlashCommandSubcommandBuilder,
 } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const sql = require('../db/sql.js');
-const zitatUtil = require('../utility/zitatutil.js');
+const zitatUtil = require('../utility/ZitatUtil.js');
 const utilities = require('../utility/Utilities.js');
 
 module.exports = {
@@ -63,7 +62,7 @@ module.exports = {
 		const guildid = interaction.member.guild.id;
 		let actionRow;
 		let answer = {
-			content: `Wenn du diese Nachricht siehst, ist irgendwas schief gelaufen...`,
+			content: `Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...`,
 			ephemeral: true,
 		};
 
@@ -165,7 +164,7 @@ module.exports = {
 				let randomZitat = await zitatUtil.randomZitat(interaction.guild.id);
 				let zitatCreator = await interaction.client.users
 					.fetch(randomZitat.author)
-					.catch((err) => {
+					.catch(() => {
 						return {
 							username:
 								'einem Discord Account, der leider nicht mehr unter uns ist lol',

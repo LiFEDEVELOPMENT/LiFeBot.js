@@ -1,5 +1,5 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const zitatUtil = require('../../utility/zitatutil.js');
+const zitatUtil = require('../../utility/ZitatUtil.js');
 
 module.exports = {
 	async execute(interaction) {
