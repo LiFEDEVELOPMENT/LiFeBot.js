@@ -35,6 +35,7 @@ module.exports = {
 				.setName('delete')
 				.setDescription('Entfernt ein Zitat!')
 				.addNumberOption((option) =>
+				.addIntegerOption((option) =>
 					option
 						.setName('id')
 						.setDescription('Die ID des Zitats, welches entfernt werden soll.')
@@ -45,11 +46,29 @@ module.exports = {
 			new SlashCommandSubcommandBuilder()
 				.setName('list')
 				.setDescription('Zeigt eine Liste aller Zitate dieses Servers!')
+		)
+		.addSubcommand(
+			new SlashCommandSubcommandBuilder()
+				.setName('import')
+				.setDescription('Importiert alle Nachrichten eines Kanals als Zitate!')
+				.addStringOption((option) =>
+					option
+						.setName('channelid')
+						.setDescription(
+							'Die ID des Channels, welcher importiert werden soll'
+						)
+						.setRequired(true)
+				)
 		),
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
 		let message =
 			'Wenn du diese Nachricht siehst, habe ich irgendwas verkackt lool';
+		let message = {
+			content: `Wenn du diese Nachricht siehst, ist irgendwas schief gelaufen...`,
+			ephemeral: true,
+		};
+
 		switch (interaction.options.getSubcommand()) {
 			case 'add':
 				const zitat = interaction.options.getString('zitat');
@@ -60,12 +79,31 @@ module.exports = {
 				break;
 			case 'delete':
 				const id = interaction.options.getNumber('id');
+				const id = interaction.options.getInteger('id');
 				message = `Das Zitat mit der ID ${id} wurde erfolgreich entfernt!`;
 				if ((await zitatUtil.deleteZitat(id, guildid)) == false)
 					message = {
 						content: `Hoppla! Auf diesem Server scheint es kein Zitat mit der ID ${id} zu geben!`,
 						ephemeral: true,
 					};
+				break;
+			case 'import':
+				const channelid = interaction.options.getString('channelid');
+				const channel = await interaction.guild.channels.cache.get(channelid);
+				let messages = await channel.messages.fetch();
+
+				messages = Array.from(messages).reverse();
+
+				for (m of messages) {
+					await zitatUtil.addZitat(
+						guildid,
+						m[1].content,
+						m[1].createdTimestamp,
+						m[1].author.id
+					);
+				}
+
+				message = `Alle Nachrichten aus ${channel.name} wurden als Zitat hinzugefügt!`;
 				break;
 			case 'list':
 				let zitatList = await zitatUtil.charLimitList(guildid);
