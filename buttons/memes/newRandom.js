@@ -9,7 +9,7 @@ module.exports = {
 			.setTitle('Zufälliges Meme')
 			.setDescription(randomMeme.meme)
 			.setFooter(`ID: ${randomMeme.id}`)
-			.setColor('YELLOW');
+			.setColor('ORANGE');
 
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()

@@ -48,6 +48,7 @@ module.exports = {
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
 		let actionRow;
+		let memeEmbed;
 		let answer = {
 			content: `Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...`,
 			ephemeral: true,
@@ -83,7 +84,7 @@ module.exports = {
 					break;
 				}
 
-				const memeEmbed = new MessageEmbed()
+				memeEmbed = new MessageEmbed()
 					.setTitle(`Alle Memes von ${interaction.guild.name} - Seite 1`)
 					.setDescription(memeList[0])
 					.setTimestamp();
@@ -119,7 +120,7 @@ module.exports = {
 			case 'random':
 				let randomMeme = await memeUtil.randomMeme(interaction.guild.id);
 
-				const memeEmbed = new MessageEmbed()
+				memeEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Meme')
 					.setDescription(randomMeme.meme)
 					.setFooter(`ID: ${randomMeme.id}`)
