@@ -5,7 +5,7 @@ const {
 const { MessageEmbed } = require('discord.js');
 const sql = require('../db/sql.js');
 const zitatUtil = require('../utility/zitatutil.js');
-const dateUtil = require('../utility/DateUtil.js');
+const utilities = require('../utility/Utilities.js');
 
 module.exports = {
 	// Creates a new SlashCommand
@@ -34,7 +34,6 @@ module.exports = {
 			new SlashCommandSubcommandBuilder()
 				.setName('delete')
 				.setDescription('Entfernt ein Zitat!')
-				.addNumberOption((option) =>
 				.addIntegerOption((option) =>
 					option
 						.setName('id')
@@ -62,9 +61,7 @@ module.exports = {
 		),
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
-		let message =
-			'Wenn du diese Nachricht siehst, habe ich irgendwas verkackt lool';
-		let message = {
+		let answer = {
 			content: `Wenn du diese Nachricht siehst, ist irgendwas schief gelaufen...`,
 			ephemeral: true,
 		};
@@ -74,36 +71,39 @@ module.exports = {
 				const zitat = interaction.options.getString('zitat');
 				const time = Date.now();
 				const author = interaction.user.id;
+
 				const zitatID = await zitatUtil.addZitat(guildid, zitat, time, author);
-				message = `Das Zitat wurde erfolgreich hinzugefügt! Es hat die ID ${zitatID}`;
+				answer = `Das Zitat wurde erfolgreich hinzugefügt! Es hat die ID ${zitatID}`;
+
 				break;
 			case 'delete':
-				const id = interaction.options.getNumber('id');
-				const id = interaction.options.getInteger('id');
-				message = `Das Zitat mit der ID ${id} wurde erfolgreich entfernt!`;
-				if ((await zitatUtil.deleteZitat(id, guildid)) == false)
-					message = {
-						content: `Hoppla! Auf diesem Server scheint es kein Zitat mit der ID ${id} zu geben!`,
+				const toDeleteID = interaction.options.getInteger('id');
+				answer = `Das Zitat mit der ID ${toDeleteID} wurde erfolgreich entfernt!`;
+
+				if ((await zitatUtil.deleteZitat(toDeleteID, guildid)) == false)
+					answer = {
+						content: `Hoppla! Auf diesem Server scheint es kein Zitat mit der ID ${toDeleteID} zu geben!`,
 						ephemeral: true,
 					};
+
 				break;
 			case 'import':
+				interaction.deferReply();
 				const channelid = interaction.options.getString('channelid');
 				const channel = await interaction.guild.channels.cache.get(channelid);
-				let messages = await channel.messages.fetch();
+				let messages = await utilities.fetchAllMessages(channel);
 
-				messages = Array.from(messages).reverse();
-
-				for (m of messages) {
+				for (message of messages) {
 					await zitatUtil.addZitat(
 						guildid,
-						m[1].content,
-						m[1].createdTimestamp,
-						m[1].author.id
+						message.content,
+						message.createdTimestamp,
+						message.author.id
 					);
 				}
 
-				message = `Alle Nachrichten aus ${channel.name} wurden als Zitat hinzugefügt!`;
+				answer = `Alle Nachrichten aus ${channel.name} wurden als Zitat hinzugefügt!`;
+
 				break;
 			case 'list':
 				let zitatList = await zitatUtil.charLimitList(guildid);
@@ -120,7 +120,7 @@ module.exports = {
 				let zitatCreator = await interaction.client.users.fetch(
 					randomZitat.author
 				);
-				let date = await dateUtil.formatDate(new Date(randomZitat.time));
+				let date = await utilities.formatDate(new Date(randomZitat.time));
 
 				const zitatEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Zitat')
@@ -129,18 +129,15 @@ module.exports = {
 						`Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`
 					)
 					.setColor('YELLOW');
-				message = { embeds: [zitatEmbed] };
+				answer = { embeds: [zitatEmbed] };
 
 				break;
 			default:
 				console.log(
 					'Hoppla, da wurde ein nicht-existierender Subcommand ausgeführt!'
 				);
-				message = {
-					content: `Wenn du diese Nachricht siehst, ist irgendwas schief gelaufen...`,
-					ephemeral: true,
-				};
 		}
-		await interaction.reply(message);
+		if (!interaction.deferred) await interaction.reply(answer);
+		else await interaction.editReply(answer);
 	},
 };
