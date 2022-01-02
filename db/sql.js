@@ -13,15 +13,7 @@ module.exports = {
 	query(sql) {
 		return db.all(sql);
 	},
-	execute(sql) {
-		db.exec(sql);
-	},
-	close() {
-		db.each((err) => {
-			if (err) {
-				console.error(err.message);
-			}
-			console.log('Close the database connection.');
-		});
+	async run(sql, placeholders) {
+		await db.run(sql, placeholders);
 	},
 };

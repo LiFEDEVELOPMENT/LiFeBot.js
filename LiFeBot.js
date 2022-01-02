@@ -1,6 +1,7 @@
 require('dotenv').config();
 const fs = require('fs');
 const sql = require('./db/sql.js');
+const zitateUtility = require('./utility/ZitatUtil.js');
 const { Client, Collection, Intents } = require('discord.js');
 
 // Create a new Client and fetch all event files
@@ -22,17 +23,11 @@ for (const file of eventFiles) {
 // Open DB-Connection and create necessary tables
 async function initDB() {
 	await sql.openConnection();
-	await sql.execute(
-		'CREATE TABLE IF NOT EXISTS zitate(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, zitat STRING, time STRING, author INTEGER)'
+	await sql.run(
+		'CREATE TABLE IF NOT EXISTS zitate(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, zitat STRING, time STRING, author BLOB)'
 	);
-	await sql.execute(
-		'CREATE TABLE IF NOT EXISTS memes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, meme STRING)'
-	);
-	await sql.execute(
-		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid INTEGER, channelid INTEGER, messageid INTEGER, userid INTEGER, answercount INTEGER)'
-	);
-	await sql.execute(
-		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid INTEGER, vote INTEGER)'
+	await sql.run(
+		'CREATE TABLE IF NOT EXISTS memes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, meme STRING)'
 	);
 }
 

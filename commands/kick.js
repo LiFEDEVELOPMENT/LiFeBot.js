@@ -16,7 +16,6 @@ module.exports = {
 			option
 				.setName('reason')
 				.setDescription('Der Grund, weswegen der angegebene User gekickt wird')
-				.setRequired(false)
 		),
 	async execute(interaction) {
 		// Prepares constants for the information in the confirmation MessageEmbed
@@ -50,7 +49,9 @@ module.exports = {
 				'Beim Abrufen dieses Users ist ein Fehler aufgetreten!'
 			);
 		if (!member.kickable || member.user.id === interaction.client.user.id)
-			return interaction.reply('Dieser User kann nicht gekickt werden!');
+			return interaction.reply(
+				'Diesen User werde ich nicht für dich vom Server kicken! lol'
+			);
 		if (
 			interaction.member.roles.highest.position <=
 				member.roles.highest.position ||
@@ -60,13 +61,12 @@ module.exports = {
 				'Du hast nicht die Berechtigung, diesen User zu kicken'
 			);
 
-		// Sends the previously created banMessage via DM and kicks the target
+		// Sends the previously created kickMessage via DM and kicks the target
 		await member.user.send(kickMessage).catch((err) => {
 			console.log(err);
 		});
-		member.kick({ reason });
+		await member.kick({ reason });
 
-		// Sends the previously created MessageEmbed to the server
 		await interaction.reply({ embeds: [kickEmbed] });
 	},
 };

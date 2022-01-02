@@ -5,7 +5,7 @@ module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('color')
-		.setDescription('Sendet ein Bild der angegeben Farbe')
+		.setDescription('Sendet ein Bild der angegeben Farbe!')
 		.addStringOption((option) =>
 			option
 				.setName('hex')
@@ -31,11 +31,10 @@ module.exports = {
 					'https://singlecolorimage.com/get/' + color.substring(1) + '/400x400'
 				);
 
-			//Sends that MessageEmbed
-			interaction.reply({ embeds: [colorEmbed] });
+			await interaction.reply({ embeds: [colorEmbed] });
 		} catch (error) {
 			// Catches any formatting mistakes by the executor and replys an error
-			interaction.reply('Hopla, da ist etwas schief gelaufen!');
+			await interaction.reply(`Hoppla, da ist etwas schief gelaufen!`);
 		}
 	},
 };
