@@ -33,7 +33,7 @@ module.exports = {
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('delete')
-				.setDescription('Entfernt das angegebene Zitat!')
+				.setDescription('Entfernt ein Zitat!')
 				.addNumberOption((option) =>
 					option
 						.setName('id')
@@ -44,7 +44,7 @@ module.exports = {
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('list')
-				.setDescription('Zeigt eine Liste aller Zitate!')
+				.setDescription('Zeigt eine Liste aller Zitate dieses Servers!')
 		),
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
