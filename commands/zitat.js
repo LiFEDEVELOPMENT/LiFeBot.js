@@ -2,7 +2,7 @@ const {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const sql = require('../db/sql.js');
 const zitatUtil = require('../utility/zitatutil.js');
 const utilities = require('../utility/Utilities.js');
@@ -61,6 +61,7 @@ module.exports = {
 		),
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
+		let actionRow;
 		let answer = {
 			content: `Wenn du diese Nachricht siehst, ist irgendwas schief gelaufen...`,
 			ephemeral: true,
@@ -88,9 +89,20 @@ module.exports = {
 
 				break;
 			case 'import':
-				interaction.deferReply();
 				const channelid = interaction.options.getString('channelid');
 				const channel = await interaction.guild.channels.cache.get(channelid);
+
+				if (channel == undefined) {
+					answer = {
+						content: 'Das scheint keine gültige ChannelID zu sein!',
+						ephemeral: true,
+					};
+
+					break;
+				}
+
+				interaction.deferReply();
+
 				let messages = await utilities.fetchAllMessages(channel);
 
 				for (message of messages) {
@@ -102,25 +114,68 @@ module.exports = {
 					);
 				}
 
-				answer = `Alle Nachrichten aus ${channel.name} wurden als Zitat hinzugefügt!`;
+				answer = `Alle Nachrichten aus #${channel.name} wurden als Zitat hinzugefügt!`;
 
 				break;
 			case 'list':
 				let zitatList = await zitatUtil.charLimitList(guildid);
+
+				if (zitatList[0] == undefined) {
+					answer = {
+						content: 'Auf diesem Server scheint es keine Zitate zu geben :(',
+						ephemeral: true,
+					};
+					break;
+				}
 
 				const zitateEmbed = new MessageEmbed()
 					.setTitle(`Alle Zitate von ${interaction.guild.name} - Seite 1`)
 					.setDescription(zitatList[0])
 					.setTimestamp();
 
-				message = { embeds: [zitateEmbed] };
+				const nextButtonsDisabled = !(zitatList.length > 1);
+
+				actionRow = new MessageActionRow().addComponents(
+					new MessageButton()
+						.setCustomId('zitate-firstPage')
+						.setStyle('PRIMARY')
+						.setLabel('Erste Seite!')
+						.setDisabled(true),
+					new MessageButton()
+						.setCustomId('zitate-previousPage')
+						.setStyle('PRIMARY')
+						.setLabel('Vorherige Seite!')
+						.setDisabled(true),
+					new MessageButton()
+						.setCustomId('zitate-nextPage')
+						.setStyle('PRIMARY')
+						.setLabel('Nächste Seite!')
+						.setDisabled(nextButtonsDisabled),
+					new MessageButton()
+						.setCustomId('zitate-lastPage')
+						.setStyle('PRIMARY')
+						.setLabel('Letzte Seite!')
+						.setDisabled(nextButtonsDisabled)
+				);
+
+				answer = { embeds: [zitateEmbed], components: [actionRow] };
+
 				break;
 			case 'random':
 				let randomZitat = await zitatUtil.randomZitat(interaction.guild.id);
-				let zitatCreator = await interaction.client.users.fetch(
-					randomZitat.author
-				);
-				let date = await utilities.formatDate(new Date(randomZitat.time));
+				let zitatCreator = await interaction.client.users
+					.fetch(randomZitat.author)
+					.catch((err) => {
+						return {
+							username:
+								'einem Discord Account, der leider nicht mehr unter uns ist lol',
+						};
+					});
+				let date = new Date(randomZitat.time).toLocaleDateString('de-DE', {
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric',
+				});
 
 				const zitatEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Zitat')
@@ -129,7 +184,14 @@ module.exports = {
 						`Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`
 					)
 					.setColor('YELLOW');
-				answer = { embeds: [zitatEmbed] };
+
+				actionRow = new MessageActionRow().addComponents(
+					new MessageButton()
+						.setCustomId('zitate-newRandom')
+						.setStyle('PRIMARY')
+						.setLabel('Noch ein Zitat!')
+				);
+				answer = { embeds: [zitatEmbed], components: [actionRow] };
 
 				break;
 			default:
@@ -137,6 +199,7 @@ module.exports = {
 					'Hoppla, da wurde ein nicht-existierender Subcommand ausgeführt!'
 				);
 		}
+
 		if (!interaction.deferred) await interaction.reply(answer);
 		else await interaction.editReply(answer);
 	},
