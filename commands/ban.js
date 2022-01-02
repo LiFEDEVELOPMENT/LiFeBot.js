@@ -65,7 +65,7 @@ module.exports = {
 		await member.user.send(banMessage).catch((err) => {
 			console.err(err);
 		});
-		member.ban({ reason });
+		await member.ban({ reason });
 
 		await interaction.reply({ embeds: [banEmbed] });
 	},

@@ -7,6 +7,6 @@ module.exports = {
 		.setDescription('Wift eine Münze!'),
 	async execute(interaction) {
 		// Replys with "Kopf" or "Zahl" with a chance of 50%
-		interaction.reply(Math.random() < 0.5 ? 'Zahl' : 'Kopf');
+		await interaction.reply(Math.random() < 0.5 ? 'Zahl' : 'Kopf');
 	},
 };

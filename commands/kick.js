@@ -65,7 +65,7 @@ module.exports = {
 		await member.user.send(kickMessage).catch((err) => {
 			console.log(err);
 		});
-		member.kick({ reason });
+		await member.kick({ reason });
 
 		await interaction.reply({ embeds: [kickEmbed] });
 	},
