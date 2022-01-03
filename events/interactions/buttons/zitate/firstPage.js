@@ -1,15 +1,13 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const zitatUtil = require('../../utility/ZitatUtil.js');
+const zitatUtil = require('../../../../utility/ZitatUtil.js');
 
 module.exports = {
 	async execute(interaction) {
 		let oldEmbed = interaction.message.embeds[0];
 		let title = oldEmbed.title.split('Seite ');
 		let zitatList = await zitatUtil.charLimitList(interaction.guild.id);
-		let page = parseInt(title[title.length - 1]); // 1-indexed at UI, so just take that for index + 1
+		let page = 0;
 
-		page =
-			page >= 0 ? (page < zitatList.length ? page : zitatList.length - 1) : 0;
 		const previousButtonsDisabled = !(page > 0);
 		const nextButtonsDisabled = !(page < zitatList.length - 1);
 
@@ -41,7 +39,7 @@ module.exports = {
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		interaction.update({
+		await interaction.update({
 			embeds: [newEmbed],
 			components: [actionRow],
 		});

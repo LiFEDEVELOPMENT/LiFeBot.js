@@ -1,15 +1,13 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const memeUtil = require('../../utility/MemeUtil.js');
+const memeUtil = require('../../../../utility/MemeUtil.js');
 
 module.exports = {
 	async execute(interaction) {
 		let oldEmbed = interaction.message.embeds[0];
 		let title = oldEmbed.title.split('Seite ');
 		let memeList = await memeUtil.charLimitList(interaction.guild.id);
-		let page = parseInt(title[title.length - 1]) - 2; // 1-indexed at UI, so just take that - 2for index - 1
+		let page = memeList.length - 1;
 
-		page =
-			page >= 0 ? (page < memeList.length ? page : memeList.length - 1) : 0;
 		const previousButtonsDisabled = !(page > 0);
 		const nextButtonsDisabled = !(page < memeList.length - 1);
 
@@ -40,11 +38,6 @@ module.exports = {
 				.setLabel('Letzte Seite!')
 				.setDisabled(nextButtonsDisabled)
 		);
-
-		await interaction.message.edit({
-			embeds: [newEmbed],
-			components: [],
-		});
 
 		interaction.update({
 			embeds: [newEmbed],
