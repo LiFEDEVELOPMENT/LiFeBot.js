@@ -191,7 +191,7 @@ module.exports = {
 						.setStyle('PRIMARY')
 						.setLabel('Noch ein Zitat!')
 				);
-				answer = { embeds: [zitatEmbed], components: [actionRow] };
+				answer = { embeds: [zitateEmbed], components: [actionRow] };
 
 				break;
 			default:
