@@ -3,8 +3,8 @@ const {
 	SlashCommandSubcommandBuilder,
 } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const zitatUtil = require('../../../utility/ZitatUtil.js');
-const utilities = require('../../../utility/Utilities.js');
+const zitatUtil = require('@util/ZitatUtil.js');
+const utilities = require('@util/Utilities.js');
 
 module.exports = {
 	// Creates a new SlashCommand

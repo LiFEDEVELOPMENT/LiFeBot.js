@@ -1,4 +1,4 @@
-const sql = require('../db/sql.js');
+const sql = require('@sql');
 
 module.exports = {
 	async addZitat(guildid, zitat, time, author) {

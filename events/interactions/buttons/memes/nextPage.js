@@ -1,5 +1,5 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const memeUtil = require('../../../../utility/MemeUtil.js');
+const memeUtil = require('@util/MemeUtil.js');
 
 module.exports = {
 	async execute(interaction) {
