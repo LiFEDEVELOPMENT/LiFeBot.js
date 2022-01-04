@@ -6,7 +6,7 @@
     "discord.js": "^13.5.0",
     "dotenv": "^10.0.0",
     "sqlite": "^4.0.23",
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^5.0.2"
   },
   "name": "lifebot.js",
   "version": "1.0.0",
