@@ -109,7 +109,7 @@ module.exports = {
 			.setCustomId(`polls-vote-${id}`)
 			.setMaxValues(maxAntworten)
 			.setPlaceholder(
-				`Du kannst maximal ${realChoiceCount} Antworten auswählen und diese bis zum Ende dieser Umfrage jederzeit ändern!`
+				`Du kannst maximal ${realChoiceCount} Antwort(en) auswählen und diese bis zum Ende dieser Umfrage jederzeit ändern!`
 			);
 
 		// Prepare the stop Button
@@ -129,7 +129,7 @@ module.exports = {
 
 		// Create the message with the poll
 		interaction.reply({
-			content: `Frage: ${frage}`,
+			content: `Frage: **${frage}**`,
 			components: [menuRow, buttonRow],
 		});
 	},
