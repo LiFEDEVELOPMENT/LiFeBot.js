@@ -30,6 +30,12 @@ async function initDB() {
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS memes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, meme STRING)'
 	);
+	await sql.run(
+		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, open BOOLEAN, guildid BLOB, authorid BLOB, maxAntworten INTEGER, frage STRING, antwort1 STRING, antwort2 STRING, antwort3 STRING, antwort4 STRING, antwort5 STRING, antwort6 STRING, antwort7 STRING, antwort8 STRING, antwort9 STRING, antwort10 STRING)'
+	);
+	await sql.run(
+		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid BLOB, vote INTEGER)'
+	);
 }
 
 initDB();
