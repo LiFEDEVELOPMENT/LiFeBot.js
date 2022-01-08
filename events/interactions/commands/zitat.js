@@ -180,9 +180,9 @@ module.exports = {
 				zitateEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Zitat')
 					.setDescription(randomZitat.zitat)
-					.setFooter(
-						`Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`
-					)
+					.setFooter({
+						text: `Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`,
+					})
 					.setColor('YELLOW');
 
 				actionRow = new MessageActionRow().addComponents(

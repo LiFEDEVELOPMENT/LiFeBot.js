@@ -8,7 +8,7 @@ module.exports = {
 		const memeEmbed = new MessageEmbed()
 			.setTitle('Zufälliges Meme')
 			.setDescription(randomMeme.meme)
-			.setFooter(`ID: ${randomMeme.id}`)
+			.setFooter({ text: `ID: ${randomMeme.id}` })
 			.setColor('ORANGE');
 
 		const actionRow = new MessageActionRow().addComponents(

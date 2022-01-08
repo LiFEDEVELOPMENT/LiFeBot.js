@@ -123,7 +123,7 @@ module.exports = {
 				memeEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Meme')
 					.setDescription(randomMeme.meme)
-					.setFooter(`ID: ${randomMeme.id}`)
+					.setFooter({ text: `ID: ${randomMeme.id}` })
 					.setColor('ORANGE');
 
 				actionRow = new MessageActionRow().addComponents(
