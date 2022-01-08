@@ -5,8 +5,16 @@
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.5.0",
     "dotenv": "^10.0.0",
+    "module-alias": "^2.2.2",
     "sqlite": "^4.0.23",
     "sqlite3": "^4.2.0"
+  },
+  "_moduleAliases": {
+    "@commands": "./events/interactions/commands",
+    "@buttons": "./events/interactions/buttons",
+    "@sql": "./db/sql.js",
+    "@menus": "./events/interactions/menus",
+    "@util": "./utility"
   },
   "name": "lifebot.js",
   "version": "1.0.0",

@@ -1,5 +1,5 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const zitatUtil = require('../../utility/ZitatUtil.js');
+const zitatUtil = require('@util/ZitatUtil.js');
 
 module.exports = {
 	async execute(interaction) {
@@ -21,9 +21,9 @@ module.exports = {
 		const zitatEmbed = new MessageEmbed()
 			.setTitle('Zufälliges Zitat')
 			.setDescription(randomZitat.zitat)
-			.setFooter(
-				`Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`
-			)
+			.setFooter({
+				text: `Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`,
+			})
 			.setColor('YELLOW');
 
 		const actionRow = new MessageActionRow().addComponents(

@@ -27,11 +27,12 @@ module.exports = {
 					? '<@&' + interaction.options.getRole('role') + '> \n\n'
 					: '') + interaction.options.getString('message')
 			)
-			.setFooter(
-				interaction.member.nickname != null
-					? `${interaction.member.nickname}`
-					: `${interaction.member.user.username}`
-			);
+			.setFooter({
+				text:
+					interaction.member.nickname != null
+						? `${interaction.member.nickname}`
+						: `${interaction.member.user.username}`,
+			});
 
 		await interaction.channel.send({ embeds: [announceEmbed] });
 		await interaction.reply({
