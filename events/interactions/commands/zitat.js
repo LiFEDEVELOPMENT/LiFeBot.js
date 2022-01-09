@@ -3,8 +3,8 @@ const {
 	SlashCommandSubcommandBuilder,
 } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const zitatUtil = require('../utility/ZitatUtil.js');
-const utilities = require('../utility/Utilities.js');
+const zitatUtil = require('@util/ZitatUtil.js');
+const utilities = require('@util/Utilities.js');
 
 module.exports = {
 	// Creates a new SlashCommand
@@ -180,9 +180,9 @@ module.exports = {
 				zitateEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Zitat')
 					.setDescription(randomZitat.zitat)
-					.setFooter(
-						`Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`
-					)
+					.setFooter({
+						text: `Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`,
+					})
 					.setColor('YELLOW');
 
 				actionRow = new MessageActionRow().addComponents(
@@ -191,7 +191,7 @@ module.exports = {
 						.setStyle('PRIMARY')
 						.setLabel('Noch ein Zitat!')
 				);
-				answer = { embeds: [zitatEmbed], components: [actionRow] };
+				answer = { embeds: [zitateEmbed], components: [actionRow] };
 
 				break;
 			default:

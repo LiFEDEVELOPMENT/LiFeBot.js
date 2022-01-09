@@ -3,8 +3,8 @@ const {
 	SlashCommandSubcommandBuilder,
 } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const memeUtil = require('../utility/MemeUtil.js');
-const utilities = require('../utility/Utilities.js');
+const memeUtil = require('@util/MemeUtil.js');
+const utilities = require('@util/Utilities.js');
 
 module.exports = {
 	// Creates a new SlashCommand
@@ -123,7 +123,7 @@ module.exports = {
 				memeEmbed = new MessageEmbed()
 					.setTitle('Zufälliges Meme')
 					.setDescription(randomMeme.meme)
-					.setFooter(`ID: ${randomMeme.id}`)
+					.setFooter({ text: `ID: ${randomMeme.id}` })
 					.setColor('ORANGE');
 
 				actionRow = new MessageActionRow().addComponents(

@@ -17,7 +17,7 @@ const commandFiles = fs
 
 for (const file of commandFiles) {
 	// Push all commands out of the seperate files into a single json-array
-	const command = require(`./commands/${file}`);
+	const command = require(`@commands/${file}`);
 	commands.push(command.data.toJSON());
 }
 

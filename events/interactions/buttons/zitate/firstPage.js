@@ -1,52 +1,45 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const memeUtil = require('../../utility/MemeUtil.js');
+const zitatUtil = require('@util/ZitatUtil.js');
 
 module.exports = {
 	async execute(interaction) {
 		let oldEmbed = interaction.message.embeds[0];
 		let title = oldEmbed.title.split('Seite ');
-		let memeList = await memeUtil.charLimitList(interaction.guild.id);
-		let page = parseInt(title[title.length - 1]) - 2; // 1-indexed at UI, so just take that - 2for index - 1
+		let zitatList = await zitatUtil.charLimitList(interaction.guild.id);
+		let page = 0;
 
-		page =
-			page >= 0 ? (page < memeList.length ? page : memeList.length - 1) : 0;
 		const previousButtonsDisabled = !(page > 0);
-		const nextButtonsDisabled = !(page < memeList.length - 1);
+		const nextButtonsDisabled = !(page < zitatList.length - 1);
 
 		let newEmbed = new MessageEmbed()
 			.setTitle(`${title[0]}Seite ${page + 1}`)
-			.setDescription(memeList[page])
+			.setDescription(zitatList[page])
 			.setTimestamp();
 
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
-				.setCustomId('memes-firstPage')
+				.setCustomId('zitate-firstPage')
 				.setStyle('PRIMARY')
 				.setLabel('Erste Seite!')
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-previousPage')
+				.setCustomId('zitate-previousPage')
 				.setStyle('PRIMARY')
 				.setLabel('Vorherige Seite!')
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-nextPage')
+				.setCustomId('zitate-nextPage')
 				.setStyle('PRIMARY')
 				.setLabel('Nächste Seite!')
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-lastPage')
+				.setCustomId('zitate-lastPage')
 				.setStyle('PRIMARY')
 				.setLabel('Letzte Seite!')
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		await interaction.message.edit({
-			embeds: [newEmbed],
-			components: [],
-		});
-
-		interaction.update({
+		await interaction.update({
 			embeds: [newEmbed],
 			components: [actionRow],
 		});

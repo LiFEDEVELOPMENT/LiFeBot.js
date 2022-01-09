@@ -1,5 +1,5 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const memeUtil = require('../../utility/MemeUtil.js');
+const memeUtil = require('@util/MemeUtil.js');
 
 module.exports = {
 	async execute(interaction) {
@@ -8,7 +8,7 @@ module.exports = {
 		const memeEmbed = new MessageEmbed()
 			.setTitle('Zufälliges Meme')
 			.setDescription(randomMeme.meme)
-			.setFooter(`ID: ${randomMeme.id}`)
+			.setFooter({ text: `ID: ${randomMeme.id}` })
 			.setColor('ORANGE');
 
 		const actionRow = new MessageActionRow().addComponents(

@@ -37,7 +37,7 @@ module.exports = {
 			.setTitle(`${member.user.tag}`)
 			.setDescription(`Wurde vom Server gebannt. Reason:\n\`${reason}\``)
 			.setColor('RED')
-			.setFooter(moderator)
+			.setFooter({ text: moderator })
 			.setTimestamp();
 
 		// Creates a message for the target user informing him about his ban

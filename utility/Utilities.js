@@ -1,4 +1,35 @@
+const sql = require('@sql');
+
 module.exports = {
+	async registerNewPoll(
+		guildid,
+		authorid,
+		maxAntworten,
+		frage,
+		antwort1,
+		antwort2,
+		antwort3,
+		antwort4,
+		antwort5,
+		antwort6,
+		antwort7,
+		antwort8,
+		antwort9,
+		antwort10
+	) {
+		// Prepare arguments for sql statement
+		let sqlParams = Array.from(arguments);
+		sqlParams.unshift(true);
+
+		// Prepaare sql statement and run it with prepared arguments
+		let preparedSQL =
+			'INSERT INTO polls (open,guildid,authorid,maxAntworten,frage,antwort1,antwort2,antwort3,antwort4,antwort5,antwort6,antwort7,antwort8,antwort9,antwort10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+		await sql.run(preparedSQL, sqlParams);
+
+		// Return the id of the newly generated poll-entry
+		let sqlResult = await sql.query('SELECT * FROM polls');
+		return sqlResult[sqlResult.length - 1].id;
+	},
 	async fetchAllMessages(
 		channel,
 		options = {
