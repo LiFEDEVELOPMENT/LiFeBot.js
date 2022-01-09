@@ -1,3 +1,4 @@
+require('module-alias/register');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
@@ -12,7 +13,7 @@ const guildId = process.env.GUILDID;
 // Prepare fetch of all command files
 const commands = [];
 const commandFiles = fs
-	.readdirSync('./commands')
+	.readdirSync('./events/interactions/commands')
 	.filter((file) => file.endsWith('.js'));
 
 for (const file of commandFiles) {
