@@ -2,8 +2,7 @@ require('module-alias/register');
 require('dotenv').config();
 const fs = require('fs');
 const sql = require('@sql');
-const zitateUtility = require('@util/ZitatUtil.js');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Intents } = require('discord.js');
 
 // Create a new Client and fetch all event files
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
