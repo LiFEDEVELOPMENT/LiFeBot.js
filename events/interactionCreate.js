@@ -10,7 +10,7 @@ module.exports = {
 		if (interaction.isCommand())
 			for (file of commandFiles) {
 				if (file.substring(0, file.length - 3) == interaction.commandName) {
-					const command = require(`./interactions/commands/${file}`);
+					const command = require(`@commands/${file}`);
 					command.execute(interaction);
 				}
 			}
@@ -24,7 +24,7 @@ module.exports = {
 
 			for (file of buttonFiles) {
 				if (file.substring(0, file.length - 3) == buttonID) {
-					const button = require(`./interactions/buttons/${type}/${file}`);
+					const button = require(`@buttons/${type}/${file}`);
 					if (type == 'polls')
 						button.execute(interaction, interactionId.split('-')[2]);
 					else button.execute(interaction);
@@ -40,7 +40,7 @@ module.exports = {
 				.filter((file) => file.endsWith('.js'));
 			for (file of menuFiles) {
 				if (file.substring(0, file.length - 3) == selectMenuId) {
-					const menu = require(`./interactions/menus/${type}/${file}`);
+					const menu = require(`@menus/${type}/${file}`);
 					if (type == 'polls')
 						menu.execute(interaction, interactionId.split('-')[2]);
 				}
