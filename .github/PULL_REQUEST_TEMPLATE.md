@@ -8,7 +8,7 @@
 -->
 
 - [ ] I have checked the PRs for upcoming features/bug fixes.
-- [ ] I have read the [contributing guidelines](contributing).
+- [ ] I have read the [contributing guidelines](https://github.com/LIFEBOTDEV/LiFeBot.js/blob/e36b4fe5d9941a4718d4a1a2a47f89faef313065/.github/CONTRIBUTING.md).
 
 <!--
   It is sometimes better to include more changes in a single commit. 
