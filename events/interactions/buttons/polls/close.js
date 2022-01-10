@@ -60,7 +60,7 @@ module.exports = {
 		let maxVotes = Math.max(...arr);
 		let winningAnswers = '';
 
-		if (max > 0)
+		if (maxVotes > 0)
 			for (let i = 1; i <= arr.length; i++) {
 				if (arr[i - 1] == maxVotes) winningAnswers += i + ', ';
 			}
@@ -81,7 +81,7 @@ module.exports = {
 				};
 			});
 
-		footer += ` - Die Umfrage wurde erstellt von ${pollCreator.username}#${pollCreator.discriminator}. Insgesamt gab es ${totalVotes} Stimmen!`;
+		footer += ` - Die Umfrage wurde erstellt von ${pollCreator.username}#${pollCreator.discriminator} - Insgesamt gab es ${totalVotes} Stimmen!`;
 		embed.setFooter({ text: footer });
 		embed.setColor('AQUA');
 		embed.setTimestamp();
