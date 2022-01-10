@@ -1,20 +1,20 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const lang = require('@lang');
 
 module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('color')
-		.setDescription('Sendet ein Bild der angegeben Farbe!')
+		.setDescription(await lang.getString('COLOR_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
 			option
 				.setName('hex')
-				.setDescription(
-					'Der Hex Code der Farbe, welche du sehen möchtest. Bitte benutze das Format #RRGGBB'
-				)
+				.setDescription(await lang.getString('COLOR_HEX_DESCRIPTION'))
 				.setRequired(true)
 		),
 	async execute(interaction) {
+		const guildid = interaction.guild.id;
 		try {
 			// Save color as #RRGGBB, regardless of the color being in the format #RRGGBB or just RRGGBB
 			const color =
@@ -34,7 +34,7 @@ module.exports = {
 			await interaction.reply({ embeds: [colorEmbed] });
 		} catch (error) {
 			// Catches any formatting mistakes by the executor and replys an error
-			await interaction.reply(`Hoppla, da ist etwas schief gelaufen!`);
+			await interaction.reply(await lang.getString('COLOR_FAIL', {}, guildid));
 		}
 	},
 };

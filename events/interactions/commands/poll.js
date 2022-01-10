@@ -6,83 +6,145 @@ const {
 } = require('discord.js');
 const sql = require('@sql');
 const util = require('@util/Utilities.js');
+const lang = require('@lang');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('poll')
-		.setDescription(
-			'Startet eine Umfrage mit bis zu zehn Antwortmöglichkeiten!'
-		)
+		.setDescription(await lang.getString('POLL_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
 			option
-				.setName('frage')
-				.setDescription('Die Frage, die du stellen möchtest')
+				.setName(await lang.getString('POLL_COMMAND_QUESTION'))
+				.setDescription(await lang.getString('POLL_QUESTION_DESCRIPTION'))
 				.setRequired(true)
 		)
 		.addIntegerOption((option) =>
 			option
-				.setName('multiplechoisecount')
-				.setDescription(
-					'Wie viele Antwortmöglichkeiten dürfen maximal gleichzeitig ausgewählt sein?'
-				)
+				.setName('multiplechoicecount')
+				.setDescription(await lang.getString('POLL_MULTIPLECHOICE_DESCRIPTION'))
 				.addChoices([
-					['Maximal 1 Antwort gleichzeitig auswählbar', 1],
-					['Maximal 2 Antworten gleichzeitig auswählbar', 2],
-					['Maximal 3 Antworten gleichzeitig auswählbar', 3],
-					['Maximal 4 Antworten gleichzeitig auswählbar', 4],
-					['Maximal 5 Antworten gleichzeitig auswählbar', 5],
-					['Maximal 6 Antworten gleichzeitig auswählbar', 6],
-					['Maximal 7 Antworten gleichzeitig auswählbar', 7],
-					['Maximal 8 Antworten gleichzeitig auswählbar', 8],
-					['Maximal 9 Antworten gleichzeitig auswählbar', 9],
-					['Maximal 10 Antworten gleichzeitig auswählbar', 10],
+					[await lang.getString('POLL_MULTIPLECHOICE_ONE'), 1],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 2 }),
+						2,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 3 }),
+						3,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 4 }),
+						4,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 5 }),
+						5,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 6 }),
+						6,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 7 }),
+						7,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 8 }),
+						8,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 9 }),
+						9,
+					],
+					[
+						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 10 }),
+						10,
+					],
 				])
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
-				.setName('antwort1')
-				.setDescription('Die 1. Antwortmöglichkeit')
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 1 }))
+				.setDescription(await lang.getString('POLL_MULTIPLECHOICE_FIRST'))
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
-				.setName('antwort2')
-				.setDescription('Die 2. Antwortmöglichkeit')
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 2 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 2 })
+				)
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort3').setDescription('Die 3. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 3 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 3 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort4').setDescription('Die 4. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 4 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 4 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort5').setDescription('Die 5. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 5 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 5 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort6').setDescription('Die 6. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 6 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 6 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort7').setDescription('Die 7. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 7 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 7 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort8').setDescription('Die 8. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 8 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 8 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort9').setDescription('Die 9. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 9 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 9 })
+				)
 		)
 		.addStringOption((option) =>
-			option.setName('antwort10').setDescription('Die 10. Antwortmöglichkeit')
+			option
+				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 10 }))
+				.setDescription(
+					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 10 })
+				)
 		),
 	async execute(interaction) {
-		const frage = interaction.options.getString('frage');
-		const maxAntworten = interaction.options.getInteger('multiplechoisecount');
+		const guildid = interaction.guild.id;
+		const frage = interaction.options.getString(
+			await lang.getString('POLL_COMMAND_QUESTION')
+		);
+		const maxAntworten = interaction.options.getInteger('multiplechoicecount');
 		let choices = [];
 
 		// Push all user-set choices into array
 		for (let i = 1; i <= 10; i++) {
-			let current = 'antwort' + i.toString();
+			let current =
+				(await lang.getString('POLL_CHOICE_NAME_NOREPLACE')) + i.toString();
 			let currentChoice = interaction.options.getString(current);
 
 			if (currentChoice == null) break;
@@ -109,13 +171,19 @@ module.exports = {
 			.setCustomId(`polls-vote-${id}`)
 			.setMaxValues(maxAntworten)
 			.setPlaceholder(
-				`Du kannst maximal ${realChoiceCount} Antwort(en) auswählen und diese bis zum Ende dieser Umfrage jederzeit ändern!`
+				await lang.getString(
+					'POLL_MENU_PLACEHOLDER',
+					{
+						CHOICECOUNT: realChoiceCount,
+					},
+					guildid
+				)
 			);
 
 		// Prepare the stop Button
 		let closeButton = new MessageButton()
 			.setCustomId(`polls-close-${id}`)
-			.setLabel('Umfrage beenden!')
+			.setLabel(await lang.getString('POLL_STOP', {}, guildid))
 			.setStyle('DANGER');
 
 		// Fill the options into the SelectionMenu
@@ -129,7 +197,11 @@ module.exports = {
 
 		// Create the message with the poll
 		interaction.reply({
-			content: `Frage: **${frage}**`,
+			content: await lang.getString(
+				'POLL_REPLY_TITLE',
+				{ STRING: frage },
+				guildid
+			),
 			components: [menuRow, buttonRow],
 		});
 	},

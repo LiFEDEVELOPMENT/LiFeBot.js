@@ -1,4 +1,5 @@
 const sql = require('@sql');
+const lang = require('@lang');
 
 module.exports = {
 	async execute(interaction, id) {
@@ -21,8 +22,7 @@ module.exports = {
 
 		// Reply to the vote
 		await interaction.reply({
-			content:
-				'Deine Stimme wurde gewertet! Du kannst deine Stimme aber bis zur Beendigung dieser Umfrage jederzeit ändern!',
+			content: await lang.getString('POLL_VOTE_ACCEPTED'),
 			ephemeral: true,
 		});
 	},

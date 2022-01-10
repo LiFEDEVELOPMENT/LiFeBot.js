@@ -1,7 +1,12 @@
+const lang = require('@lang');
 module.exports = {
 	name: 'ready',
 	once: true,
-	execute(client) {
-		console.log(`Ready! Logged in as ${client.user.tag}`);
+	async execute(client) {
+		console.log(
+			await lang.getString('LOGIN_CONFIRMATION', '', {
+				USERTAG: client.user.tag,
+			})
+		);
 	},
 };

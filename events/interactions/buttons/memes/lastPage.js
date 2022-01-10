@@ -1,10 +1,14 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
 const memeUtil = require('@util/MemeUtil.js');
+const lang = require('@lang');
 
 module.exports = {
 	async execute(interaction) {
-		let oldEmbed = interaction.message.embeds[0];
-		let title = oldEmbed.title.split('Seite ');
+		const guildid = interaction.guild.id;
+		const oldEmbed = interaction.message.embeds[0];
+		let title = oldEmbed.title.split(
+			await lang.getString('EMBED_TITLE_SPLIT', {}, guildid)
+		);
 		let memeList = await memeUtil.charLimitList(interaction.guild.id);
 		let page = memeList.length - 1;
 
@@ -12,7 +16,16 @@ module.exports = {
 		const nextButtonsDisabled = !(page < memeList.length - 1);
 
 		let newEmbed = new MessageEmbed()
-			.setTitle(`${title[0]}Seite ${page + 1}`)
+			.setTitle(
+				await lang.getString(
+					'EMBED_TITLE_PAGE',
+					{
+						TITLE: title[0],
+						PAGE: page + 1,
+					},
+					guildid
+				)
+			)
 			.setDescription(memeList[page])
 			.setTimestamp();
 
@@ -20,22 +33,22 @@ module.exports = {
 			new MessageButton()
 				.setCustomId('memes-firstPage')
 				.setStyle('PRIMARY')
-				.setLabel('Erste Seite!')
+				.setLabel(await lang.getString('FIRST_PAGE', {}, guildid))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
 				.setCustomId('memes-previousPage')
 				.setStyle('PRIMARY')
-				.setLabel('Vorherige Seite!')
+				.setLabel(await lang.getString('PREVIOUS_PAGE', {}, guildid))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
 				.setCustomId('memes-nextPage')
 				.setStyle('PRIMARY')
-				.setLabel('Nächste Seite!')
+				.setLabel(await lang.getString('NEXT_PAGE', {}, guildid))
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
 				.setCustomId('memes-lastPage')
 				.setStyle('PRIMARY')
-				.setLabel('Letzte Seite!')
+				.setLabel(await lang.getString('LAST_PAGE', {}, guildid))
 				.setDisabled(nextButtonsDisabled)
 		);
 

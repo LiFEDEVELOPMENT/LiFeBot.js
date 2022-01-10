@@ -1,8 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 const sql = require('@sql');
+const lang = require('@lang');
 
 module.exports = {
 	async execute(interaction, id) {
+		const guildid = interaction.guild.id;
 		const pollData = await sql.query(`SELECT * FROM polls WHERE id=${id}`);
 		const voteData = await sql.query(
 			`SELECT * FROM pollvotes WHERE pollid=${id}`
@@ -27,8 +29,7 @@ module.exports = {
 			!(interaction.user.id == pollData[0].authorid)
 		) {
 			interaction.reply({
-				content:
-					'Du hast nicht die Berechtigung, diese Poll zu beenden! Du brauchst die Berechtigung "MANAGE_MESSAGES" oder musst der Author dieser Poll sein!',
+				content: await lang.getString('POLL_CLOSE_PROHIBITED', {}, guildid),
 				ephemeral: true,
 			});
 			return;
@@ -42,7 +43,13 @@ module.exports = {
 
 		// Create a new MessageEmbed and put the poll's question in the title
 		let embed = new MessageEmbed().setTitle(
-			`Die Umfrageergebnisse - ${pollData[0].frage}:`
+			await lang.getString(
+				'EMBED_TITLE_POLL_RESULT',
+				{
+					QUESTION: pollData[0].frage,
+				},
+				guildid
+			)
 		);
 
 		let pollAsArray = Object.values(pollData[0]);
@@ -64,24 +71,41 @@ module.exports = {
 			for (let i = 1; i <= arr.length; i++) {
 				if (arr[i - 1] == maxVotes) winningAnswers += i + ', ';
 			}
-		else winningAnswers = 'Es wurde für keine Option abgestimmt.';
+		else winningAnswers = await lang.getString('POLL_NO_VOTES', {}, guildid);
 		winningAnswers = winningAnswers.substring(0, winningAnswers.length - 2);
 
 		let footer =
 			winningAnswers.length == 1
-				? `Antwort ${winningAnswers} gewinnt!`
-				: `Es gewinnen die folgenden Antworten: ${winningAnswers}!`;
+				? await lang.getString(
+						'POLL_ONE_WINNER',
+						{ WINNING: winningAnswers },
+						guildid
+				  )
+				: await lang.getString(
+						'POLL_MULTIPLE_WINNERS',
+						{
+							WINNING: winningAnswers,
+						},
+						guildid
+				  );
 
 		let pollCreator = await interaction.client.users
 			.fetch(pollData[0].authorid)
 			.catch(() => {
 				return {
-					username:
-						'einem Discord Account, der leider nicht mehr unter uns ist lol',
+					username: await lang.getString('DISCORD_LOST_ACCOUNT', {}, guildid),
 				};
 			});
 
-		footer += ` - Die Umfrage wurde erstellt von ${pollCreator.username}#${pollCreator.discriminator} - Insgesamt gab es ${totalVotes} Stimmen!`;
+		footer += await lang.getString(
+			'POLL_FOOTER',
+			{
+				CREATOR: pollCreator.username,
+				DRISCRIMINATOR: pollCreator.discriminator,
+				TOTALVOTES: totalVotes,
+			},
+			guildid
+		);
 		embed.setFooter({ text: footer });
 		embed.setColor('AQUA');
 		embed.setTimestamp();
@@ -93,6 +117,8 @@ module.exports = {
 
 		await sql.run('UPDATE polls SET open=? WHERE id=?', [false, id]);
 
-		interaction.reply({ content: 'Diese Umfrage wurde beendet!' });
+		interaction.reply({
+			content: await lang.getString('POLL_ENDED', {}, guildid),
+		});
 	},
 };

@@ -1,23 +1,25 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const lang = require('@lang');
 
 module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('kick')
-		.setDescription('Kickt einen User vom Server')
+		.setDescription(await lang.getString('KICK_COMMAND_DESCRIPTION'))
 		.addUserOption((option) =>
 			option
 				.setName('target')
-				.setDescription('Der User, der gekickt werden soll')
+				.setDescription(await lang.getString('KICK_TARGET_DESCRIPTION'))
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
 				.setName('reason')
-				.setDescription('Der Grund, weswegen der angegebene User gekickt wird')
+				.setDescription(await lang.getString('KICK_REASON_DESCRIPTION'))
 		),
 	async execute(interaction) {
+		const guildid = interaction.guild.id;
 		// Prepares constants for the information in the confirmation MessageEmbed
 		const target = interaction.options.getUser('target');
 		const member =
@@ -26,7 +28,7 @@ module.exports = {
 		const reason =
 			interaction.options.getString('reason') != null
 				? interaction.options.getString('reason')
-				: 'Es wurde kein Grund angegeben';
+				: await lang.getString('KICK_NO_REASON', {}, guildid);
 		const moderator =
 			interaction.member.nickname != null
 				? `${interaction.member.nickname}`
@@ -35,22 +37,35 @@ module.exports = {
 		// Prepares an MessageEmbed containing information about the kick
 		const kickEmbed = new MessageEmbed()
 			.setTitle(`${member.user.tag}`)
-			.setDescription(`Wurde vom Server gekickt. Reason:\n\`${reason}\``)
+			.setDescription(
+				await lang.getString(
+					'KICK_EMBED_DESCRIPTION',
+					{ KICKREASON: reason },
+					guildid
+				)
+			)
 			.setColor('RED')
 			.setFooter({ text: moderator })
 			.setTimestamp();
 
 		// Creates a message for the target user informing him about his kick
-		const kickMessage = `Du wurdest von **${interaction.guild.name}** gekickt. Reason:\n\`${reason}\``;
+		const kickMessage = await lang.getString(
+			'KICK_YOU_GOT_KICKED',
+			{
+				GUILDNAME: interaction.guild.name,
+				KICKREASON: reason,
+			},
+			guildid
+		);
 
 		// Checks if the executor has the permissions to kick the target and the target can be kicked
 		if (!member)
 			return interaction.reply(
-				'Beim Abrufen dieses Users ist ein Fehler aufgetreten!'
+				await lang.getString('KICK_FETCH_MEMBER_FAIL', {}, guildid)
 			);
 		if (!member.kickable || member.user.id === interaction.client.user.id)
 			return interaction.reply(
-				'Diesen User werde ich nicht für dich vom Server kicken! lol'
+				await lang.getString('KICK_HIERACHY_FAIL', {}, guildid)
 			);
 		if (
 			interaction.member.roles.highest.position <=
@@ -58,7 +73,7 @@ module.exports = {
 			!interaction.member.permissions.has('KICK_MEMBERS')
 		)
 			return interaction.reply(
-				'Du hast nicht die Berechtigung, diesen User zu kicken'
+				await lang.getString('KICK_PERMISSION_FAIL', {}, guildid)
 			);
 
 		// Sends the previously created kickMessage via DM and kicks the target

@@ -1,23 +1,25 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const lang = require('@lang');
 
 module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('ban')
-		.setDescription('Bannt einen User vom Server!')
+		.setDescription(await lang.getString('BAN_COMMAND_DESCRIPTION'))
 		.addUserOption((option) =>
 			option
 				.setName('target')
-				.setDescription('Der User, der gebannt werden soll')
+				.setDescription(await lang.getString('BAN_TARGET_DESCRIPTION'))
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
 				.setName('reason')
-				.setDescription('Der Grund, weswegen der angegebene User gebannt wird')
+				.setDescription(await lang.getString('BAN_REASON_DESCRIPTION'))
 		),
 	async execute(interaction) {
+		const guildid = interaction.guild.id;
 		// Prepares constants for the information in the confirmation MessageEmbed
 		const target = interaction.options.getUser('target');
 		const member =
@@ -26,7 +28,7 @@ module.exports = {
 		const reason =
 			interaction.options.getString('reason') != null
 				? interaction.options.getString('reason')
-				: 'Es wurde kein Grund angegeben';
+				: await lang.getString('BAN_NO_REASON', {}, guildid);
 		const moderator =
 			interaction.member.nickname != null
 				? `${interaction.member.nickname}`
@@ -35,22 +37,37 @@ module.exports = {
 		// Prepares an MessageEmbed containing information about the ban
 		const banEmbed = new MessageEmbed()
 			.setTitle(`${member.user.tag}`)
-			.setDescription(`Wurde vom Server gebannt. Reason:\n\`${reason}\``)
+			.setDescription(
+				await lang.getString(
+					'BAN_EMBED_DESCRIPTION',
+					{ BANREASON: reason },
+					guildid
+				)
+			)
 			.setColor('RED')
 			.setFooter({ text: moderator })
 			.setTimestamp();
 
 		// Creates a message for the target user informing him about his ban
-		const banMessage = `Du wurdest von **${interaction.guild.name}** gebannt. Reason:\n\`${reason}\``;
+
+		const banMessage = await lang.getString(
+			'BAN_YOU_GOT_BANNED',
+			{
+				GUILDNAME: interaction.guild.name,
+				BANREASON: reason,
+			},
+			guildid
+		);
 
 		// Checks if the executor has the permissions to ban the target and the target can be banned
 		if (!member)
-			return interaction.reply(
-				'Beim Abrufen dieses Users ist ein Fehler aufgetreten!'
-			);
+			return interaction.reply({
+				content: lang.getString('BAN_FETCH_MEMBER_FAIL', {}, guildid),
+				ephemeral: true,
+			});
 		if (!member.bannable || member.user.id === interaction.client.user.id)
 			return interaction.reply(
-				'Diesen User werde ich nicht für dich bannen! lol'
+				lang.getString('BAN_HIERACHY_FAIL', {}, guildid)
 			);
 		if (
 			interaction.member.roles.highest.position <=
@@ -58,7 +75,7 @@ module.exports = {
 			!interaction.member.permissions.has('BAN_MEMBERS')
 		)
 			return interaction.reply(
-				'Du hast nicht die Berechtigung, diesen User zu bannen!'
+				await lang.getString('BAN_PERMISSION_FAIL', {}, guildid)
 			);
 
 		// Sends the previously created banMessage via DM and bans the target

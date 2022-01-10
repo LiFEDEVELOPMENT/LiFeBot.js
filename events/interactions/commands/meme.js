@@ -4,53 +4,55 @@ const {
 } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const memeUtil = require('@util/MemeUtil.js');
-const utilities = require('@util/Utilities.js');
+const lang = require('@lang');
 
 module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('meme')
-		.setDescription(
-			'Meme-Commandgruppe. Enthält Subcommands für hinzufügen, löschen und anzeigen der Memes.'
-		)
+		.setDescription(await lang.getString('MEME_SUBCOMMAND_DESCRIPTION'))
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('random')
-				.setDescription('Zeigt ein zufälliges Meme des Servers!')
+				.setDescription(await lang.getString('MEME_COMMAND_RANDOM_DESCRIPTION'))
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('add')
-				.setDescription('Fügt ein Meme hinzu!')
-				.addStringOption((option) =>
-					option
-						.setName('meme')
-						.setDescription('Das Meme, welches hinzugefügt werden soll.')
-						.setRequired(true)
+				.setDescription(await lang.getString('MEME_COMMAND_ADD_DESCRIPTION'))
+		)
+		.addStringOption((option) =>
+			option
+				.setName('meme')
+				.setDescription(
+					await lang.getString('MEME_COMMAND_ADD_MEME_DESCRIPTION')
 				)
+				.setRequired(true)
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('delete')
-				.setDescription('Entfernt ein Meme!')
+				.setDescription(await lang.getString('MEME_COMMAND_DELETE_DESCRIPTION'))
 				.addIntegerOption((option) =>
 					option
 						.setName('id')
-						.setDescription('Die ID des Memes, welches entfernt werden soll.')
+						.setDescription(
+							await lang.getString('MEME_COMMAND_DELETE_ID_DESCRIPTION')
+						)
 						.setRequired(true)
 				)
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('list')
-				.setDescription('Zeigt eine Liste aller Memes dieses Servers!')
+				.setDescription(await lang.getString('MEME_COMMAND_LIST_DESCRIPTION'))
 		),
 	async execute(interaction) {
 		const guildid = interaction.member.guild.id;
 		let actionRow;
 		let memeEmbed;
 		let answer = {
-			content: `Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...`,
+			content: await lang.getString('MEME_COMMAND_ERROR', {}, guildid),
 			ephemeral: true,
 		};
 
@@ -59,16 +61,28 @@ module.exports = {
 				const meme = interaction.options.getString('meme');
 
 				const memeID = await memeUtil.addMeme(guildid, meme);
-				answer = `Das Meme wurde erfolgreich hinzugefügt! Es hat die ID ${memeID}`;
+				answer = await lang.getString(
+					'MEME_COMMAND_ADD_ANSWER',
+					{ MEMEID: memeID },
+					guildid
+				);
 
 				break;
 			case 'delete':
 				const toDeleteID = interaction.options.getInteger('id');
-				answer = `Das Meme mit der ID ${toDeleteID} wurde erfolgreich entfernt!`;
+				answer = await lang.getString(
+					'MEME_COMMAND_DELETE_ANSWER_SUCCESS',
+					{ MEMEID: toDeleteID },
+					guildid
+				);
 
 				if ((await memeUtil.deleteMeme(toDeleteID, guildid)) == false)
 					answer = {
-						content: `Hoppla! Auf diesem Server scheint es kein Meme mit der ID ${toDeleteID} zu geben!`,
+						content: await lang.getString(
+							'MEME_COMMAND_DELETE_ANSWER_FAIL',
+							{ MEMEID: toDeleteID },
+							guildid
+						),
 						ephemeral: true,
 					};
 
@@ -78,14 +92,20 @@ module.exports = {
 
 				if (memeList[0] == undefined) {
 					answer = {
-						content: 'Auf diesem Server scheint es keine Memes zu geben :(',
+						content: await lang.getString('MEME_LIST_NO_MEMES', {}, guildid),
 						ephemeral: true,
 					};
 					break;
 				}
 
 				memeEmbed = new MessageEmbed()
-					.setTitle(`Alle Memes von ${interaction.guild.name} - Seite 1`)
+					.setTitle(
+						await lang.getString(
+							'MEME_LIST_TITLE',
+							{ GUILDNAME: interaction.guild.name },
+							guildid
+						)
+					)
 					.setDescription(memeList[0])
 					.setTimestamp();
 
@@ -95,22 +115,22 @@ module.exports = {
 					new MessageButton()
 						.setCustomId('memes-firstPage')
 						.setStyle('PRIMARY')
-						.setLabel('Erste Seite!')
+						.setLabel(await lang.getString('FIRST_PAGE', {}, guildid))
 						.setDisabled(true),
 					new MessageButton()
 						.setCustomId('memes-previousPage')
 						.setStyle('PRIMARY')
-						.setLabel('Vorherige Seite!')
+						.setLabel(await lang.getString('PREVIOUS_PAGE', {}, guildid))
 						.setDisabled(true),
 					new MessageButton()
 						.setCustomId('memes-nextPage')
 						.setStyle('PRIMARY')
-						.setLabel('Nächste Seite!')
+						.setLabel(await lang.getString('NEXT_PAGE', {}, guildid))
 						.setDisabled(nextButtonsDisabled),
 					new MessageButton()
 						.setCustomId('memes-lastPage')
 						.setStyle('PRIMARY')
-						.setLabel('Letzte Seite!')
+						.setLabel(await lang.getString('LAST_PAGE', {}, guildid))
 						.setDisabled(nextButtonsDisabled)
 				);
 
@@ -121,24 +141,24 @@ module.exports = {
 				let randomMeme = await memeUtil.randomMeme(interaction.guild.id);
 
 				memeEmbed = new MessageEmbed()
-					.setTitle('Zufälliges Meme')
+					.setTitle(await lang.getString('MEME_RANDOM', {}, guildid))
 					.setDescription(randomMeme.meme)
-					.setFooter({ text: `ID: ${randomMeme.id}` })
+					.setFooter({
+						text: await lang.getString(
+							'MEME_RANDOM_FOOTER',
+							{ MEMEID: randomMeme.id },
+							guildid
+						),
+					})
 					.setColor('ORANGE');
 
 				actionRow = new MessageActionRow().addComponents(
 					new MessageButton()
 						.setCustomId('memes-newRandom')
 						.setStyle('PRIMARY')
-						.setLabel('Noch ein Meme!')
+						.setLabel(await lang.getString('ANOTHER_MEME', {}, guildid))
 				);
 				answer = { embeds: [memeEmbed], components: [actionRow] };
-
-				break;
-			default:
-				console.log(
-					'Hoppla, da wurde ein nicht-existierender Subcommand ausgeführt!'
-				);
 		}
 
 		if (!interaction.deferred) await interaction.reply(answer);

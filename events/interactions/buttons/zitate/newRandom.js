@@ -1,15 +1,16 @@
 const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
 const zitatUtil = require('@util/ZitatUtil.js');
+const lang = require('@lang');
 
 module.exports = {
 	async execute(interaction) {
+		const guildid = interaction.guild.id;
 		let randomZitat = await zitatUtil.randomZitat(interaction.guild.id);
 		let zitatCreator = await interaction.client.users
 			.fetch(randomZitat.author)
 			.catch((err) => {
 				return {
-					username:
-						'einem Discord Account, der leider nicht mehr unter uns ist lol',
+					username: await lang.getString('DISCORD_LOST_ACCOUNT', {}, guildid),
 				};
 			});
 		let date = new Date(randomZitat.time).toLocaleDateString('de-DE', {
@@ -19,10 +20,18 @@ module.exports = {
 		});
 
 		const zitatEmbed = new MessageEmbed()
-			.setTitle('Zufälliges Zitat')
+			.setTitle(await lang.getString('QUOTE_RANDOM', {}, guildid))
 			.setDescription(randomZitat.zitat)
 			.setFooter({
-				text: `Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`,
+				text: await lang.getString(
+					'QUOTE_RANDOM_FOOTER',
+					{
+						DATE: date,
+						CREATOR: zitatCreator.username,
+						QUOTEID: randomZitat.id,
+					},
+					guildid
+				),
 			})
 			.setColor('YELLOW');
 
@@ -30,7 +39,7 @@ module.exports = {
 			new MessageButton()
 				.setCustomId('zitate-newRandom')
 				.setStyle('PRIMARY')
-				.setLabel('Noch ein Zitat!')
+				.setLabel(await lang.getString('QUOTE_ANOTHER', {}, guildid))
 		);
 
 		interaction.update({

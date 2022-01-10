@@ -35,6 +35,9 @@ async function initDB() {
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid BLOB, vote INTEGER)'
 	);
+	await sql.run(
+		'CREATE TABLE IF NOT EXISTS config(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, key STRING, value STRING)'
+	);
 }
 
 initDB();

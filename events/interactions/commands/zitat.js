@@ -5,55 +5,62 @@ const {
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const zitatUtil = require('@util/ZitatUtil.js');
 const utilities = require('@util/Utilities.js');
+const lang = require('@lang');
 
 module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('zitat')
-		.setDescription(
-			'Zitat-Commandgruppe. Enthält Subcommands für hinzufügen, löschen und anzeigen der Zitate.'
-		)
+		.setDescription(await lang.getString('QUOTE_SUBCOMMAND_DESCRIPTION'))
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('random')
-				.setDescription('Zeigt ein zufälliges Zitat des Servers!')
+				.setDescription(await lang.getString('QUOTE_COMMAND_MEME_DESCRIPTION'))
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('add')
-				.setDescription('Fügt ein Zitat hinzu!')
+				.setDescription(await lang.getString('QUOTE_COMMAND_ADD_DESCRIPTION'))
 				.addStringOption((option) =>
 					option
 						.setName('zitat')
-						.setDescription('Das Zitat, welches hinzugefügt werden soll.')
+						.setDescription(
+							await lang.getString('QUOTE_COMMAND_ADD_QUOTE_DESCRIPTION')
+						)
 						.setRequired(true)
 				)
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('delete')
-				.setDescription('Entfernt ein Zitat!')
+				.setDescription(
+					await lang.getString('QUOTE_COMMAND_DELETE_DESCRIPTION')
+				)
 				.addIntegerOption((option) =>
 					option
 						.setName('id')
-						.setDescription('Die ID des Zitats, welches entfernt werden soll.')
+						.setDescription(
+							await lang.getString('QUOTE_COMMAND_DELETE_ID_DESCRIPTION')
+						)
 						.setRequired(true)
 				)
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('list')
-				.setDescription('Zeigt eine Liste aller Zitate dieses Servers!')
+				.setDescription(await lang.getString('QUOTE_COMMAND_LIST_DESCRIPTION'))
 		)
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('import')
-				.setDescription('Importiert alle Nachrichten eines Kanals als Zitate!')
+				.setDescription(
+					await lang.getString('QUOTE_COMMAND_IMPORT_DESCRIPTION')
+				)
 				.addStringOption((option) =>
 					option
 						.setName('channelid')
 						.setDescription(
-							'Die ID des Channels, welcher importiert werden soll'
+							await lang.getString('QUOTE_COMMAND_IMPORT_ID_DESCRIPTION')
 						)
 						.setRequired(true)
 				)
@@ -63,7 +70,7 @@ module.exports = {
 		let actionRow;
 		let zitateEmbed;
 		let answer = {
-			content: `Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...`,
+			content: await lang.get('QUOTE_COMMAND_ERROR'),
 			ephemeral: true,
 		};
 
@@ -74,16 +81,28 @@ module.exports = {
 				const author = interaction.user.id;
 
 				const zitatID = await zitatUtil.addZitat(guildid, zitat, time, author);
-				answer = `Das Zitat wurde erfolgreich hinzugefügt! Es hat die ID ${zitatID}`;
+				answer = await lang.getString(
+					'QUOTE_COMMAND_ADD_ANSWER',
+					{ QUOTEID: zitatID },
+					guildid
+				);
 
 				break;
 			case 'delete':
 				const toDeleteID = interaction.options.getInteger('id');
-				answer = `Das Zitat mit der ID ${toDeleteID} wurde erfolgreich entfernt!`;
+				answer = await lang.getString(
+					'QUOTE_COMMAND_DELETE_ANSWER_SUCCESS',
+					{ QUOTEID: toDeleteID },
+					guildid
+				);
 
 				if ((await zitatUtil.deleteZitat(toDeleteID, guildid)) == false)
 					answer = {
-						content: `Hoppla! Auf diesem Server scheint es kein Zitat mit der ID ${toDeleteID} zu geben!`,
+						content: await lang.getString(
+							'QUOTE_COMMAND_DELETE_ANSWER_FAIL',
+							{ QUOTEID: toDeleteID },
+							guildid
+						),
 						ephemeral: true,
 					};
 
@@ -94,7 +113,7 @@ module.exports = {
 
 				if (channel == undefined) {
 					answer = {
-						content: 'Das scheint keine gültige ChannelID zu sein!',
+						content: await lang.getString('QUOTE_COMMAND_IMPORT_ANSWER_FAIL'),
 						ephemeral: true,
 					};
 
@@ -114,7 +133,11 @@ module.exports = {
 					);
 				}
 
-				answer = `Alle Nachrichten aus #${channel.name} wurden als Zitat hinzugefügt!`;
+				answer = await lang.getString(
+					'QUOTE_COMMAND_IMPORT_ANSWER_SUCCESS',
+					{ CHANNELNAME: channelid },
+					guildid
+				);
 
 				break;
 			case 'list':
@@ -122,14 +145,20 @@ module.exports = {
 
 				if (zitatList[0] == undefined) {
 					answer = {
-						content: 'Auf diesem Server scheint es keine Zitate zu geben :(',
+						content: await lang.getString('QUOTE_LIST_NO_QUOTES'),
 						ephemeral: true,
 					};
 					break;
 				}
 
 				zitateEmbed = new MessageEmbed()
-					.setTitle(`Alle Zitate von ${interaction.guild.name} - Seite 1`)
+					.setTitle(
+						await lang.getString(
+							'QUOTE_LIST_TITLE',
+							{ GUILDNAME: interaction.guild.name },
+							guildid
+						)
+					)
 					.setDescription(zitatList[0])
 					.setTimestamp();
 
@@ -139,22 +168,22 @@ module.exports = {
 					new MessageButton()
 						.setCustomId('zitate-firstPage')
 						.setStyle('PRIMARY')
-						.setLabel('Erste Seite!')
+						.setLabel(await await lang.getString('FIRST_PAGE', {}, guildid))
 						.setDisabled(true),
 					new MessageButton()
 						.setCustomId('zitate-previousPage')
 						.setStyle('PRIMARY')
-						.setLabel('Vorherige Seite!')
+						.setLabel(await await lang.getString('PREVIOUS_PAGE', {}, guildid))
 						.setDisabled(true),
 					new MessageButton()
 						.setCustomId('zitate-nextPage')
 						.setStyle('PRIMARY')
-						.setLabel('Nächste Seite!')
+						.setLabel(await await lang.getString('NEXT_PAGE, {}, guildid'))
 						.setDisabled(nextButtonsDisabled),
 					new MessageButton()
 						.setCustomId('zitate-lastPage')
 						.setStyle('PRIMARY')
-						.setLabel('Letzte Seite!')
+						.setLabel(await await lang.getString('LAST_PAGE', {}, guildid))
 						.setDisabled(nextButtonsDisabled)
 				);
 
@@ -167,8 +196,11 @@ module.exports = {
 					.fetch(randomZitat.author)
 					.catch(() => {
 						return {
-							username:
-								'einem Discord Account, der leider nicht mehr unter uns ist lol',
+							username: await lang.getString(
+								'DISCORD_LOST_ACCOUNT',
+								{},
+								guildid
+							),
 						};
 					});
 				let date = new Date(randomZitat.time).toLocaleDateString('de-DE', {
@@ -178,10 +210,18 @@ module.exports = {
 				});
 
 				zitateEmbed = new MessageEmbed()
-					.setTitle('Zufälliges Zitat')
+					.setTitle(await lang.getString('QUOTE_RANDOM', {}, guildid))
 					.setDescription(randomZitat.zitat)
 					.setFooter({
-						text: `Erstellt am ${date} von ${zitatCreator.username} | ID: ${randomZitat.id}`,
+						text: await lang.getString(
+							'QUOTE_RANDOM_FOOTER',
+							{
+								DATE: date,
+								CREATOR: zitatCreator.username,
+								QUOTEID: randomZitat.id,
+							},
+							guildid
+						),
 					})
 					.setColor('YELLOW');
 
@@ -189,15 +229,9 @@ module.exports = {
 					new MessageButton()
 						.setCustomId('zitate-newRandom')
 						.setStyle('PRIMARY')
-						.setLabel('Noch ein Zitat!')
+						.setLabel(await lang.getString('QUOTE_ANOTHER', {}, guildid))
 				);
 				answer = { embeds: [zitateEmbed], components: [actionRow] };
-
-				break;
-			default:
-				console.log(
-					'Hoppla, da wurde ein nicht-existierender Subcommand ausgeführt!'
-				);
 		}
 
 		if (!interaction.deferred) await interaction.reply(answer);

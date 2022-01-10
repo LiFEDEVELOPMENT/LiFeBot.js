@@ -1,23 +1,25 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const lang = require('@lang');
 
 module.exports = {
 	// Creates a new SlashCommand
 	data: new SlashCommandBuilder()
 		.setName('announce')
-		.setDescription('Announced eine Nachricht!')
+		.setDescription(await lang.getString('ANNOUNCE_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
 			option
 				.setName('message')
-				.setDescription('Die Nachricht, die announced werden soll')
+				.setDescription(await lang.getString('ANNOUNCE_MESSAGE_DESCRIPTION'))
 				.setRequired(true)
 		)
 		.addRoleOption((option) =>
 			option
 				.setName('role')
-				.setDescription('Die Rolle, die in der Nachricht erwähnt werden soll')
+				.setDescription(await lang.getString('ANNOUNCE_ROLE_DESCRIPTION'))
 		),
 	async execute(interaction) {
+		const guildid = interaction.guild.id;
 		// Prepare MessageEmbed for the announce
 		const announceEmbed = new MessageEmbed()
 			.setColor('YELLOW')
@@ -36,7 +38,7 @@ module.exports = {
 
 		await interaction.channel.send({ embeds: [announceEmbed] });
 		await interaction.reply({
-			content: 'Die Nachricht wurde announced!',
+			content: await lang.getString('ANNOUNCE_SUCCESS', {}, guildid),
 			ephemeral: true,
 		});
 	},

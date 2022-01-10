@@ -2,6 +2,7 @@ require('module-alias/register');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const fs = require('fs');
+const lang = require('@lang');
 require('dotenv').config();
 
 // Load environment data
@@ -29,13 +30,21 @@ const rest = new REST({ version: '9' }).setToken(token);
 	try {
 		// Check if the bot is in developer mode. If so, put commands into development guild, if not, put commands into global application commands
 		if (mode == 'DEV') {
-			console.log(`Started refreshing guild (/) commands for ${guildId}`);
+			console.log(
+				await lang.getString('DEPLOY_COMMANDS_GUILD_START', '', {
+					GUILDID: guildId,
+				})
+			);
 			await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
 				body: commands,
 			});
-			console.log(`Successfully reloaded guild (/) commands for ${guildId}`);
+			console.log(
+				await lang.getString('DEPLOY_COMMANDS_GUILD_SUCCESS', '', {
+					GUILDID: guildId,
+				})
+			);
 		} else {
-			console.log('Started refreshing application (/) commands.');
+			console.log(await lang.getString('DEPLOY_COMMANDS_APP_START', '', ''));
 			await rest.put(Routes.applicationCommands(clientId), { body: commands });
 			console.log('Successfully reloaded application (/) commands.');
 		}
