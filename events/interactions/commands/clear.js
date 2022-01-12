@@ -1,33 +1,36 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const lang = require('@lang');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import lang from '@lang';
 
-module.exports = {
-	// Creates a new SlashCommand
-	data: new SlashCommandBuilder()
+async function create() {
+	new SlashCommandBuilder()
 		.setName('clear')
-		.setDescription(await lang.getString('CLEAR_COMMAND_DESCRIPTION'))
+		.setDescription(await lang('CLEAR_COMMAND_DESCRIPTION'))
 		.addNumberOption((option) =>
 			option
 				.setName('amount')
-				.setDescription(await lang.getString('CLEAR_AMOUNT_DESCRIPTION'))
+				.setDescription(await lang('CLEAR_COMMAND_AMOUNT_DESCRIPTION'))
 				.setRequired(true)
-		),
-	async execute(interaction) {
+		);
+}
+async function execute() {
+	try {
 		const guildid = interaction.guild.id;
 		const amount = interaction.options.getNumber('amount');
 
 		// Deletes the given amount of messages
-		await interaction.channel.bulkDelete(amount).catch((err) => {
-			console.err(err);
-		});
+		await interaction.channel.bulkDelete(amount);
 
 		interaction.reply({
-			content: await lang.getString(
-				'CLEAR_SUCCESS',
-				{ AMOUNT: amount },
-				guildid
-			),
+			content: await lang('CLEAR_EXECUTE_SUCCESS', { AMOUNT: amount }, guildid),
 			ephemeral: true,
 		});
-	},
-};
+	} catch (error) {
+		console.log(error);
+		interaction.reply({
+			content: await lang('ERROR'),
+			ephemeral: true,
+		});
+	}
+}
+
+export default { create, execute };

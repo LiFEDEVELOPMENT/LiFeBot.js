@@ -1,45 +1,58 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
-const lang = require('@lang');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed } from 'discord.js';
+import lang from '@lang';
 
-module.exports = {
-	// Creates a new SlashCommand
-	data: new SlashCommandBuilder()
+async function create() {
+	const command = new SlashCommandBuilder()
 		.setName('announce')
 		.setDescription(await lang.getString('ANNOUNCE_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
 			option
 				.setName('message')
-				.setDescription(await lang.getString('ANNOUNCE_MESSAGE_DESCRIPTION'))
+				.setDescription(
+					await lang.getString('ANNOUNCE_COMMAND_MESSAGE_DESCRIPTION')
+				)
 				.setRequired(true)
 		)
 		.addRoleOption((option) =>
 			option
 				.setName('role')
-				.setDescription(await lang.getString('ANNOUNCE_ROLE_DESCRIPTION'))
-		),
-	async execute(interaction) {
-		const guildid = interaction.guild.id;
-		// Prepare MessageEmbed for the announce
+				.setDescription(
+					await lang.getString('ANNOUNCE_COMMAND_ROLE_DESCRIPTION')
+				)
+		);
+	return command.toJSON();
+}
+async function execute(interaction) {
+	try {
+		const roleString =
+			interaction.options.getRole('role') != null
+				? `<@&${interaction.options.getRole('role')}> \n\n`
+				: '';
+		const announceMessage =
+			roleString + interaction.options.getString('message');
+
 		const announceEmbed = new MessageEmbed()
-			.setColor('YELLOW')
+			.setColor('RED')
 			.setTitle('Announce')
-			.setDescription(
-				(interaction.options.getRole('role') != null
-					? '<@&' + interaction.options.getRole('role') + '> \n\n'
-					: '') + interaction.options.getString('message')
-			)
+			.setDescription(announceMessage)
 			.setFooter({
-				text:
-					interaction.member.nickname != null
-						? `${interaction.member.nickname}`
-						: `${interaction.member.user.username}`,
+				text: interaction.member.displayName,
 			});
 
 		await interaction.channel.send({ embeds: [announceEmbed] });
+
 		await interaction.reply({
-			content: await lang.getString('ANNOUNCE_SUCCESS', {}, guildid),
+			content: lang('ANNOUNCE_REPLY_SUCCESS'),
 			ephemeral: true,
 		});
-	},
-};
+	} catch (error) {
+		console.log(error);
+		interaction.reply({
+			content: await lang('ERROR'),
+			ephemeral: true,
+		});
+	}
+}
+
+export default { create, execute };
