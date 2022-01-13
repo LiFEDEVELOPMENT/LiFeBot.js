@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed } from 'discord.js';
-import lang from '@lang';
+import lang from '#lang';
 
 async function create() {
 	const command = new SlashCommandBuilder().setName('ban').setDescription(

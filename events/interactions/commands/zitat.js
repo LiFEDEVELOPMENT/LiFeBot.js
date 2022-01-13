@@ -3,9 +3,9 @@ import {
 	SlashCommandSubcommandBuilder,
 } from '@discordjs/builders';
 import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js';
-import zitatUtil from '@util/ZitatUtil.js';
-import utilities from '@util/Utilities.js';
-import lang from '@lang';
+import zitatUtil from '#util/ZitatUtil.js';
+import utilities from '#util/Utilities.js';
+import lang from '#lang';
 
 async function create() {
 	const command = new SlashCommandBuilder()

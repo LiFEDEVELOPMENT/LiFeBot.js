@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import lang from '@lang';
+import lang from '#lang';
 
 async function create() {
 	const command = new SlashCommandBuilder()

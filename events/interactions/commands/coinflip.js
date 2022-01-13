@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import lang from '@lang';
+import lang from '#lang';
 
 async function create() {
 	const command = new SlashCommandBuilder()
@@ -14,8 +14,8 @@ async function execute() {
 		// Replys with Heads or Tails with a chance of 50%
 		await interaction.reply(
 			Math.random() < 0.5
-				? await lang.getString('HEADS', {}, guildid)
-				: await lang.getString('TAILS', {}, guildid)
+				? await lang('HEADS', {}, guildid)
+				: await lang('TAILS', {}, guildid)
 		);
 	} catch (error) {
 		console.log(error);

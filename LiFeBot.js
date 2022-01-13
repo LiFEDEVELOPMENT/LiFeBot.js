@@ -1,6 +1,6 @@
 import {} from 'dotenv/config';
 import fs from 'fs';
-import sql from '@sql';
+import sql from '#sql';
 import { Client, Intents } from 'discord.js';
 
 // Create a new Client
