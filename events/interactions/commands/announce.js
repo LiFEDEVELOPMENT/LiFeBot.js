@@ -5,22 +5,19 @@ import lang from '@lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('announce')
-		.setDescription(await lang.getString('ANNOUNCE_COMMAND_DESCRIPTION'))
+		.setDescription(await lang('ANNOUNCE_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
 			option
 				.setName('message')
-				.setDescription(
-					await lang.getString('ANNOUNCE_COMMAND_MESSAGE_DESCRIPTION')
-				)
+				.setDescription(await lang('ANNOUNCE_COMMAND_MESSAGE_DESCRIPTION'))
 				.setRequired(true)
 		)
 		.addRoleOption((option) =>
 			option
 				.setName('role')
-				.setDescription(
-					await lang.getString('ANNOUNCE_COMMAND_ROLE_DESCRIPTION')
-				)
+				.setDescription(await lang('ANNOUNCE_COMMAND_ROLE_DESCRIPTION'))
 		);
+
 	return command.toJSON();
 }
 async function execute(interaction) {
@@ -48,7 +45,7 @@ async function execute(interaction) {
 		});
 	} catch (error) {
 		console.log(error);
-		interaction.reply({
+		await interaction.reply({
 			content: await lang('ERROR'),
 			ephemeral: true,
 		});

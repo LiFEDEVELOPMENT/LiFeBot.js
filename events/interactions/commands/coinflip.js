@@ -2,9 +2,11 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import lang from '@lang';
 
 async function create() {
-	new SlashCommandBuilder()
+	const command = new SlashCommandBuilder()
 		.setName('coinflip')
 		.setDescription(await lang('COINFLIP_COMMAND_DESCRIPTION'));
+
+	return command.toJSON();
 }
 async function execute() {
 	try {
@@ -17,7 +19,7 @@ async function execute() {
 		);
 	} catch (error) {
 		console.log(error);
-		interaction.reply({
+		await interaction.reply({
 			content: await lang('ERROR'),
 			ephemeral: true,
 		});

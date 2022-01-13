@@ -5,34 +5,23 @@
     "better-sqlite3": "^7.4.6",
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.5.1",
-    "dotenv": "^10.0.0",
-    "module-alias": "^2.2.2",
-    "sqlite": "^4.0.23",
-    "sqlite3": "^4.2.0"
+    "dotenv": "^10.0.0"
   },
   "imports": {
     "#sql": "./db/sql.js",
     "#langs/*": "./languages/*.js",
-    "#lang": "./utility/Language.js"
-  },
-  "_moduleAliases": {
-    "@commands": "./events/interactions/commands",
-    "@buttons": "./events/interactions/buttons",
-    "@sql": "./db/sql.js",
-    "@menus": "./events/interactions/menus",
-    "@util": "./utility",
-    "@langs": "./languages",
-    "@lang": "./utility/Language.js"
+    "#lang": "./utility/Language.js",
+    "#util/*": "./utility/*.js",
+    "#menus/*": "./events/interactions/menus/*.js",
+    "#commands": "./events/interactions/commands/*.js",
+    "#buttons": "./events/interactions/buttons/*.js"
   },
   "name": "lifebot.js",
   "version": "1.0.0",
   "main": "LiFeBot.js",
-  "scripts": {
-    "test": "node LiFeBot.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["discord-bot"],
+  "author": "Linus Potocnik",
+  "license": "MIT",
   "description": "",
   "type": "module"
 }

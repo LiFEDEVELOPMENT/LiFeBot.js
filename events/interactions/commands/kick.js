@@ -17,6 +17,7 @@ async function create() {
 					.setDescription(await lang('KICK_COMMAND_REASON_DESCRIPTION'))
 			)
 	);
+
 	return command.toJSON();
 }
 async function execute(interaction) {
@@ -75,7 +76,7 @@ async function execute(interaction) {
 		await interaction.reply({ embeds: [kickEmbed] });
 	} catch (error) {
 		console.log(error);
-		interaction.reply({
+		await interaction.reply({
 			content: await lang('ERROR'),
 			ephemeral: true,
 		});

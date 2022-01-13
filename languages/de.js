@@ -5,7 +5,7 @@ export default {
 	ANNOUNCE_COMMAND_ROLE_DESCRIPTION:
 		'Die Rolle, die in der Nachricht erwähnt werden soll',
 	ANNOUNCE_EXECUTE_SUCCESS: 'Die Nachricht wurde announced!',
-	ANOTHER_MEME: 'Noch ein Meme!',
+	MEME_EXECUTE_RANDOM_ANOTHER_MEME: 'Noch ein Meme!',
 	BAN_COMMAND_DESCRIPTION: 'Bannt einen User vom Server!',
 	BAN_COMMAND_REASON_DESCRIPTION:
 		'Der Grund, weswegen der angegebene User gebannt wird',
@@ -61,7 +61,7 @@ export default {
 		'Du wurdest von **GUILDNAME** gekickt. Grund: KICKREASON',
 	LAST_PAGE: 'Letzte Seite!',
 	LOGIN_CONFIRMATION: 'Bereit! Eingeloggt als USERTAG',
-	MEME_COMMAND_ADD_ANSWER:
+	MEME_EXECUTE_ADD_SUCCESS:
 		'Das Meme wurde erfolgreich hinzugefügt! Es hat die ID MEMEID',
 	MEME_COMMAND_ADD_DESCRIPTION: 'Fügt ein Meme hinzu!',
 	MEME_COMMAND_ADD_MEME_DESCRIPTION:
@@ -77,39 +77,41 @@ export default {
 		'Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...',
 	MEME_COMMAND_LIST_DESCRIPTION: 'Zeigt eine Liste aller Memes dieses Servers!',
 	MEME_COMMAND_RANDOM_DESCRIPTION: 'Zeigt ein zufälliges Meme des Servers!',
-	MEME_LIST_NO_MEMES: 'Auf diesem Server scheint es keine Memes zu geben :(',
-	MEME_LIST_TITLE: 'Alle Memes von GUILDNAME - Seite 1',
-	MEME_RANDOM: 'Zufälliges Meme!',
-	MEME_RANDOM_FOOTER: 'ID: MEMEID',
-	MEME_SUBCOMMAND_DESCRIPTION:
+	MEME_EXECUTE_LIST_EMBED_NO_MEMES:
+		'Auf diesem Server scheint es keine Memes zu geben :(',
+	MEME_EXECUTE_LIST_EMBED_TITLE: 'Alle Memes von GUILDNAME - Seite 1',
+	MEME_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Meme!',
+	MEME_EXECUTE_RANDOM_EMBED_FOOTER: 'ID: MEMEID',
+	MEME_COMMAND_DESCRIPTION:
 		'Meme-Commandgruppe. Enthält Subcommands für hinzufügen, löschen und anzeigen der Memes.',
 	MISSING_ARGUMENTS: 'Fehlende Argumente',
 	MISSING_STRING: 'Fehlender String!',
 	NEXT_PAGE: 'Nächste Seite!',
-	POLL_CHOICE_NAME: 'antwortNUMBER',
+	POLL_COMMAND_CHOICE_NAME: 'antwortNUMBER',
 	POLL_CHOICE_NAME_NOREPLACE: 'antwort',
 	POLL_CLOSE_PROHIBITED:
 		'Du hast nicht die Berechtigung, diese Umfrage zu beenden! Du brauchst die Berechtigung "MANAGE_MESSAGES" oder musst der Author dieser Umfrage sein!',
 	POLL_COMMAND_DESCRIPTION:
 		'Startet eine Umfrage mit bis zu zehn Antwortmöglichkeiten!',
-	POLL_COMMAND_QUESTION: 'frage',
+	POLL_COMMAND_QUESTION_NAME: 'frage',
 	POLL_ENDED: 'Diese Umfrage wurde beendet!',
 	POLL_FOOTER:
 		' - Die Umfrage wurde erstellt von CREATOR#DRISCRIMINATOR - Insgesamt gab es TOTALVOTES Stimmen!',
 	POLL_MENU_PLACEHOLDER:
 		'Du kannst maximal CHOICECOUNT Antwort(en) auswählen und diese bis zum Ende dieser Umfrage jederzeit ändern!',
 	POLL_MULTIPLE_WINNERS: 'Es gewinnen die folgenden Antworten: WINNING',
-	POLL_MULTIPLECHOICE_DESCRIPTION:
+	POLL_COMMAND_MULTIPLECHOICE_DESCRIPTION:
 		'Wie viele Antwortmöglichkeiten dürfen maximal gleichzeitig ausgewählt sein?',
-	POLL_MULTIPLECHOICE_FIRST: 'Die 1. Antwortmöglichkeit',
-	POLL_MULTIPLECHOICE_MULTIPLE:
+	POLL_COMMAND_MULTIPLECHOICE_FIRST: 'Die 1. Antwortmöglichkeit',
+	POLL_COMMAND_MULTIPLECHOICE_CHOICE_MULTIPLE:
 		'Maximal COUNT Antworten gleichzeitig auswählbar',
-	POLL_MULTIPLECHOICE_NTH: 'Die NUMBER. Antwortmöglichkeit!',
-	POLL_MULTIPLECHOICE_ONE: 'Maximal 1 Antwort gleichzeitig auswählbar',
+	POLL_COMMAND_MULTIPLECHOICE_NTH: 'Die NUMBER. Antwortmöglichkeit!',
+	POLL_COMMAND_MULTIPLECHOICE_CHOICE_ONE:
+		'Maximal 1 Antwort gleichzeitig auswählbar',
 	POLL_NO_VOTES: 'Es wurde für keine Option abgestimmt!',
 	POLL_ONE_WINNER: 'Antwort WINNING gewinnt',
-	POLL_QUESTION_DESCRIPTION: 'Die Frage, die du stellen möchtest!',
-	POLL_REPLY_TITLE: 'Question: **STRING**',
+	POLL_COMMAND_QUESTION_DESCRIPTION: 'Die Frage, die du stellen möchtest!',
+	POLL_EXECUTE_REPLY_TITLE: 'Question: **STRING**',
 	POLL_STOP: 'Umfrage beenden!',
 	POLL_VOTE_ACCEPTED:
 		'Deine Stimme wurde gewertet! Du kannst deine Stimme aber bis zur Beendigung dieser Umfrage jederzeit ändern!',

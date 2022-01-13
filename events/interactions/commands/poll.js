@@ -1,151 +1,68 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const {
-	MessageSelectMenu,
-	MessageActionRow,
-	MessageButton,
-} = require('discord.js');
-const sql = require('@sql');
-const util = require('@util/Utilities.js');
-const lang = require('@lang');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageSelectMenu, MessageActionRow, MessageButton } from 'discord.js';
+import util from '#util/Utilities.js';
+import lang from '#lang';
 
-module.exports = {
-	data: new SlashCommandBuilder()
+async function create() {
+	const choices = [];
+	choices.push([await lang('POLL_COMMAND_MULTIPLECHOICE_CHOICE_ONE'), 1]);
+	for (let i = 2; i <= 10; i++) {
+		choices.push([
+			await lang('POLL_COMMAND_MULTIPLECHOICE_CHOICE_MULTIPLE', { COUNT: i }),
+			i,
+		]);
+	}
+
+	const command = new SlashCommandBuilder()
 		.setName('poll')
-		.setDescription(await lang.getString('POLL_COMMAND_DESCRIPTION'))
+		.setDescription(await lang('POLL_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
 			option
-				.setName(await lang.getString('POLL_COMMAND_QUESTION'))
-				.setDescription(await lang.getString('POLL_QUESTION_DESCRIPTION'))
+				.setName(await lang('POLL_COMMAND_QUESTION_NAME'))
+				.setDescription(await lang('POLL_COMMAND_QUESTION_DESCRIPTION'))
 				.setRequired(true)
 		)
 		.addIntegerOption((option) =>
 			option
 				.setName('multiplechoicecount')
-				.setDescription(await lang.getString('POLL_MULTIPLECHOICE_DESCRIPTION'))
-				.addChoices([
-					[await lang.getString('POLL_MULTIPLECHOICE_ONE'), 1],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 2 }),
-						2,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 3 }),
-						3,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 4 }),
-						4,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 5 }),
-						5,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 6 }),
-						6,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 7 }),
-						7,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 8 }),
-						8,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 9 }),
-						9,
-					],
-					[
-						await lang.getString('POLL_MULTIPLECHOICE_MULTIPLE', { COUNT: 10 }),
-						10,
-					],
-				])
+				.setDescription(await lang('POLL_COMMAND_MULTIPLECHOICE_DESCRIPTION'))
+				.addChoices(choices)
 				.setRequired(true)
-		)
-		.addStringOption((option) =>
+		);
+
+	command.addStringOption((option) =>
+		option
+			.setName(await lang('POLL_COMMAND_CHOICE_NAME', { NUMBER: 1 }))
+			.setDescription(await lang('POLL_COMMAND_MULTIPLECHOICE_FIRST'))
+			.setRequired(true)
+	);
+
+	for (let i = 2; i <= 10; i++) {
+		command.addStringOption((option) =>
 			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 1 }))
-				.setDescription(await lang.getString('POLL_MULTIPLECHOICE_FIRST'))
-				.setRequired(true)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 2 }))
+				.setName(await lang('POLL_COMMAND_CHOICE_NAME', { NUMBER: i }))
 				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 2 })
+					await lang('POLL_COMMAND_MULTIPLECHOICE_NTH', { NUMBER: i })
 				)
-				.setRequired(true)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 3 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 3 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 4 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 4 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 5 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 5 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 6 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 6 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 7 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 7 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 8 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 8 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 9 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 9 })
-				)
-		)
-		.addStringOption((option) =>
-			option
-				.setName(await lang.getString('POLL_CHOICE_NAME', { NUMBER: 10 }))
-				.setDescription(
-					await lang.getString('POLL_MULTIPLECHOICE_NTH', { NUMBER: 10 })
-				)
-		),
-	async execute(interaction) {
+				.setRequired(i == 2)
+		);
+	}
+}
+
+async function execute(interaction) {
+	try {
 		const guildid = interaction.guild.id;
-		const frage = interaction.options.getString(
-			await lang.getString('POLL_COMMAND_QUESTION')
+		const question = interaction.options.getString(
+			await lang('POLL_COMMAND_QUESTION_NAME')
 		);
 		const maxAntworten = interaction.options.getInteger('multiplechoicecount');
 		let choices = [];
 
 		// Push all user-set choices into array
 		for (let i = 1; i <= 10; i++) {
-			let current =
-				(await lang.getString('POLL_CHOICE_NAME_NOREPLACE')) + i.toString();
-			let currentChoice = interaction.options.getString(current);
+			let currentChoice = interaction.options.getString(
+				await lang('POLL_COMMAND_CHOICE_NAME', { COUNT: i })
+			);
 
 			if (currentChoice == null) break;
 			choices.push(currentChoice);
@@ -162,7 +79,7 @@ module.exports = {
 			interaction.guild.id,
 			interaction.user.id,
 			maxAntworten,
-			frage,
+			question,
 			...choices
 		);
 
@@ -171,7 +88,7 @@ module.exports = {
 			.setCustomId(`polls-vote-${id}`)
 			.setMaxValues(maxAntworten)
 			.setPlaceholder(
-				await lang.getString(
+				await lang(
 					'POLL_MENU_PLACEHOLDER',
 					{
 						CHOICECOUNT: realChoiceCount,
@@ -183,7 +100,7 @@ module.exports = {
 		// Prepare the stop Button
 		let closeButton = new MessageButton()
 			.setCustomId(`polls-close-${id}`)
-			.setLabel(await lang.getString('POLL_STOP', {}, guildid))
+			.setLabel(await lang('POLL_STOP', {}, guildid))
 			.setStyle('DANGER');
 
 		// Fill the options into the SelectionMenu
@@ -197,12 +114,20 @@ module.exports = {
 
 		// Create the message with the poll
 		interaction.reply({
-			content: await lang.getString(
-				'POLL_REPLY_TITLE',
-				{ STRING: frage },
+			content: await lang(
+				'POLL_EXECUTE_REPLY_TITLE',
+				{ STRING: question },
 				guildid
 			),
 			components: [menuRow, buttonRow],
 		});
-	},
-};
+	} catch (error) {
+		console.log(error);
+		await interaction.reply({
+			content: await lang('ERROR'),
+			ephemeral: true,
+		});
+	}
+}
+
+export default { create, execute };

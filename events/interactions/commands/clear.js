@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import lang from '@lang';
 
 async function create() {
-	new SlashCommandBuilder()
+	const command = new SlashCommandBuilder()
 		.setName('clear')
 		.setDescription(await lang('CLEAR_COMMAND_DESCRIPTION'))
 		.addNumberOption((option) =>
@@ -11,6 +11,8 @@ async function create() {
 				.setDescription(await lang('CLEAR_COMMAND_AMOUNT_DESCRIPTION'))
 				.setRequired(true)
 		);
+
+	return command.toJSON();
 }
 async function execute() {
 	try {
@@ -26,7 +28,7 @@ async function execute() {
 		});
 	} catch (error) {
 		console.log(error);
-		interaction.reply({
+		await interaction.reply({
 			content: await lang('ERROR'),
 			ephemeral: true,
 		});

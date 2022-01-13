@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js';
 import lang from '@lang';
 
 async function create() {
-	new SlashCommandBuilder()
+	const command = new SlashCommandBuilder()
 		.setName('color')
 		.setDescription(await lang('COLOR_COMMAND_DESCRIPTION'))
 		.addStringOption((option) =>
@@ -12,6 +12,8 @@ async function create() {
 				.setDescription(await lang('COLOR_COMMAND_HEX_DESCRIPTION'))
 				.setRequired(true)
 		);
+
+	return command.toJSON();
 }
 async function execute(interaction) {
 	try {
@@ -32,7 +34,7 @@ async function execute(interaction) {
 		await interaction.reply({ embeds: [colorEmbed] });
 	} catch (error) {
 		console.log(error);
-		interaction.reply({
+		await interaction.reply({
 			content: await lang('ERROR'),
 			ephemeral: true,
 		});
