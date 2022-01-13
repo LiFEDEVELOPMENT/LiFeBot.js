@@ -1,9 +1,8 @@
-require('module-alias/register');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const fs = require('fs');
-const lang = require('@lang');
-require('dotenv').config();
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+import fs from 'fs';
+import lang from '#lang';
+import {} from 'dotenv/config';
 
 // Load environment data
 const mode = process.env.MODE;
@@ -19,8 +18,10 @@ const commandFiles = fs
 
 for (const file of commandFiles) {
 	// Push all commands out of the seperate files into a single json-array
-	const command = require(`@commands/${file}`);
-	commands.push(command.data.toJSON());
+	const command = await import(
+		`#commands/${file.substring(0, file.length - 3)}`
+	);
+	commands.push(await command.create());
 }
 
 // Prepare Route to Discord
@@ -31,7 +32,7 @@ const rest = new REST({ version: '9' }).setToken(token);
 		// Check if the bot is in developer mode. If so, put commands into development guild, if not, put commands into global application commands
 		if (mode == 'DEV') {
 			console.log(
-				await lang.getString('DEPLOY_COMMANDS_GUILD_START', '', {
+				await lang('DEPLOY_COMMANDS_GUILD_START', '', {
 					GUILDID: guildId,
 				})
 			);
@@ -39,12 +40,12 @@ const rest = new REST({ version: '9' }).setToken(token);
 				body: commands,
 			});
 			console.log(
-				await lang.getString('DEPLOY_COMMANDS_GUILD_SUCCESS', '', {
+				await lang('DEPLOY_COMMANDS_GUILD_SUCCESS', '', {
 					GUILDID: guildId,
 				})
 			);
 		} else {
-			console.log(await lang.getString('DEPLOY_COMMANDS_APP_START', '', ''));
+			console.log(await lang('DEPLOY_COMMANDS_APP_START', '', ''));
 			await rest.put(Routes.applicationCommands(clientId), { body: commands });
 			console.log('Successfully reloaded application (/) commands.');
 		}
