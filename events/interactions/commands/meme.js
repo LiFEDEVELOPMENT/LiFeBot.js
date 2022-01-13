@@ -54,7 +54,7 @@ async function execute(interaction) {
 	try {
 		const guildid = interaction.guild.id;
 		let answer = {
-			content: await lang('MEME_COMMAND_ERROR', {}, guildid),
+			content: await lang('ERROR', {}, guildid),
 			ephemeral: true,
 		};
 
@@ -132,7 +132,7 @@ async function listCommand(interaction, guildid) {
 
 		if (memeList[0] == undefined)
 			return {
-				content: await lang('MEME_EXECUTE_LIST_EMBED_NO_MEMES', {}, guildid),
+				content: await lang('MEME_EXECUTE_LIST_REPLY_NO_MEMES', {}, guildid),
 				ephemeral: true,
 			};
 
@@ -151,22 +151,22 @@ async function listCommand(interaction, guildid) {
 
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
-				.setCustomId('memes-firstPage')
+				.setCustomId('memes/firstPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('FIRST_PAGE', {}, guildid))
 				.setDisabled(true),
 			new MessageButton()
-				.setCustomId('memes-previousPage')
+				.setCustomId('memes/previousPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('PREVIOUS_PAGE', {}, guildid))
 				.setDisabled(true),
 			new MessageButton()
-				.setCustomId('memes-nextPage')
+				.setCustomId('memes/nextPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('NEXT_PAGE', {}, guildid))
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-lastPage')
+				.setCustomId('memes/lastPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('LAST_PAGE', {}, guildid))
 				.setDisabled(nextButtonsDisabled)
@@ -200,7 +200,7 @@ async function randomCommand(interaction, guildid) {
 
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
-				.setCustomId('memes-newRandom')
+				.setCustomId('memes/newRandom')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('MEME_EXECUTE_RANDOM_ANOTHER_MEME', {}, guildid))
 		);

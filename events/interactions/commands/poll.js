@@ -85,7 +85,7 @@ async function execute(interaction) {
 
 		// Prepare the SelectionMenu
 		let selectMenu = new MessageSelectMenu()
-			.setCustomId(`polls-vote-${id}`)
+			.setCustomId(`polls/vote-${id}`)
 			.setMaxValues(maxAntworten)
 			.setPlaceholder(
 				await lang(
@@ -99,7 +99,7 @@ async function execute(interaction) {
 
 		// Prepare the stop Button
 		let closeButton = new MessageButton()
-			.setCustomId(`polls-close-${id}`)
+			.setCustomId(`polls/close-${id}`)
 			.setLabel(await lang('POLL_STOP', {}, guildid))
 			.setStyle('DANGER');
 

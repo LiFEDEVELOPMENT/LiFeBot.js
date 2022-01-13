@@ -1,22 +1,27 @@
-require('module-alias/register');
-require('dotenv').config();
-const fs = require('fs');
-const sql = require('@sql');
-const { Client, Intents } = require('discord.js');
+import {} from 'dotenv/config';
+import fs from 'fs';
+import sql from '@sql';
+import { Client, Intents } from 'discord.js';
 
-// Create a new Client and fetch all event files
+// Create a new Client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-const eventFiles = fs
-	.readdirSync('./events')
-	.filter((file) => file.endsWith('.js'));
 
-// Check for an event and execute the corresponding file in ./events
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+async function handleEvents() {
+	const events = fs
+		.readdirSync('./events')
+		.filter((file) => file.endsWith('.js'));
+
+	// Check for an event and execute the corresponding file in ./events
+	for (let event of events) {
+		const eventFile = (await import(`#events/${event}`)).default;
+		if (event.once)
+			client.once(event.name, (...args) => {
+				eventFile.execute(...args);
+			});
+		else
+			client.on(event.name, (...args) => {
+				eventFile.execute(...args);
+			});
 	}
 }
 
@@ -41,6 +46,7 @@ async function initDB() {
 }
 
 initDB();
+handleEvents();
 
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);

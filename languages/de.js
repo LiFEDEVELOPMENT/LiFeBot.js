@@ -73,11 +73,9 @@ export default {
 	MEME_COMMAND_DELETE_DESCRIPTION: 'Entfernt ein Meme!',
 	MEME_COMMAND_DELETE_ID_DESCRIPTION:
 		'Die ID des Memes, welches entfernt werden soll.',
-	MEME_COMMAND_ERROR:
-		'Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...',
 	MEME_COMMAND_LIST_DESCRIPTION: 'Zeigt eine Liste aller Memes dieses Servers!',
 	MEME_COMMAND_RANDOM_DESCRIPTION: 'Zeigt ein zufälliges Meme des Servers!',
-	MEME_EXECUTE_LIST_EMBED_NO_MEMES:
+	MEME_EXECUTE_LIST_REPLY_NO_MEMES:
 		'Auf diesem Server scheint es keine Memes zu geben :(',
 	MEME_EXECUTE_LIST_EMBED_TITLE: 'Alle Memes von GUILDNAME - Seite 1',
 	MEME_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Meme!',
@@ -116,24 +114,21 @@ export default {
 	POLL_VOTE_ACCEPTED:
 		'Deine Stimme wurde gewertet! Du kannst deine Stimme aber bis zur Beendigung dieser Umfrage jederzeit ändern!',
 	PREVIOUS_PAGE: 'Vorherige Seite!',
-	QUOTE_ANOTHER: 'Noch ein Zitat!',
-	QUOTE_COMMAND_ADD_ANSWER:
+	QUOTE_EXECUTE_RANDOM_BUTTON_TITLE: 'Noch ein Zitat!',
+	QUOTE_EXECUTE_ADD_SUCCESS:
 		'Das Zitat wurde erfolgreich hinzugefügt! Es hat die ID QUOTEID',
 	QUOTE_COMMAND_ADD_DESCRIPTION: 'Fügt ein Zitat hinzu!',
 	QUOTE_COMMAND_ADD_QUOTE_DESCRIPTION:
 		'Das Zitat, welches hinzugefügt werden soll.',
-	QUOTE_COMMAND_DELETE_ANSWER_FAIL:
+	QUOTE_EXECUTE_DELETE_ERROR:
 		'Hoppla! Auf diesem Server scheint es kein Zitat mit der ID QUOTEID zu geben!',
-	QUOTE_COMMAND_DELETE_ANSWER_SUCCESS:
+	QUOTE_EXECUTE_DELETE_SUCCESS:
 		'Das Zitat mit der ID QUOTEID wurde erfolgreich entfernt!',
 	QUOTE_COMMAND_DELETE_DESCRIPTION: 'Entfernt ein Zitat!',
 	QUOTE_COMMAND_DELETE_ID_DESCRIPTION:
 		'Die ID des Zitats, welches entfernt werden soll.',
-	QUOTE_COMMAND_ERROR:
-		'Wenn du diese Nachricht siehst, ist irgendwas sehr schief gelaufen...',
-	QUOTE_COMMAND_IMPORT_ANSWER_FAIL:
-		'Das scheint keine gültige ChannelID zu sein!',
-	QUOTE_COMMAND_IMPORT_ANSWER_SUCCESS:
+	QUOTE_EXECUTE_IMPORT_ERROR: 'Das scheint keine gültige ChannelID zu sein!',
+	QUOTE_EXECUTE_IMPORT_SUCCESS:
 		'Alle Nachrichten aus #CHANNELNAME wurden als Zitat hinzugefügt!',
 	QUOTE_COMMAND_IMPORT_DESCRIPTION:
 		'Importiert alle Nachrichten eines Kanals als Zitate!',
@@ -142,11 +137,14 @@ export default {
 	QUOTE_COMMAND_LIST_DESCRIPTION:
 		'Zeigt eine Liste aller Zitate dieses Servers!',
 	QUOTE_COMMAND_RANDOM_DESCRIPTION: "'Zeigt ein zufälliges Zitat des Servers!'",
-	QUOTE_LIST_NO_QUOTES: 'Auf diesem Server scheint es keine Zitate zu geben :(',
-	QUOTE_LIST_TITLE: 'Alle Zitate von GUILDNAME - Seite 1',
-	QUOTE_RANDOM: 'Zufälliges Zitat!',
-	QUOTE_RANDOM_FOOTER: 'Erstellt am DATE von CREATOR | ID: QUOTEID',
-	QUOTE_SUBCOMMAND_DESCRIPTION:
+	QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES:
+		'Auf diesem Server scheint es keine Zitate zu geben :(',
+	QUOTE_EXECUTE_LIST_EMBED_TITLE: 'Alle Zitate von GUILDNAME - Seite 1',
+	QUOTE_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Zitat!',
+	QUOTE_EXECUTE_RANDOM_EMBED_FOOTER:
+		'Erstellt am DATE von CREATOR | ID: QUOTEID',
+	QUOTE_COMMAND_DESCRIPTION:
 		'Zitat-Commandgruppe. Enthält Subcommands für hinzufügen, löschen und anzeigen der Zitate.',
+	QUOTE_COMMAND_NAME: 'zitat',
 	TAILS: 'Zahl',
 };

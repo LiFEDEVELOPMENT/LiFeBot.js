@@ -13,8 +13,9 @@
     "#lang": "./utility/Language.js",
     "#util/*": "./utility/*.js",
     "#menus/*": "./events/interactions/menus/*.js",
-    "#commands": "./events/interactions/commands/*.js",
-    "#buttons": "./events/interactions/buttons/*.js"
+    "#commands/*": "./events/interactions/commands/*.js",
+    "#buttons/*": "./events/interactions/buttons/*.js",
+    "#events/*": "./events/*"
   },
   "name": "lifebot.js",
   "version": "1.0.0",
