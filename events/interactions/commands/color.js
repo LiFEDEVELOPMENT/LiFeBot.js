@@ -5,11 +5,11 @@ import lang from '#lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('color')
-		.setDescription(await lang('COLOR_COMMAND_DESCRIPTION'))
+		.setDescription('Sends an image of the color you want')
 		.addStringOption((option) =>
 			option
 				.setName('hex')
-				.setDescription(await lang('COLOR_COMMAND_HEX_DESCRIPTION'))
+				.setDescription('Hex Code of the Color. Use Format #RRGGBB')
 				.setRequired(true)
 		);
 

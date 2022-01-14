@@ -4,11 +4,11 @@ import lang from '#lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('clear')
-		.setDescription(await lang('CLEAR_COMMAND_DESCRIPTION'))
+		.setDescription("Clears previous messages from your channel")
 		.addNumberOption((option) =>
 			option
 				.setName('amount')
-				.setDescription(await lang('CLEAR_COMMAND_AMOUNT_DESCRIPTION'))
+				.setDescription("Amount of messages you want to clear")
 				.setRequired(true)
 		);
 

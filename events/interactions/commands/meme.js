@@ -9,35 +9,35 @@ import lang from '#lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('meme')
-		.setDescription(await lang('MEME_COMMAND_DESCRIPTION'));
+		.setDescription('Meme commands. Contains subcommands for adding, deleting and displaying memes');
 
 	command.addSubcommand(
 		new SlashCommandSubcommandBuilder()
 			.setName('random')
-			.setDescription(await lang('MEME_COMMAND_RANDOM_DESCRIPTION'))
+			.setDescription('Displays a random meme of your server')
 	);
 
 	command
 		.addSubcommand(
 			new SlashCommandSubcommandBuilder()
 				.setName('add')
-				.setDescription(await lang('MEME_COMMAND_ADD_DESCRIPTION'))
+				.setDescription('Adds a meme')
 		)
 		.addStringOption((option) =>
 			option
 				.setName('meme')
-				.setDescription(await lang('MEME_COMMAND_ADD_MEME_DESCRIPTION'))
+				.setDescription('Meme you want to add')
 				.setRequired(true)
 		);
 
 	command.addSubcommand(
 		new SlashCommandSubcommandBuilder()
 			.setName('delete')
-			.setDescription(await lang('MEME_COMMAND_DELETE_DESCRIPTION'))
+			.setDescription('Deletes a meme')
 			.addIntegerOption((option) =>
 				option
 					.setName('id')
-					.setDescription(await lang('MEME_COMMAND_DELETE_ID_DESCRIPTION'))
+					.setDescription('ID of the meme you want to delete')
 					.setRequired(true)
 			)
 	);
@@ -45,7 +45,7 @@ async function create() {
 	command.addSubcommand(
 		new SlashCommandSubcommandBuilder()
 			.setName('list')
-			.setDescription(await lang('MEME_COMMAND_LIST_DESCRIPTION'))
+			.setDescription('Lists the meme of your Server')
 	);
 
 	return command.toJSON();

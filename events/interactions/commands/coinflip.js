@@ -4,7 +4,7 @@ import lang from '#lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('coinflip')
-		.setDescription(await lang('COINFLIP_COMMAND_DESCRIPTION'));
+		.setDescription('Flips a coin');
 
 	return command.toJSON();
 }

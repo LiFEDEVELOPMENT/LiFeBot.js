@@ -3,20 +3,20 @@ import { MessageEmbed } from 'discord.js';
 import lang from '#lang';
 
 async function create() {
-	const command = new SlashCommandBuilder().setName('ban').setDescription(
-		await lang('BAN_COMMAND_DESCRIPTION')
-			.addUserOption((option) =>
-				option
-					.setName('target')
-					.setDescription(await lang('BAN_COMMAND_TARGET_DESCRIPTION'))
-					.setRequired(true)
-			)
-			.addStringOption((option) =>
-				option
-					.setName('reason')
-					.setDescription(await lang('BAN_COMMAND_REASON_DESCRIPTION'))
-			)
-	);
+	const command = new SlashCommandBuilder()
+        .setName('ban')
+        .setDescription('Bans a user from your server')
+        .addUserOption((option) =>
+            option
+                .setName('target')
+                .setDescription('The User you want to ban from your server')
+                .setRequired(true)
+        )
+        .addStringOption((option) =>
+            option
+                .setName('reason')
+                .setDescription('The reason for the ban')
+        );
 
 	return command.toJSON();
 }

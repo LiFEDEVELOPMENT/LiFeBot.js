@@ -3,19 +3,19 @@ import { MessageEmbed } from 'discord.js';
 import lang from '#lang';
 
 async function create() {
-	const command = new SlashCommandBuilder().setName('kick').setDescription(
-		await lang('KICK_COMMAND_DESCRIPTION')
-			.addUserOption((option) =>
-				option
-					.setName('target')
-					.setDescription(await lang('KICK_COMMAND_TARGET_DESCRIPTION'))
-					.setRequired(true)
-			)
-			.addStringOption((option) =>
-				option
-					.setName('reason')
-					.setDescription(await lang('KICK_COMMAND_REASON_DESCRIPTION'))
-			)
+	const command = new SlashCommandBuilder()
+        .setName('kick')
+        .setDescription('Kicks a user from your server')
+		.addUserOption((option) =>
+            option
+                .setName('target')
+                .setDescription('The User you want to kick from your server')
+                .setRequired(true)
+        )
+        .addStringOption((option) =>
+            option
+                .setName('reason')
+                .setDescription('The reason for the kick')
 	);
 
 	return command.toJSON();
