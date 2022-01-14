@@ -2,7 +2,7 @@ import lang from '#lang';
 
 async function execute(client) {
 	console.log(
-		await lang('LOGIN_CONFIRMATION', '', {
+		await lang('LOGIN_CONFIRMATION', {
 			USERTAG: client.user.tag,
 		})
 	);

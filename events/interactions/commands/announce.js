@@ -5,17 +5,19 @@ import lang from '#lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('announce')
-		.setDescription(await lang('ANNOUNCE_COMMAND_DESCRIPTION'))
+		.setDescription('Announces a command to the public')
 		.addStringOption((option) =>
 			option
 				.setName('message')
-				.setDescription(await lang('ANNOUNCE_COMMAND_MESSAGE_DESCRIPTION'))
+				.setDescription('The message you want to announce')
 				.setRequired(true)
 		)
 		.addRoleOption((option) =>
 			option
 				.setName('role')
-				.setDescription(await lang('ANNOUNCE_COMMAND_ROLE_DESCRIPTION'))
+				.setDescription(
+					'If you want to mention a role in the announcement message'
+				)
 		);
 
 	return command.toJSON();

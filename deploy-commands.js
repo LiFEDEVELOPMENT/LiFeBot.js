@@ -32,7 +32,7 @@ const rest = new REST({ version: '9' }).setToken(token);
 		// Check if the bot is in developer mode. If so, put commands into development guild, if not, put commands into global application commands
 		if (mode == 'DEV') {
 			console.log(
-				await lang('DEPLOY_COMMANDS_GUILD_START', '', {
+				await lang('DEPLOY_COMMANDS_GUILD_START', {
 					GUILDID: guildId,
 				})
 			);
@@ -40,7 +40,7 @@ const rest = new REST({ version: '9' }).setToken(token);
 				body: commands,
 			});
 			console.log(
-				await lang('DEPLOY_COMMANDS_GUILD_SUCCESS', '', {
+				await lang('DEPLOY_COMMANDS_GUILD_SUCCESS', {
 					GUILDID: guildId,
 				})
 			);

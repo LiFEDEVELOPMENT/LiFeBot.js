@@ -6,28 +6,12 @@ import { Client, Intents } from 'discord.js';
 // Create a new Client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-async function handleEvents() {
-	const events = fs
-		.readdirSync('./events')
-		.filter((file) => file.endsWith('.js'));
-
-	// Check for an event and execute the corresponding file in ./events
-	for (let event of events) {
-		const eventFile = (await import(`#events/${event}`)).default;
-		if (event.once)
-			client.once(event.name, (...args) => {
-				eventFile.execute(...args);
-			});
-		else
-			client.on(event.name, (...args) => {
-				eventFile.execute(...args);
-			});
-	}
-}
+const events = fs
+	.readdirSync('./events')
+	.filter((file) => file.endsWith('.js'));
 
 // Open DB-Connection and create necessary tables
-async function initDB() {
-	await sql.openConnection();
+(async function () {
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS zitate(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, zitat STRING, time STRING, author BLOB)'
 	);
@@ -43,10 +27,22 @@ async function initDB() {
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS config(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, key STRING, value STRING)'
 	);
-}
+})();
 
-initDB();
-handleEvents();
+(async function () {
+	// Check for an event and execute the corresponding file in ./events
+	for (let event of events) {
+		const eventFile = (await import(`#events/${event}`)).default;
+		if (eventFile.once)
+			client.once(eventFile.name, (...args) => {
+				eventFile.execute(...args);
+			});
+		else
+			client.on(eventFile.name, (...args) => {
+				eventFile.execute(...args);
+			});
+	}
+})();
 
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);

@@ -220,12 +220,12 @@ async function listCommand(interaction, guildid) {
 			new MessageButton()
 				.setCustomId('zitate/firstPage')
 				.setStyle('PRIMARY')
-				.setLabel(await await lang('FIRST_PAGE', {}, guildid))
+				.setLabel(await lang('FIRST_PAGE', {}, guildid))
 				.setDisabled(true),
 			new MessageButton()
 				.setCustomId('zitate/previousPage')
 				.setStyle('PRIMARY')
-				.setLabel(await await lang('PREVIOUS_PAGE', {}, guildid))
+				.setLabel(await lang('PREVIOUS_PAGE', {}, guildid))
 				.setDisabled(true),
 			new MessageButton()
 				.setCustomId('zitate/nextPage')
@@ -235,7 +235,7 @@ async function listCommand(interaction, guildid) {
 			new MessageButton()
 				.setCustomId('zitate/lastPage')
 				.setStyle('PRIMARY')
-				.setLabel(await await lang('LAST_PAGE', {}, guildid))
+				.setLabel(await lang('LAST_PAGE', {}, guildid))
 				.setDisabled(nextButtonsDisabled)
 		);
 

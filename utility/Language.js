@@ -8,8 +8,7 @@ export default async function getString(key, mapObject = {}, guildid) {
 	let language =
 		guildid != undefined
 			? await sql.query(
-					'SELECT * FROM config WHERE guildid=? AND key=guildlanguage',
-					guildid
+					`SELECT * FROM config WHERE guildid=${guildid} AND key="guildlanguage";`
 			  )
 			: process.env.DEFAULTLANGUAGE;
 	language = activeLanguages.some((e) => e == language)
