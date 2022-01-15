@@ -5,7 +5,7 @@ async function execute(interaction) {
 		);
 
 	if (interaction.isButton())
-		return (await import(`#commands/${interaction.customId}`)).execute(
+		return (await import(`#buttons/${interaction.customId}`)).execute(
 			interaction
 		);
 
@@ -21,4 +21,4 @@ async function execute(interaction) {
 const once = false;
 const name = 'interactionCreate';
 
-export default { name, once, execute };
+export { name, once, execute };

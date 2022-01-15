@@ -1,6 +1,6 @@
 import sql from '#sql';
 
-async function addZitat(guildid, zitat, time, author) {
+async function addQuote(guildid, zitat, time, author) {
 	// Prepares a SQL statement and inserts the given quote into the zitate table of the db
 	let preparedSQL =
 		'INSERT INTO zitate (guildid,zitat,time,author) VALUES (?,?,?,?)';
@@ -10,7 +10,7 @@ async function addZitat(guildid, zitat, time, author) {
 	let zitate = await sql.query('SELECT * FROM zitate');
 	return zitate[zitate.length - 1].id;
 }
-async function deleteZitat(id, guildid) {
+async function deleteQuote(id, guildid) {
 	if (id < 0) return false;
 
 	// Fetch all quotes with a matching guildid and check if the given id matches one
@@ -20,12 +20,12 @@ async function deleteZitat(id, guildid) {
 	await sql.run('DELETE FROM zitate WHERE id=?', id);
 	return true;
 }
-async function listZitate(guildid) {
+async function listQuotes(guildid) {
 	let zitate = await sql.query('SELECT * FROM zitate');
 	return zitate.filter((zitat) => zitat.guildid == guildid);
 }
 async function charLimitList(guildid) {
-	let zitate = await this.listZitate(guildid);
+	let zitate = await this.listQuotes(guildid);
 	let resultArray = [];
 	let result = '';
 	zitate.forEach((element) => {
@@ -38,17 +38,17 @@ async function charLimitList(guildid) {
 	if (result != '') resultArray.push(result);
 	return resultArray;
 }
-async function randomZitat(guildid) {
+async function randomQuote(guildid) {
 	// Retrieves a list of all quotes of the given guild and picks a random one
-	let guildZitate = await this.listZitate(guildid);
+	let guildZitate = await this.listQuotes(guildid);
 	let random = Math.floor(Math.random() * guildZitate.length);
 	return guildZitate[random];
 }
 
 export default {
-	addZitat,
-	deleteZitat,
-	listZitate,
+	addQuote,
+	deleteQuote,
+	listQuotes,
 	charLimitList,
-	randomZitat,
+	randomQuote,
 };

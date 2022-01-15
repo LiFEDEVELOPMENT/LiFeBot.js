@@ -9,20 +9,22 @@ async function create() {
 		.addStringOption((option) =>
 			option
 				.setName('hex')
-				.setDescription('Hex Code of the Color. Use Format #RRGGBB')
+				.setDescription('Hex-code of the color. Use format #RRGGBB')
 				.setRequired(true)
 		);
 
 	return command.toJSON();
 }
 async function execute(interaction) {
+	const locale = interaction.locale;
+	const hexRegEx = /#[0-9A-Fa-f]{6}/g;
 	try {
-		const guildid = interaction.guild.id;
-		const color =
-			'#' +
-			(interaction.options.getString('hex').startsWith('#')
-				? interaction.options.getString('hex').substring(1)
-				: interaction.options.getString('hex'));
+		const color = interaction.options.getString('hex');
+
+		if (!hexRegEx.test(color))
+			return interaction.reply(
+				await lang('COLOR_EXECUTE_WRONG_FORMAT', {}, locale)
+			);
 
 		const colorEmbed = new MessageEmbed()
 			.setTitle(color)
@@ -35,10 +37,10 @@ async function execute(interaction) {
 	} catch (error) {
 		console.log(error);
 		await interaction.reply({
-			content: await lang('ERROR'),
+			content: await lang('ERROR', {}, locale),
 			ephemeral: true,
 		});
 	}
 }
 
-export default { create, execute };
+export { create, execute };

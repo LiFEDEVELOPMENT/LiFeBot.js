@@ -29,7 +29,7 @@ const events = fs
 (async function () {
 	// Check for an event and execute the corresponding file in ./events
 	for (let event of events) {
-		const eventFile = (await import(`#events/${event}`)).default;
+		const eventFile = await import(`#events/${event}`);
 		if (eventFile.once)
 			client.once(eventFile.name, (...args) => {
 				eventFile.execute(...args);

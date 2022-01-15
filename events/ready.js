@@ -11,4 +11,4 @@ async function execute(client) {
 const once = true;
 const name = 'ready';
 
-export default { name, once, execute };
+export { name, once, execute };

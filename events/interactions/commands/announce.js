@@ -5,53 +5,61 @@ import lang from '#lang';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('announce')
-		.setDescription('Announces a command to the public')
+		.setDescription('Announces a message to the public')
 		.addStringOption((option) =>
 			option
 				.setName('message')
 				.setDescription('The message you want to announce')
 				.setRequired(true)
 		)
+		.addStringOption((option) =>
+			option.setName('title').setDescription('The title of your message')
+		)
 		.addRoleOption((option) =>
 			option
 				.setName('role')
-				.setDescription(
-					'If you want to mention a role in the announcement message'
-				)
+				.setDescription('The role you want to notify about your announcement')
 		);
 
 	return command.toJSON();
 }
 async function execute(interaction) {
+	const locale = interaction.locale;
 	try {
+		const options = interaction.options;
+		const announceMessage = options.getString('message');
 		const roleString =
-			interaction.options.getRole('role') != null
-				? `<@&${interaction.options.getRole('role')}> \n\n`
-				: '';
-		const announceMessage =
-			roleString + interaction.options.getString('message');
+			options.getRole('role') != null ? `${options.getRole('role')}` : ' ';
+		const announceTitle =
+			options.getString('title') != null
+				? options.getString('title')
+				: await lang('ANNOUNCE_EXECUTE_EMBED_TITLE', {}, locale);
 
 		const announceEmbed = new MessageEmbed()
 			.setColor('RED')
-			.setTitle('Announce')
+			.setTitle(announceTitle)
 			.setDescription(announceMessage)
 			.setFooter({
 				text: interaction.member.displayName,
-			});
+			})
+			.setTimestamp();
 
-		await interaction.channel.send({ embeds: [announceEmbed] });
+		await interaction.channel.send({
+			content: roleString,
+			embeds: [announceEmbed],
+		});
 
 		await interaction.reply({
-			content: lang('ANNOUNCE_REPLY_SUCCESS'),
+			content: await lang('ANNOUNCE_EXECUTE_SUCCESS', {}, locale),
 			ephemeral: true,
 		});
 	} catch (error) {
 		console.log(error);
 		await interaction.reply({
-			content: await lang('ERROR'),
+			content: await lang('ERROR', {}, locale),
 			ephemeral: true,
 		});
 	}
 }
 
-export default { create, execute };
+export { create, execute };

@@ -22,9 +22,9 @@ async function execute(interaction, id) {
 
 	// Reply to the vote
 	await interaction.reply({
-		content: await lang('POLL_VOTE_ACCEPTED'),
+		content: await lang('POLL_VOTE_ACCEPTED', {}, interaction.locale),
 		ephemeral: true,
 	});
 }
 
-export default { execute };
+export { execute };

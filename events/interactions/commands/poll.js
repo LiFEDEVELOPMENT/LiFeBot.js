@@ -1,74 +1,62 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageSelectMenu, MessageActionRow, MessageButton } from 'discord.js';
-import util from '#util/Utilities.js';
+import util from '#util/Utilities';
 import lang from '#lang';
 
 async function create() {
 	const choices = [];
-	choices.push([await lang('POLL_COMMAND_MULTIPLECHOICE_CHOICE_ONE'), 1]);
-	for (let i = 2; i <= 10; i++) {
-		choices.push([
-			await lang('POLL_COMMAND_MULTIPLECHOICE_CHOICE_MULTIPLE', { COUNT: i }),
-			i,
-		]);
+	for (let i = 1; i <= 10; i++) {
+		choices.push([`Only allow ${i} answer(s) per user`, i]);
 	}
 
 	const command = new SlashCommandBuilder()
 		.setName('poll')
-		.setDescription(await lang('POLL_COMMAND_DESCRIPTION'))
+		.setDescription('Starts a poll for all users in this channel to vote on')
 		.addStringOption((option) =>
 			option
-				.setName(await lang('POLL_COMMAND_QUESTION_NAME'))
-				.setDescription(await lang('POLL_COMMAND_QUESTION_DESCRIPTION'))
+				.setName('question')
+				.setDescription('The question you want to ask')
 				.setRequired(true)
 		)
 		.addIntegerOption((option) =>
 			option
 				.setName('multiplechoicecount')
-				.setDescription(await lang('POLL_COMMAND_MULTIPLECHOICE_DESCRIPTION'))
+				.setDescription(
+					'How many answers you want to allow simultaneously per user'
+				)
 				.addChoices(choices)
 				.setRequired(true)
 		);
 
-	command.addStringOption((option) =>
-		option
-			.setName(await lang('POLL_COMMAND_CHOICE_NAME', { NUMBER: 1 }))
-			.setDescription(await lang('POLL_COMMAND_MULTIPLECHOICE_FIRST'))
-			.setRequired(true)
-	);
-
-	for (let i = 2; i <= 10; i++) {
+	for (let i = 1; i <= 10; i++) {
 		command.addStringOption((option) =>
 			option
-				.setName(await lang('POLL_COMMAND_CHOICE_NAME', { NUMBER: i }))
-				.setDescription(
-					await lang('POLL_COMMAND_MULTIPLECHOICE_NTH', { NUMBER: i })
-				)
-				.setRequired(i == 2)
+				.setName(`answer${i}`)
+				.setDescription(`Answer no. ${i}`)
+				.setRequired(i <= 2)
 		);
 	}
+
+	return command.toJSON();
 }
 
 async function execute(interaction) {
+	const locale = interaction.locale;
 	try {
 		const guildid = interaction.guild.id;
-		const question = interaction.options.getString(
-			await lang('POLL_COMMAND_QUESTION_NAME')
-		);
-		const maxAntworten = interaction.options.getInteger('multiplechoicecount');
+		const question = interaction.options.getString('question');
+		const maxChoices = interaction.options.getInteger('multiplechoicecount');
 		let choices = [];
 
 		// Push all user-set choices into array
 		for (let i = 1; i <= 10; i++) {
-			let currentChoice = interaction.options.getString(
-				await lang('POLL_COMMAND_CHOICE_NAME', { COUNT: i })
-			);
+			let currentChoice = interaction.options.getString(`answer${i}`);
 
-			if (currentChoice == null) break;
+			if (currentChoice === null) break;
 			choices.push(currentChoice);
 		}
 
-		// Save old length and fill up the array with empty strings
+		// Save old length and fill up the array with empty strings to be of size 10
 		const realChoiceCount = choices.length;
 		for (let i = choices.length; i < 10; i++) {
 			choices.push('');
@@ -76,9 +64,9 @@ async function execute(interaction) {
 
 		// Register a new poll
 		let id = await util.registerNewPoll(
-			interaction.guild.id,
+			guildid,
 			interaction.user.id,
-			maxAntworten,
+			maxChoices,
 			question,
 			...choices
 		);
@@ -86,21 +74,21 @@ async function execute(interaction) {
 		// Prepare the SelectionMenu
 		let selectMenu = new MessageSelectMenu()
 			.setCustomId(`polls/vote-${id}`)
-			.setMaxValues(maxAntworten)
+			.setMaxValues(maxChoices)
 			.setPlaceholder(
 				await lang(
-					'POLL_MENU_PLACEHOLDER',
+					'POLL_EXECUTE_MENU_PLACEHOLDER',
 					{
 						CHOICECOUNT: realChoiceCount,
 					},
-					guildid
+					locale
 				)
 			);
 
 		// Prepare the stop Button
 		let closeButton = new MessageButton()
 			.setCustomId(`polls/close-${id}`)
-			.setLabel(await lang('POLL_STOP', {}, guildid))
+			.setLabel(await lang('POLL_EXECUTE_BUTTON_STOP', {}, locale))
 			.setStyle('DANGER');
 
 		// Fill the options into the SelectionMenu
@@ -117,17 +105,17 @@ async function execute(interaction) {
 			content: await lang(
 				'POLL_EXECUTE_REPLY_TITLE',
 				{ STRING: question },
-				guildid
+				locale
 			),
 			components: [menuRow, buttonRow],
 		});
 	} catch (error) {
 		console.log(error);
 		await interaction.reply({
-			content: await lang('ERROR'),
+			content: await lang('ERROR', {}, locale),
 			ephemeral: true,
 		});
 	}
 }
 
-export default { create, execute };
+export { create, execute };
