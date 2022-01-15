@@ -1,8 +1,9 @@
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, Permissions } from 'discord.js';
 import sql from '#sql';
 import lang from '#lang';
 
 async function execute(interaction, id) {
+	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const pollData = await sql.query(`SELECT * FROM polls WHERE id=${id}`);
 	const voteData = await sql.query(
@@ -24,15 +25,13 @@ async function execute(interaction, id) {
 
 	// Check if the user has the permission to end the poll
 	if (
-		!interaction.member.permissions.has('MANAGE_MESSAGES') &&
+		!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) &&
 		!(interaction.user.id == pollData[0].authorid)
-	) {
-		interaction.reply({
-			content: await lang('POLL_CLOSE_PROHIBITED', {}, guildid),
+	)
+		return interaction.reply({
+			content: await lang('POLL_EXECUTE_CLOSE_PROHIBITED', {}, locale),
 			ephemeral: true,
 		});
-		return;
-	}
 
 	// Count/Store the votes for each option and total votes
 	for (let vote of voteData) {
@@ -43,11 +42,11 @@ async function execute(interaction, id) {
 	// Create a new MessageEmbed and put the poll's question in the title
 	let embed = new MessageEmbed().setTitle(
 		await lang(
-			'EMBED_TITLE_POLL_RESULT',
+			'POLL_EXECUTE_RESULT_EMBED',
 			{
 				QUESTION: pollData[0].frage,
 			},
-			guildid
+			locale
 		)
 	);
 
@@ -70,36 +69,41 @@ async function execute(interaction, id) {
 		for (let i = 1; i <= arr.length; i++) {
 			if (arr[i - 1] == maxVotes) winningAnswers += i + ', ';
 		}
-	else winningAnswers = await lang('POLL_NO_VOTES', {}, guildid);
-	winningAnswers = winningAnswers.substring(0, winningAnswers.length - 2);
+	else winningAnswers = await lang('POLL_EXECUTE_NO_VOTES', {}, locale);
+	winningAnswers = winningAnswers.endsWith(', ')
+		? winningAnswers.substring(0, winningAnswers.length - 2)
+		: winningAnswers;
 
 	let footer =
 		winningAnswers.length == 1
-			? await lang('POLL_ONE_WINNER', { WINNING: winningAnswers }, guildid)
+			? await lang(
+					'POLL_EXECUTE_ONE_WINNER',
+					{ WINNING: winningAnswers },
+					locale
+			  )
 			: await lang(
-					'POLL_MULTIPLE_WINNERS',
+					'POLL_EXEUCUTE_MULTIPLE_WINNERS',
 					{
 						WINNING: winningAnswers,
 					},
-					guildid
+					locale
 			  );
 
 	let pollCreator = await interaction.client.users
 		.fetch(pollData[0].authorid)
 		.catch(() => {
 			return {
-				username: await lang('DISCORD_LOST_ACCOUNT', {}, guildid),
+				tag: 'n/a',
 			};
 		});
 
 	footer += await lang(
-		'POLL_FOOTER',
+		'POLL_EXECUTE_RESULT_EMBED_FOOTER',
 		{
-			CREATOR: pollCreator.username,
-			DRISCRIMINATOR: pollCreator.discriminator,
+			CREATOR: pollCreator.tag,
 			TOTALVOTES: totalVotes,
 		},
-		guildid
+		locale
 	);
 	embed.setFooter({ text: footer });
 	embed.setColor('AQUA');
@@ -110,10 +114,8 @@ async function execute(interaction, id) {
 		components: [],
 	});
 
-	await sql.run('UPDATE polls SET open=? WHERE id=?', [false, id]);
-
 	interaction.reply({
-		content: await lang('POLL_ENDED', {}, guildid),
+		content: await lang('POLL_EXECUTE_REPLY_ENDED', {}, locale),
 	});
 }
-export default { execute };
+export { execute };

@@ -4,16 +4,18 @@ async function execute(interaction) {
 			interaction
 		);
 
+	const metadata = interaction.customId.split('-');
+
 	if (interaction.isButton())
-		return (await import(`#buttons/${interaction.customId}`)).execute(
-			interaction
+		return (await import(`#buttons/${metadata[0]}`)).execute(
+			interaction,
+			metadata[1]
 		);
 
 	if (interaction.isSelectMenu()) {
-		const customId = interaction.customId.split('-');
-		return (await import(`#menus/${customId[0]}`)).execute(
+		return (await import(`#menus/${metadata[0]}`)).execute(
 			interaction,
-			customId[1]
+			metadata[1]
 		);
 	}
 }

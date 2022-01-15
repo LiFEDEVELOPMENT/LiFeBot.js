@@ -14,7 +14,7 @@ async function deleteQuote(id, guildid) {
 	if (id < 0) return false;
 
 	// Fetch all quotes with a matching guildid and check if the given id matches one
-	matchedZitat = await this.listZitate(guildid);
+	let = matchedZitat = await this.listZitate(guildid);
 	if (matchedZitat.filter((zitat) => zitat.id == id).length < 1) return false;
 
 	await sql.run('DELETE FROM zitate WHERE id=?', id);

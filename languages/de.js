@@ -31,9 +31,9 @@ export default {
 		'Aktualisierung der Server (/) Commands für GUILDID erfolgreich abgeschlossen!',
 	DISCORD_LOST_ACCOUNT:
 		'einem Discord Account, der leider nicht mehr unter uns ist lol',
-	EMBED_TITLE_PAGE: 'TITLESeite PAGE',
+	EMBED_TITLE_PAGE: 'TITLEPage NEWPAGE',
 	POLL_EXECUTE_RESULT_EMBED: 'Die Umfrageergebnisse - QUESTION:',
-	EMBED_TITLE_SPLIT: 'Seite ',
+	EMBED_TITLE_SPLIT: 'Page ',
 	ERROR:
 		'Hoppla, da ist wohl etwas schief gelaufen. Ich habe einen Bugreport an den Ersteller dieses Bots geschickt. Solltest du den Bot selbst hosten, solltest du regelmäßig die GitHub-Page auf Updates überprüfen!',
 	FIRST_PAGE: 'Erste Seite!',
@@ -52,7 +52,7 @@ export default {
 		'Das Meme wurde erfolgreich hinzugefügt! Es hat die ID MEMEID',
 	MEME_EXECUTE_LIST_REPLY_NO_MEMES:
 		'Auf diesem Server scheint es keine Memes zu geben :(',
-	MEME_EXECUTE_LIST_EMBED_TITLE: 'Alle Memes von GUILDNAME - Seite 1',
+	MEME_EXECUTE_LIST_EMBED_TITLE: 'Alle Memes von GUILDNAME - Page 1',
 	MEME_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Meme!',
 	MEME_EXECUTE_RANDOM_EMBED_FOOTER: 'ID: MEMEID',
 	MISSING_ARGUMENTS: 'Fehlende Argumente',
@@ -63,7 +63,7 @@ export default {
 		'Du hast nicht die Berechtigung, diese Umfrage zu beenden! Du brauchst die Berechtigung "MANAGE_MESSAGES" oder musst der Author dieser Umfrage sein!',
 	POLL_EXECUTE_REPLY_ENDED: 'Diese Umfrage wurde beendet!',
 	POLL_EXECUTE_RESULT_EMBED_FOOTER:
-		' - Die Umfrage wurde erstellt von CREATOR#DRISCRIMINATOR - Insgesamt gab es TOTALVOTES Stimmen!',
+		' - Die Umfrage wurde erstellt von CREATOR - Insgesamt gab es TOTALVOTES Stimmen!',
 	POLL_EXECUTE_MENU_PLACEHOLDER:
 		'Du kannst maximal CHOICECOUNT Antwort(en) auswählen und diese bis zum Ende dieser Umfrage jederzeit ändern!',
 	POLL_EXEUCUTE_MULTIPLE_WINNERS:
@@ -87,7 +87,7 @@ export default {
 		'Alle Nachrichten aus #CHANNELNAME wurden als Zitat hinzugefügt!',
 	QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES:
 		'Auf diesem Server scheint es keine Zitate zu geben :(',
-	QUOTE_EXECUTE_LIST_EMBED_TITLE: 'Alle Zitate von GUILDNAME - Seite 1',
+	QUOTE_EXECUTE_LIST_EMBED_TITLE: 'Alle Zitate von GUILDNAME - Page 1',
 	QUOTE_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Zitat!',
 	QUOTE_EXECUTE_RANDOM_EMBED_FOOTER:
 		'Erstellt am DATE von CREATOR | ID: QUOTEID',

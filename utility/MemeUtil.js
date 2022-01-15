@@ -14,7 +14,7 @@ async function deleteMeme(id, guildid) {
 	if (id < 0) return false;
 
 	// Fetch all memes with a matching guildid and check if the given id matches one
-	matchedMeme = await this.listMemes(guildid);
+	let matchedMeme = await this.listMemes(guildid);
 	if (matchedMeme.filter((meme) => meme.id == id).length < 1) return false;
 
 	await sql.run('DELETE FROM memes WHERE id=?', id);
