@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed, Permissions } from 'discord.js';
 import lang from '#lang';
+import errorMessage from '#errormessage';
 
 async function create() {
 	const command = new SlashCommandBuilder()

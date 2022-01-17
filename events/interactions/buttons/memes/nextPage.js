@@ -1,6 +1,7 @@
 import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
 import memeUtil from '#util/MemeUtil';
 import lang from '#lang';
+import errorMessage from '#errormessage';
 
 async function execute(interaction) {
 	try {

@@ -1,7 +1,6 @@
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import fs from 'fs';
-import lang from '#lang';
 import {} from 'dotenv/config';
 
 // Load environment data

@@ -1,6 +1,7 @@
 import { MessageEmbed, Permissions, Util } from 'discord.js';
 import sql from '#sql';
 import lang from '#lang';
+import errorMessage from '#errormessage';
 
 async function execute(interaction, id) {
 	try {

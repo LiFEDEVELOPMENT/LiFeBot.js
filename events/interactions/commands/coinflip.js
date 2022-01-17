@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import lang from '#lang';
+import errorMessage from '#errormessage';
 
 async function create() {
 	const command = new SlashCommandBuilder()
