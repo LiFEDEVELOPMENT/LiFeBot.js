@@ -27,9 +27,8 @@ async function execute(interaction) {
 			interaction.options.getUser('target').id
 		);
 		const reason =
-			options.getString('reason') != null
-				? options.getString('reason')
-				: await lang('KICK_EXECUTE_NO_REASON', {}, locale);
+			options.getString('reason') ??
+			(await lang('KICK_EXECUTE_NO_REASON', {}, locale));
 		const directMessage = `You got kicked from **${interaction.guild.name}**.\nReason: ${reason}`;
 		const kickEmbed = new MessageEmbed()
 			.setTitle(target.user.tag)

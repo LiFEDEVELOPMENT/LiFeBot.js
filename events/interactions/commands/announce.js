@@ -28,12 +28,10 @@ async function execute(interaction) {
 	try {
 		const options = interaction.options;
 		const announceMessage = options.getString('message');
-		const roleString =
-			options.getRole('role') != null ? `${options.getRole('role')}` : ' ';
+		const roleString = options.getRole('role') ?? ' ';
 		const announceTitle =
-			options.getString('title') != null
-				? options.getString('title')
-				: await lang('ANNOUNCE_EXECUTE_EMBED_TITLE', {}, locale);
+			options.getString('title') ??
+			(await lang('ANNOUNCE_EXECUTE_EMBED_TITLE', {}, locale));
 
 		const announceEmbed = new MessageEmbed()
 			.setColor('RED')
@@ -45,7 +43,7 @@ async function execute(interaction) {
 			.setTimestamp();
 
 		await interaction.channel.send({
-			content: roleString,
+			content: `${roleString}`,
 			embeds: [announceEmbed],
 		});
 

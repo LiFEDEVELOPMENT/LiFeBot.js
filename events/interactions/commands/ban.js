@@ -27,9 +27,8 @@ async function execute(interaction) {
 			options.getUser('target').id
 		);
 		const reason =
-			options.getString('reason') != null
-				? options.getString('reason')
-				: await lang('BAN_EXECUTE_NO_REASON', {}, locale);
+			options.getString('reason') ??
+			(await lang('BAN_EXECUTE_NO_REASON', {}, locale));
 		const directMessage = `You got banned from **${interaction.guild.name}**.\nReason: ${reason}`;
 		const banEmbed = new MessageEmbed()
 			.setTitle(target.user.tag)
