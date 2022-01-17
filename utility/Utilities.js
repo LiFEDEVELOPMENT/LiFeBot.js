@@ -4,24 +4,24 @@ async function registerNewPoll(
 	guildid,
 	authorid,
 	maxAnswers,
-	frage,
-	antwort1,
-	antwort2,
-	antwort3,
-	antwort4,
-	antwort5,
-	antwort6,
-	antwort7,
-	antwort8,
-	antwort9,
-	antwort10
+	question,
+	answer1,
+	answer2,
+	answer3,
+	answer4,
+	answer5,
+	answer6,
+	answer7,
+	answer8,
+	answer9,
+	answer10
 ) {
 	// Prepare arguments for sql statement
 	let sqlParams = Array.from(arguments);
 
 	// Prepaare sql statement and run it with prepared arguments
 	let preparedSQL =
-		'INSERT INTO polls (guildid,authorid,maxAnswers,frage,antwort1,antwort2,antwort3,antwort4,antwort5,antwort6,antwort7,antwort8,antwort9,antwort10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+		'INSERT INTO polls (guildid,authorid,maxAnswers,question,answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,answer10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 	await sql.run(preparedSQL, sqlParams);
 
 	// Return the id of the newly generated poll-entry

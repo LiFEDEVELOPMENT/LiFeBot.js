@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions } from 'discord.js';
+import { MessageEmbed, Permissions, Util } from 'discord.js';
 import sql from '#sql';
 import lang from '#lang';
 
@@ -44,7 +44,7 @@ async function execute(interaction, id) {
 		await lang(
 			'POLL_EXECUTE_RESULT_EMBED',
 			{
-				QUESTION: pollData[0].frage,
+				QUESTION: pollData[0].question,
 			},
 			locale
 		)
@@ -57,7 +57,11 @@ async function execute(interaction, id) {
 
 		if (currentAnswer == '') break;
 
-		embed.addField(currentAnswer, votes[i - 6].toString(), true);
+		embed.addField(
+			Util.escapeMarkdown(currentAnswer),
+			votes[i - 6].toString(),
+			true
+		);
 	}
 
 	// Footer

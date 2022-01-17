@@ -2,7 +2,12 @@ import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } from '@discordjs/builders';
-import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	MessageEmbed,
+	MessageActionRow,
+	MessageButton,
+	Util,
+} from 'discord.js';
 import memeUtil from '#util/MemeUtil';
 import lang from '#lang';
 
@@ -89,7 +94,7 @@ async function addCommand(interaction) {
 	const locale = interaction.locale;
 	try {
 		const guildid = interaction.guild.id;
-		const meme = interaction.options.getString('meme');
+		const meme = Util.escapeMarkdown(interaction.options.getString('meme'));
 
 		const memeID = await memeUtil.addMeme(guildid, meme);
 		return await lang('MEME_EXECUTE_ADD_SUCCESS', { MEMEID: memeID }, locale);
@@ -146,10 +151,12 @@ async function listCommand(interaction) {
 
 		const memeEmbed = new MessageEmbed()
 			.setTitle(
-				await lang(
-					'MEME_EXECUTE_LIST_EMBED_TITLE',
-					{ GUILDNAME: interaction.guild.name },
-					locale
+				Util.escapeMarkdown(
+					await lang(
+						'MEME_EXECUTE_LIST_EMBED_TITLE',
+						{ GUILDNAME: interaction.guild.name },
+						locale
+					)
 				)
 			)
 			.setDescription(memeList[0])

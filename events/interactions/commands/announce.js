@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, Util } from 'discord.js';
 import lang from '#lang';
 
 async function create() {
@@ -27,11 +27,12 @@ async function execute(interaction) {
 	const locale = interaction.locale;
 	try {
 		const options = interaction.options;
-		const announceMessage = options.getString('message');
+		const announceMessage = Util.escapeMarkdown(options.getString('message'));
 		const roleString = options.getRole('role') ?? ' ';
-		const announceTitle =
+		const announceTitle = Util.escapeMarkdown(
 			options.getString('title') ??
-			(await lang('ANNOUNCE_EXECUTE_EMBED_TITLE', {}, locale));
+				(await lang('ANNOUNCE_EXECUTE_EMBED_TITLE', {}, locale))
+		);
 
 		const announceEmbed = new MessageEmbed()
 			.setColor('RED')

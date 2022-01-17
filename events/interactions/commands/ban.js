@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed, Permissions } from 'discord.js';
+import { MessageEmbed, Permissions, Util } from 'discord.js';
 import lang from '#lang';
 
 async function create() {
@@ -29,13 +29,15 @@ async function execute(interaction) {
 		const reason =
 			options.getString('reason') ??
 			(await lang('BAN_EXECUTE_NO_REASON', {}, locale));
-		const directMessage = `You got banned from **${interaction.guild.name}**.\nReason: ${reason}`;
+		const directMessage = `You got banned from **${
+			interaction.guild.name
+		}**.\nReason: ${Util.escapeMarkdown(reason)}`;
 		const banEmbed = new MessageEmbed()
 			.setTitle(target.user.tag)
 			.setDescription(
 				await lang(
 					'BAN_EXECUTE_EMBED_DESCRIPTION',
-					{ BANREASON: reason },
+					{ BANREASON: Util.escapeMarkdown(reason) },
 					locale
 				)
 			)

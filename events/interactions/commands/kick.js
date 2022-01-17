@@ -29,13 +29,15 @@ async function execute(interaction) {
 		const reason =
 			options.getString('reason') ??
 			(await lang('KICK_EXECUTE_NO_REASON', {}, locale));
-		const directMessage = `You got kicked from **${interaction.guild.name}**.\nReason: ${reason}`;
+		const directMessage = `You got kicked from **${
+			interaction.guild.name
+		}**.\nReason: ${Util.escapeMarkdown(reason)}`;
 		const kickEmbed = new MessageEmbed()
 			.setTitle(target.user.tag)
 			.setDescription(
 				await lang(
 					'KICK_EXECUTE_EMBED_DESCRIPTION',
-					{ KICKREASON: reason },
+					{ KICKREASON: Util.escapeMarkdown(reason) },
 					locale
 				)
 			)

@@ -1,5 +1,10 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageSelectMenu, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	MessageSelectMenu,
+	MessageActionRow,
+	MessageButton,
+	Util,
+} from 'discord.js';
 import util from '#util/Utilities';
 import lang from '#lang';
 
@@ -44,7 +49,9 @@ async function execute(interaction) {
 	const locale = interaction.locale;
 	try {
 		const guildid = interaction.guild.id;
-		const question = interaction.options.getString('question');
+		const question = Util.escapeMarkdown(
+			interaction.options.getString('question')
+		);
 		const maxChoices = interaction.options.getInteger('multiplechoicecount');
 		let choices = [];
 

@@ -19,7 +19,7 @@ const events = fs
 		'CREATE TABLE IF NOT EXISTS memes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, meme STRING)'
 	);
 	await sql.run(
-		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, open BOOLEAN, guildid BLOB, authorid BLOB, maxAnswers INTEGER, frage STRING, antwort1 STRING, antwort2 STRING, antwort3 STRING, antwort4 STRING, antwort5 STRING, antwort6 STRING, antwort7 STRING, antwort8 STRING, antwort9 STRING, antwort10 STRING)'
+		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, open BOOLEAN, guildid BLOB, authorid BLOB, maxAnswers INTEGER, question STRING, answer1 STRING, answer2 STRING, answer3 STRING, answer4 STRING, answer5 STRING, answer6 STRING, answer7 STRING, answer8 STRING, answer9 STRING, answer10 STRING)'
 	);
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid BLOB, vote INTEGER)'

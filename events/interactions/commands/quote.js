@@ -2,7 +2,12 @@ import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } from '@discordjs/builders';
-import { MessageEmbed, MessageActionRow, MessageButton } from 'discord.js';
+import {
+	MessageEmbed,
+	MessageActionRow,
+	MessageButton,
+	Util,
+} from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
 import utilities from '#util/Utilities';
 import lang from '#lang';
@@ -106,7 +111,7 @@ async function addCommand(interaction) {
 	const locale = interaction.locale;
 	try {
 		const guildid = interaction.guild.id;
-		const quote = interaction.options.getString('quote');
+		const quote = Util.escapeMarkdown(interaction.options.getString('quote'));
 		const time = Date.now();
 		const author = interaction.user.id;
 
@@ -209,10 +214,12 @@ async function listCommand(interaction) {
 
 		const quoteEmbed = new MessageEmbed()
 			.setTitle(
-				await lang(
-					'QUOTE_EXECUTE_LIST_EMBED_TITLE',
-					{ GUILDNAME: interaction.guild.name },
-					locale
+				Util.escapeMarkdown(
+					await lang(
+						'QUOTE_EXECUTE_LIST_EMBED_TITLE',
+						{ GUILDNAME: interaction.guild.name },
+						locale
+					)
 				)
 			)
 			.setDescription(quoteList[0])
