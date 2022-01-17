@@ -1,31 +1,18 @@
 import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
-import memeUtil from '#util/MemeUtil.js';
+import memeUtil from '#util/MemeUtil';
 import lang from '#lang';
 
 async function execute(interaction) {
-	const guildid = interaction.guild.id;
-	let oldEmbed = interaction.message.embeds[0];
-	let title = oldEmbed.title.split(
-		await lang('EMBED_TITLE_SPLIT', {}, guildid)
-	);
-	let memeList = await memeUtil.charLimitList(interaction.guild.id);
-	let page = parseInt(title[title.length - 1]) - 2; // 1-indexed at UI, so just take that - 2for index - 1
+	const locale = interaction.locale;
+	const memeList = memeUtil.charLimitList(interaction.guild.id);
+	const oldEmbed = interaction.message.embeds[0];
+	const oldTitle = oldEmbed.title.split('Page ');
+	const page = parseInt(oldTitle[1] - 2) >= 0 ? parseInt(oldTitle[1] - 2) : 0;
+	const previousButtonsDisabled = page < 1;
+	const nextButtonsDisabled = page === memeList.length - 1;
 
-	page = page >= 0 ? (page < memeList.length ? page : memeList.length - 1) : 0;
-	const previousButtonsDisabled = !(page > 0);
-	const nextButtonsDisabled = !(page < memeList.length - 1);
-
-	let newEmbed = new MessageEmbed()
-		.setTitle(
-			await lang(
-				'EMBED_TITLE_PAGE',
-				{
-					TITLE: title[0],
-					PAGE: page + 1,
-				},
-				guildid
-			)
-		)
+	const newEmbed = new MessageEmbed()
+		.setTitle(oldTitle[0] + `Page ${page + 1}`)
 		.setDescription(memeList[page])
 		.setTimestamp();
 
@@ -33,34 +20,28 @@ async function execute(interaction) {
 		new MessageButton()
 			.setCustomId('memes/firstPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('FIRST_PAGE', {}, guildid))
+			.setLabel(await lang('FIRST_PAGE', {}, locale))
 			.setDisabled(previousButtonsDisabled),
 		new MessageButton()
 			.setCustomId('memes/previousPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('PREVIOUS_PAGE', {}, guildid))
+			.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
 			.setDisabled(previousButtonsDisabled),
 		new MessageButton()
 			.setCustomId('memes/nextPage')
 			.setStyle('PRIMARY')
-			.setLabel(lang('NEXT_PAGE', {}, guildid))
+			.setLabel(await lang('NEXT_PAGE', {}, locale))
 			.setDisabled(nextButtonsDisabled),
 		new MessageButton()
 			.setCustomId('memes/lastPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('LAST_PAGE', {}, guildid))
+			.setLabel(await lang('LAST_PAGE', {}, locale))
 			.setDisabled(nextButtonsDisabled)
 	);
 
-	await interaction.message.edit({
-		embeds: [newEmbed],
-		components: [],
-	});
-
-	interaction.update({
+	await interaction.update({
 		embeds: [newEmbed],
 		components: [actionRow],
 	});
 }
-
-export default { execute };
+export { execute };

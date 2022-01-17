@@ -1,48 +1,48 @@
 import sql from '#sql';
 
-async function addQuote(guildid, zitat, time, author) {
-	// Prepares a SQL statement and inserts the given quote into the zitate table of the db
+async function addQuote(guildid, quote, time, author) {
+	// Prepares a SQL statement and inserts the given quote into the quotes table of the db
 	let preparedSQL =
-		'INSERT INTO zitate (guildid,zitat,time,author) VALUES (?,?,?,?)';
-	await sql.run(preparedSQL, [guildid, zitat, time.toString(), author]);
+		'INSERT INTO quotes (guildid,quote,time,author) VALUES (?,?,?,?)';
+	await sql.run(preparedSQL, [guildid, quote, time.toString(), author]);
 
-	// Fetches the last (just generated) object of the zitate table and retrieves its id.
-	let zitate = await sql.query('SELECT * FROM zitate');
-	return zitate[zitate.length - 1].id;
+	// Fetches the last (just generated) object of the quotes table and retrieves its id.
+	let quotes = await sql.query('SELECT * FROM quotes');
+	return quotes[quotes.length - 1].id;
 }
 async function deleteQuote(id, guildid) {
 	if (id < 0) return false;
 
 	// Fetch all quotes with a matching guildid and check if the given id matches one
-	let = matchedZitat = await this.listZitate(guildid);
-	if (matchedZitat.filter((zitat) => zitat.id == id).length < 1) return false;
+	let = matchedQuote = await this.listQuotes(guildid);
+	if (matchedQuote.filter((quote) => quote.id == id).length < 1) return false;
 
-	await sql.run('DELETE FROM zitate WHERE id=?', id);
+	await sql.run('DELETE FROM quotes WHERE id=?', id);
 	return true;
 }
 async function listQuotes(guildid) {
-	let zitate = await sql.query('SELECT * FROM zitate');
-	return zitate.filter((zitat) => zitat.guildid == guildid);
+	let quotes = await sql.query('SELECT * FROM quotes');
+	return quotes.filter((quote) => quote.guildid == guildid);
 }
 async function charLimitList(guildid) {
-	let zitate = await this.listQuotes(guildid);
+	let quotes = await this.listQuotes(guildid);
 	let resultArray = [];
 	let result = '';
-	zitate.forEach((element) => {
-		if ((result + element.zitat).length > 2000) {
+	quotes.forEach((element) => {
+		if ((result + element.quote).length > 2000) {
 			resultArray.push(result);
 			result = '';
 		}
-		result += '\n\n' + element.zitat + ` **(${element.id})**`;
+		result += '\n\n' + element.quote + ` **(${element.id})**`;
 	});
 	if (result != '') resultArray.push(result);
 	return resultArray;
 }
 async function randomQuote(guildid) {
 	// Retrieves a list of all quotes of the given guild and picks a random one
-	let guildZitate = await this.listQuotes(guildid);
-	let random = Math.floor(Math.random() * guildZitate.length);
-	return guildZitate[random];
+	const guildQuotes = await this.listQuotes(guildid);
+	const random = Math.floor(Math.random() * guildQuotes.length);
+	return guildQuotes[random];
 }
 
 export default {

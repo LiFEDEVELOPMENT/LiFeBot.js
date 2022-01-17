@@ -110,10 +110,10 @@ async function addCommand(interaction) {
 		const time = Date.now();
 		const author = interaction.user.id;
 
-		const zitatID = await quoteUtil.addQuote(guildid, quote, time, author);
+		const quoteID = await quoteUtil.addQuote(guildid, quote, time, author);
 		return await lang(
 			'QUOTE_EXECUTE_ADD_SUCCESS',
-			{ QUOTEID: zitatID },
+			{ QUOTEID: quoteID },
 			locale
 		);
 	} catch (error) {
@@ -207,7 +207,7 @@ async function listCommand(interaction) {
 				ephemeral: true,
 			};
 
-		zitateEmbed = new MessageEmbed()
+		const quoteEmbed = new MessageEmbed()
 			.setTitle(
 				await lang(
 					'QUOTE_EXECUTE_LIST_EMBED_TITLE',
@@ -222,28 +222,28 @@ async function listCommand(interaction) {
 
 		actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
-				.setCustomId('zitate/firstPage')
+				.setCustomId('quotes/firstPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('FIRST_PAGE', {}, locale))
 				.setDisabled(true),
 			new MessageButton()
-				.setCustomId('zitate/previousPage')
+				.setCustomId('quotes/previousPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
 				.setDisabled(true),
 			new MessageButton()
-				.setCustomId('zitate/nextPage')
+				.setCustomId('quotes/nextPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('NEXT_PAGE', {}, locale))
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
-				.setCustomId('zitate/lastPage')
+				.setCustomId('quotes/lastPage')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('LAST_PAGE', {}, locale))
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		return { embeds: [zitateEmbed], components: [actionRow] };
+		return { embeds: [quoteEmbed], components: [actionRow] };
 	} catch (error) {
 		console.log(error);
 		await interaction.reply({
@@ -273,7 +273,7 @@ async function randomCommand(interaction) {
 
 		const quoteEmbed = new MessageEmbed()
 			.setTitle(await lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
-			.setDescription(randomQuote.zitat)
+			.setDescription(randomQuote.quote)
 			.setFooter({
 				text: await lang(
 					'QUOTE_EXECUTE_RANDOM_EMBED_FOOTER',
@@ -289,7 +289,7 @@ async function randomCommand(interaction) {
 
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
-				.setCustomId('zitate/newRandom')
+				.setCustomId('quotes/newRandom')
 				.setStyle('PRIMARY')
 				.setLabel(await lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', {}, locale))
 		);

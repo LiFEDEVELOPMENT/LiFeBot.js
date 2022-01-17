@@ -1,7 +1,7 @@
 import sql from '#sql';
 
 async function addMeme(guildid, meme) {
-	// Prepares a SQL statement and inserts the given quote into the zitate table of the db
+	// Prepares a SQL statement and inserts the given quote into the quotes table of the db
 	let preparedSQL = 'INSERT INTO memes (guildid,meme) VALUES (?,?)';
 	await sql.run(preparedSQL, [guildid, meme]);
 
