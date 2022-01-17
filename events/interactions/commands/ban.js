@@ -1,72 +1,73 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed, Permissions, Util } from 'discord.js';
+import lang from '#lang';
 
-module.exports = {
-	// Creates a new SlashCommand
-	data: new SlashCommandBuilder()
+async function create() {
+	const command = new SlashCommandBuilder()
 		.setName('ban')
-		.setDescription('Bannt einen User vom Server!')
+		.setDescription('Bans a user from your server')
 		.addUserOption((option) =>
 			option
 				.setName('target')
-				.setDescription('Der User, der gebannt werden soll')
+				.setDescription('The user you want to ban from your server')
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option
-				.setName('reason')
-				.setDescription('Der Grund, weswegen der angegebene User gebannt wird')
-		),
-	async execute(interaction) {
-		// Prepares constants for the information in the confirmation MessageEmbed
-		const target = interaction.options.getUser('target');
-		const member =
-			interaction.guild.members.cache.get(target.id) ||
-			(await interaction.guild.members.fetch(target.id).catch((err) => {}));
-		const reason =
-			interaction.options.getString('reason') != null
-				? interaction.options.getString('reason')
-				: 'Es wurde kein Grund angegeben';
-		const moderator =
-			interaction.member.nickname != null
-				? `${interaction.member.nickname}`
-				: `${interaction.member.user.username}`;
+			option.setName('reason').setDescription('The reason for the ban')
+		);
 
-		// Prepares an MessageEmbed containing information about the ban
+	return command.toJSON();
+}
+async function execute(interaction) {
+	const locale = interaction.locale;
+	try {
+		const options = interaction.options;
+		const moderator = interaction.member;
+		const target = interaction.guild.members.cache.get(
+			options.getUser('target').id
+		);
+		const reason =
+			options.getString('reason') ??
+			(await lang('BAN_EXECUTE_NO_REASON', {}, locale));
+		const directMessage = `You got banned from **${
+			interaction.guild.name
+		}**.\nReason: ${Util.escapeMarkdown(reason)}`;
 		const banEmbed = new MessageEmbed()
-			.setTitle(`${member.user.tag}`)
-			.setDescription(`Wurde vom Server gebannt. Reason:\n\`${reason}\``)
+			.setTitle(target.user.tag)
+			.setDescription(
+				await lang(
+					'BAN_EXECUTE_EMBED_DESCRIPTION',
+					{ BANREASON: Util.escapeMarkdown(reason) },
+					locale
+				)
+			)
+			.setFooter({ text: moderator.displayName })
 			.setColor('RED')
-			.setFooter({ text: moderator })
 			.setTimestamp();
 
-		// Creates a message for the target user informing him about his ban
-		const banMessage = `Du wurdest von **${interaction.guild.name}** gebannt. Reason:\n\`${reason}\``;
-
-		// Checks if the executor has the permissions to ban the target and the target can be banned
-		if (!member)
-			return interaction.reply(
-				'Beim Abrufen dieses Users ist ein Fehler aufgetreten!'
-			);
-		if (!member.bannable || member.user.id === interaction.client.user.id)
-			return interaction.reply(
-				'Diesen User werde ich nicht für dich bannen! lol'
-			);
+		// Check if the target can be banned by the executing user
 		if (
-			interaction.member.roles.highest.position <=
-				member.roles.highest.position ||
-			!interaction.member.permissions.has('BAN_MEMBERS')
+			!target.bannable ||
+			target.user.id == interaction.client.user.id ||
+			target.user.bot
 		)
 			return interaction.reply(
-				'Du hast nicht die Berechtigung, diesen User zu bannen!'
+				await lang('BAN_EXECUTE_HIERACHY_ERROR', {}, locale)
+			);
+		if (
+			moderator.roles.highest.position <= target.roles.highest.position ||
+			!moderator.permissions.has(Permissions.FLAGS.BAN_MEMBERS)
+		)
+			return interaction.reply(
+				await lang('BAN_EXECUTE_PERMISSION_ERROR', {}, locale)
 			);
 
-		// Sends the previously created banMessage via DM and bans the target
-		await member.user.send(banMessage).catch((err) => {
-			console.err(err);
-		});
-		await member.ban({ reason });
-
+		await target.ban({ reason });
+		await target.user.send(directMessage);
 		await interaction.reply({ embeds: [banEmbed] });
-	},
-};
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+
+export { create, execute };

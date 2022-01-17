@@ -1,8 +1,8 @@
-require('module-alias/register');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const fs = require('fs');
-require('dotenv').config();
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+import fs from 'fs';
+import lang from '#lang';
+import {} from 'dotenv/config';
 
 // Load environment data
 const mode = process.env.MODE;
@@ -18,8 +18,10 @@ const commandFiles = fs
 
 for (const file of commandFiles) {
 	// Push all commands out of the seperate files into a single json-array
-	const command = require(`@commands/${file}`);
-	commands.push(command.data.toJSON());
+	const command = await import(
+		`#commands/${file.substring(0, file.length - 3)}`
+	);
+	commands.push(await command.create());
 }
 
 // Prepare Route to Discord

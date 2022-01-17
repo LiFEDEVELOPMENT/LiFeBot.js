@@ -1,95 +1,69 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const {
+import { SlashCommandBuilder } from '@discordjs/builders';
+import {
 	MessageSelectMenu,
 	MessageActionRow,
 	MessageButton,
-} = require('discord.js');
-const sql = require('@sql');
-const util = require('@util/Utilities.js');
+	Util,
+} from 'discord.js';
+import util from '#util/Utilities';
+import lang from '#lang';
 
-module.exports = {
-	data: new SlashCommandBuilder()
+async function create() {
+	const choices = [];
+	for (let i = 1; i <= 10; i++) {
+		choices.push([`Only allow ${i} answer(s) per user`, i]);
+	}
+
+	const command = new SlashCommandBuilder()
 		.setName('poll')
-		.setDescription(
-			'Startet eine Umfrage mit bis zu zehn Antwortmöglichkeiten!'
-		)
+		.setDescription('Starts a poll for all users in this channel to vote on')
 		.addStringOption((option) =>
 			option
-				.setName('frage')
-				.setDescription('Die Frage, die du stellen möchtest')
+				.setName('question')
+				.setDescription('The question you want to ask')
 				.setRequired(true)
 		)
 		.addIntegerOption((option) =>
 			option
-				.setName('multiplechoisecount')
+				.setName('multiplechoicecount')
 				.setDescription(
-					'Wie viele Antwortmöglichkeiten dürfen maximal gleichzeitig ausgewählt sein?'
+					'How many answers you want to allow simultaneously per user'
 				)
-				.addChoices([
-					['Maximal 1 Antwort gleichzeitig auswählbar', 1],
-					['Maximal 2 Antworten gleichzeitig auswählbar', 2],
-					['Maximal 3 Antworten gleichzeitig auswählbar', 3],
-					['Maximal 4 Antworten gleichzeitig auswählbar', 4],
-					['Maximal 5 Antworten gleichzeitig auswählbar', 5],
-					['Maximal 6 Antworten gleichzeitig auswählbar', 6],
-					['Maximal 7 Antworten gleichzeitig auswählbar', 7],
-					['Maximal 8 Antworten gleichzeitig auswählbar', 8],
-					['Maximal 9 Antworten gleichzeitig auswählbar', 9],
-					['Maximal 10 Antworten gleichzeitig auswählbar', 10],
-				])
+				.addChoices(choices)
 				.setRequired(true)
-		)
-		.addStringOption((option) =>
+		);
+
+	for (let i = 1; i <= 10; i++) {
+		command.addStringOption((option) =>
 			option
-				.setName('antwort1')
-				.setDescription('Die 1. Antwortmöglichkeit')
-				.setRequired(true)
-		)
-		.addStringOption((option) =>
-			option
-				.setName('antwort2')
-				.setDescription('Die 2. Antwortmöglichkeit')
-				.setRequired(true)
-		)
-		.addStringOption((option) =>
-			option.setName('antwort3').setDescription('Die 3. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort4').setDescription('Die 4. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort5').setDescription('Die 5. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort6').setDescription('Die 6. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort7').setDescription('Die 7. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort8').setDescription('Die 8. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort9').setDescription('Die 9. Antwortmöglichkeit')
-		)
-		.addStringOption((option) =>
-			option.setName('antwort10').setDescription('Die 10. Antwortmöglichkeit')
-		),
-	async execute(interaction) {
-		const frage = interaction.options.getString('frage');
-		const maxAntworten = interaction.options.getInteger('multiplechoisecount');
+				.setName(`answer${i}`)
+				.setDescription(`Answer no. ${i}`)
+				.setRequired(i <= 2)
+		);
+	}
+
+	return command.toJSON();
+}
+
+async function execute(interaction) {
+	const locale = interaction.locale;
+	try {
+		const guildid = interaction.guild.id;
+		const question = Util.escapeMarkdown(
+			interaction.options.getString('question')
+		);
+		const maxChoices = interaction.options.getInteger('multiplechoicecount');
 		let choices = [];
 
 		// Push all user-set choices into array
 		for (let i = 1; i <= 10; i++) {
-			let current = 'antwort' + i.toString();
-			let currentChoice = interaction.options.getString(current);
+			let currentChoice = interaction.options.getString(`answer${i}`);
 
-			if (currentChoice == null) break;
+			if (currentChoice === null) break;
 			choices.push(currentChoice);
 		}
 
-		// Save old length and fill up the array with empty strings
+		// Save old length and fill up the array with empty strings to be of size 10
 		const realChoiceCount = choices.length;
 		for (let i = choices.length; i < 10; i++) {
 			choices.push('');
@@ -97,25 +71,31 @@ module.exports = {
 
 		// Register a new poll
 		let id = await util.registerNewPoll(
-			interaction.guild.id,
+			guildid,
 			interaction.user.id,
-			maxAntworten,
-			frage,
+			maxChoices,
+			question,
 			...choices
 		);
 
 		// Prepare the SelectionMenu
 		let selectMenu = new MessageSelectMenu()
-			.setCustomId(`polls-vote-${id}`)
-			.setMaxValues(maxAntworten)
+			.setCustomId(`polls/vote-${id}`)
+			.setMaxValues(maxChoices)
 			.setPlaceholder(
-				`Du kannst maximal ${realChoiceCount} Antwort(en) auswählen und diese bis zum Ende dieser Umfrage jederzeit ändern!`
+				await lang(
+					'POLL_EXECUTE_MENU_PLACEHOLDER',
+					{
+						CHOICECOUNT: realChoiceCount,
+					},
+					locale
+				)
 			);
 
 		// Prepare the stop Button
 		let closeButton = new MessageButton()
-			.setCustomId(`polls-close-${id}`)
-			.setLabel('Umfrage beenden!')
+			.setCustomId(`polls/close-${id}`)
+			.setLabel(await lang('POLL_EXECUTE_BUTTON_STOP', {}, locale))
 			.setStyle('DANGER');
 
 		// Fill the options into the SelectionMenu
@@ -129,8 +109,16 @@ module.exports = {
 
 		// Create the message with the poll
 		interaction.reply({
-			content: `Frage: **${frage}**`,
+			content: await lang(
+				'POLL_EXECUTE_REPLY_TITLE',
+				{ STRING: question },
+				locale
+			),
 			components: [menuRow, buttonRow],
 		});
-	},
-};
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+
+export { create, execute };

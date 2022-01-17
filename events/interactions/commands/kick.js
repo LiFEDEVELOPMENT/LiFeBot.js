@@ -1,72 +1,73 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed, Permissions } from 'discord.js';
+import lang from '#lang';
 
-module.exports = {
-	// Creates a new SlashCommand
-	data: new SlashCommandBuilder()
+async function create() {
+	const command = new SlashCommandBuilder()
 		.setName('kick')
-		.setDescription('Kickt einen User vom Server')
+		.setDescription('Kicks a user from your server')
 		.addUserOption((option) =>
 			option
 				.setName('target')
-				.setDescription('Der User, der gekickt werden soll')
+				.setDescription('The user you want to kick from your server')
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option
-				.setName('reason')
-				.setDescription('Der Grund, weswegen der angegebene User gekickt wird')
-		),
-	async execute(interaction) {
-		// Prepares constants for the information in the confirmation MessageEmbed
-		const target = interaction.options.getUser('target');
-		const member =
-			interaction.guild.members.cache.get(target.id) ||
-			(await interaction.guild.members.fetch(target.id).catch((err) => {}));
-		const reason =
-			interaction.options.getString('reason') != null
-				? interaction.options.getString('reason')
-				: 'Es wurde kein Grund angegeben';
-		const moderator =
-			interaction.member.nickname != null
-				? `${interaction.member.nickname}`
-				: `${interaction.member.user.username}`;
+			option.setName('reason').setDescription('The reason for the kick')
+		);
 
-		// Prepares an MessageEmbed containing information about the kick
+	return command.toJSON();
+}
+async function execute(interaction) {
+	const locale = interaction.locale;
+	try {
+		const options = interaction.options;
+		const moderator = interaction.member;
+		const target = interaction.guild.members.cache.get(
+			interaction.options.getUser('target').id
+		);
+		const reason =
+			options.getString('reason') ??
+			(await lang('KICK_EXECUTE_NO_REASON', {}, locale));
+		const directMessage = `You got kicked from **${
+			interaction.guild.name
+		}**.\nReason: ${Util.escapeMarkdown(reason)}`;
 		const kickEmbed = new MessageEmbed()
-			.setTitle(`${member.user.tag}`)
-			.setDescription(`Wurde vom Server gekickt. Reason:\n\`${reason}\``)
+			.setTitle(target.user.tag)
+			.setDescription(
+				await lang(
+					'KICK_EXECUTE_EMBED_DESCRIPTION',
+					{ KICKREASON: Util.escapeMarkdown(reason) },
+					locale
+				)
+			)
+			.setFooter({ text: moderator.displayName })
 			.setColor('RED')
-			.setFooter({ text: moderator })
 			.setTimestamp();
 
-		// Creates a message for the target user informing him about his kick
-		const kickMessage = `Du wurdest von **${interaction.guild.name}** gekickt. Reason:\n\`${reason}\``;
-
-		// Checks if the executor has the permissions to kick the target and the target can be kicked
-		if (!member)
-			return interaction.reply(
-				'Beim Abrufen dieses Users ist ein Fehler aufgetreten!'
-			);
-		if (!member.kickable || member.user.id === interaction.client.user.id)
-			return interaction.reply(
-				'Diesen User werde ich nicht für dich vom Server kicken! lol'
-			);
+		// Check if the target can be kicked by the executing user
 		if (
-			interaction.member.roles.highest.position <=
-				member.roles.highest.position ||
-			!interaction.member.permissions.has('KICK_MEMBERS')
+			!target.kickable ||
+			target.user.id == interaction.client.user.id ||
+			target.user.bot
 		)
 			return interaction.reply(
-				'Du hast nicht die Berechtigung, diesen User zu kicken'
+				await lang('KICK_EXECUTE_HIERACHY_ERROR', {}, locale)
+			);
+		if (
+			moderator.roles.highest.position <= target.roles.highest.position ||
+			!moderator.permissions.has(Permissions.FLAGS.KICK_MEMBERS)
+		)
+			return interaction.reply(
+				await lang('KICK_EXECUTE_PERMISSION_ERROR', {}, locale)
 			);
 
-		// Sends the previously created kickMessage via DM and kicks the target
-		await member.user.send(kickMessage).catch((err) => {
-			console.log(err);
-		});
-		await member.kick({ reason });
-
+		await target.kick({ reason });
+		await target.user.send(directMessage);
 		await interaction.reply({ embeds: [kickEmbed] });
-	},
-};
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+
+export { create, execute };

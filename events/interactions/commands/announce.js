@@ -1,43 +1,61 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed, Util } from 'discord.js';
+import lang from '#lang';
+import errorMessage from '#errormessage';
 
-module.exports = {
-	// Creates a new SlashCommand
-	data: new SlashCommandBuilder()
+async function create() {
+	const command = new SlashCommandBuilder()
 		.setName('announce')
-		.setDescription('Announced eine Nachricht!')
+		.setDescription('Announces a message to the public')
 		.addStringOption((option) =>
 			option
 				.setName('message')
-				.setDescription('Die Nachricht, die announced werden soll')
+				.setDescription('The message you want to announce')
 				.setRequired(true)
+		)
+		.addStringOption((option) =>
+			option.setName('title').setDescription('The title of your message')
 		)
 		.addRoleOption((option) =>
 			option
 				.setName('role')
-				.setDescription('Die Rolle, die in der Nachricht erwähnt werden soll')
-		),
-	async execute(interaction) {
-		// Prepare MessageEmbed for the announce
-		const announceEmbed = new MessageEmbed()
-			.setColor('YELLOW')
-			.setTitle('Announce')
-			.setDescription(
-				(interaction.options.getRole('role') != null
-					? '<@&' + interaction.options.getRole('role') + '> \n\n'
-					: '') + interaction.options.getString('message')
-			)
-			.setFooter({
-				text:
-					interaction.member.nickname != null
-						? `${interaction.member.nickname}`
-						: `${interaction.member.user.username}`,
-			});
+				.setDescription('The role you want to notify about your announcement')
+		);
 
-		await interaction.channel.send({ embeds: [announceEmbed] });
+	return command.toJSON();
+}
+async function execute(interaction) {
+	const locale = interaction.locale;
+	try {
+		const options = interaction.options;
+		const announceMessage = Util.escapeMarkdown(options.getString('message'));
+		const roleString = options.getRole('role') ?? ' ';
+		const announceTitle = Util.escapeMarkdown(
+			options.getString('title') ??
+				(await lang('ANNOUNCE_EXECUTE_EMBED_TITLE', {}, locale))
+		);
+
+		const announceEmbed = new MessageEmbed()
+			.setColor('RED')
+			.setTitle(announceTitle)
+			.setDescription(announceMessage)
+			.setFooter({
+				text: interaction.member.displayName,
+			})
+			.setTimestamp();
+
+		await interaction.channel.send({
+			content: `${roleString}`,
+			embeds: [announceEmbed],
+		});
+
 		await interaction.reply({
-			content: 'Die Nachricht wurde announced!',
+			content: await lang('ANNOUNCE_EXECUTE_SUCCESS', {}, locale),
 			ephemeral: true,
 		});
-	},
-};
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+
+export { create, execute };

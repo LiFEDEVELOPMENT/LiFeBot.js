@@ -1,43 +1,45 @@
-require('module-alias/register');
-require('dotenv').config();
-const fs = require('fs');
-const sql = require('@sql');
-const { Client, Intents } = require('discord.js');
+import {} from 'dotenv/config';
+import fs from 'fs';
+import sql from '#sql';
+import { Client, Intents } from 'discord.js';
 
-// Create a new Client and fetch all event files
+// Create a new Client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-const eventFiles = fs
+
+const events = fs
 	.readdirSync('./events')
 	.filter((file) => file.endsWith('.js'));
 
-// Check for an event and execute the corresponding file in ./events
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
-}
-
 // Open DB-Connection and create necessary tables
-async function initDB() {
-	await sql.openConnection();
+(async function () {
 	await sql.run(
-		'CREATE TABLE IF NOT EXISTS zitate(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, zitat STRING, time STRING, author BLOB)'
+		'CREATE TABLE IF NOT EXISTS quotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, quote STRING, time STRING, author BLOB)'
 	);
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS memes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, meme STRING)'
 	);
 	await sql.run(
-		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, open BOOLEAN, guildid BLOB, authorid BLOB, maxAntworten INTEGER, frage STRING, antwort1 STRING, antwort2 STRING, antwort3 STRING, antwort4 STRING, antwort5 STRING, antwort6 STRING, antwort7 STRING, antwort8 STRING, antwort9 STRING, antwort10 STRING)'
+		'CREATE TABLE IF NOT EXISTS polls(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, open BOOLEAN, guildid BLOB, authorid BLOB, maxAnswers INTEGER, question STRING, answer1 STRING, answer2 STRING, answer3 STRING, answer4 STRING, answer5 STRING, answer6 STRING, answer7 STRING, answer8 STRING, answer9 STRING, answer10 STRING)'
 	);
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid BLOB, vote INTEGER)'
 	);
-}
+})();
 
-initDB();
+(async function () {
+	// Check for an event and execute the corresponding file in ./events
+	for (let event of events) {
+		const eventFile = await import(`#events/${event}`);
+		if (eventFile.once)
+			client.once(eventFile.name, (...args) => {
+				eventFile.execute(...args);
+			});
+		else
+			client.on(eventFile.name, (...args) => {
+				eventFile.execute(...args);
+			});
+	}
+})();
 
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);

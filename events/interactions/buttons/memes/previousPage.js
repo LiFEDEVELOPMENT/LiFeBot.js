@@ -1,54 +1,51 @@
-const { MessageActionRow, MessageEmbed, MessageButton } = require('discord.js');
-const memeUtil = require('@util/MemeUtil.js');
+import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
+import memeUtil from '#util/MemeUtil';
+import lang from '#lang';
 
-module.exports = {
-	async execute(interaction) {
-		let oldEmbed = interaction.message.embeds[0];
-		let title = oldEmbed.title.split('Seite ');
-		let memeList = await memeUtil.charLimitList(interaction.guild.id);
-		let page = parseInt(title[title.length - 1]) - 2; // 1-indexed at UI, so just take that - 2for index - 1
+async function execute(interaction) {
+	try {
+		const locale = interaction.locale;
+		const memeList = memeUtil.charLimitList(interaction.guild.id);
+		const oldEmbed = interaction.message.embeds[0];
+		const oldTitle = oldEmbed.title.split('Page ');
+		const page = parseInt(oldTitle[1] - 2) >= 0 ? parseInt(oldTitle[1] - 2) : 0;
+		const previousButtonsDisabled = page < 1;
+		const nextButtonsDisabled = page === memeList.length - 1;
 
-		page =
-			page >= 0 ? (page < memeList.length ? page : memeList.length - 1) : 0;
-		const previousButtonsDisabled = !(page > 0);
-		const nextButtonsDisabled = !(page < memeList.length - 1);
-
-		let newEmbed = new MessageEmbed()
-			.setTitle(`${title[0]}Seite ${page + 1}`)
+		const newEmbed = new MessageEmbed()
+			.setTitle(oldTitle[0] + `Page ${page + 1}`)
 			.setDescription(memeList[page])
 			.setTimestamp();
 
 		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
-				.setCustomId('memes-firstPage')
+				.setCustomId('memes/firstPage')
 				.setStyle('PRIMARY')
-				.setLabel('Erste Seite!')
+				.setLabel(await lang('FIRST_PAGE', {}, locale))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-previousPage')
+				.setCustomId('memes/previousPage')
 				.setStyle('PRIMARY')
-				.setLabel('Vorherige Seite!')
+				.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-nextPage')
+				.setCustomId('memes/nextPage')
 				.setStyle('PRIMARY')
-				.setLabel('Nächste Seite!')
+				.setLabel(await lang('NEXT_PAGE', {}, locale))
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
-				.setCustomId('memes-lastPage')
+				.setCustomId('memes/lastPage')
 				.setStyle('PRIMARY')
-				.setLabel('Letzte Seite!')
+				.setLabel(await lang('LAST_PAGE', {}, locale))
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		await interaction.message.edit({
-			embeds: [newEmbed],
-			components: [],
-		});
-
-		interaction.update({
+		await interaction.update({
 			embeds: [newEmbed],
 			components: [actionRow],
 		});
-	},
-};
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+export { execute };

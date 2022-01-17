@@ -1,8 +1,10 @@
-const { MessageEmbed } = require('discord.js');
-const sql = require('@sql');
+import { MessageEmbed, Permissions, Util } from 'discord.js';
+import sql from '#sql';
+import lang from '#lang';
 
-module.exports = {
-	async execute(interaction, id) {
+async function execute(interaction, id) {
+	try {
+		const locale = interaction.locale;
 		const pollData = await sql.query(`SELECT * FROM polls WHERE id=${id}`);
 		const voteData = await sql.query(
 			`SELECT * FROM pollvotes WHERE pollid=${id}`
@@ -23,16 +25,13 @@ module.exports = {
 
 		// Check if the user has the permission to end the poll
 		if (
-			!interaction.member.permissions.has('MANAGE_MESSAGES') &&
+			!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) &&
 			!(interaction.user.id == pollData[0].authorid)
-		) {
-			interaction.reply({
-				content:
-					'Du hast nicht die Berechtigung, diese Poll zu beenden! Du brauchst die Berechtigung "MANAGE_MESSAGES" oder musst der Author dieser Poll sein!',
+		)
+			return interaction.reply({
+				content: await lang('POLL_EXECUTE_CLOSE_PROHIBITED', {}, locale),
 				ephemeral: true,
 			});
-			return;
-		}
 
 		// Count/Store the votes for each option and total votes
 		for (let vote of voteData) {
@@ -42,7 +41,13 @@ module.exports = {
 
 		// Create a new MessageEmbed and put the poll's question in the title
 		let embed = new MessageEmbed().setTitle(
-			`Die Umfrageergebnisse - ${pollData[0].frage}:`
+			await lang(
+				'POLL_EXECUTE_RESULT_EMBED',
+				{
+					QUESTION: pollData[0].question,
+				},
+				locale
+			)
 		);
 
 		let pollAsArray = Object.values(pollData[0]);
@@ -52,7 +57,11 @@ module.exports = {
 
 			if (currentAnswer == '') break;
 
-			embed.addField(currentAnswer, votes[i - 6].toString(), true);
+			embed.addField(
+				Util.escapeMarkdown(currentAnswer),
+				votes[i - 6].toString(),
+				true
+			);
 		}
 
 		// Footer
@@ -64,24 +73,42 @@ module.exports = {
 			for (let i = 1; i <= arr.length; i++) {
 				if (arr[i - 1] == maxVotes) winningAnswers += i + ', ';
 			}
-		else winningAnswers = 'Es wurde für keine Option abgestimmt.';
-		winningAnswers = winningAnswers.substring(0, winningAnswers.length - 2);
+		else winningAnswers = await lang('POLL_EXECUTE_NO_VOTES', {}, locale);
+		winningAnswers = winningAnswers.endsWith(', ')
+			? winningAnswers.substring(0, winningAnswers.length - 2)
+			: winningAnswers;
 
 		let footer =
 			winningAnswers.length == 1
-				? `Antwort ${winningAnswers} gewinnt!`
-				: `Es gewinnen die folgenden Antworten: ${winningAnswers}!`;
+				? await lang(
+						'POLL_EXECUTE_ONE_WINNER',
+						{ WINNING: winningAnswers },
+						locale
+				  )
+				: await lang(
+						'POLL_EXEUCUTE_MULTIPLE_WINNERS',
+						{
+							WINNING: winningAnswers,
+						},
+						locale
+				  );
 
 		let pollCreator = await interaction.client.users
 			.fetch(pollData[0].authorid)
 			.catch(() => {
 				return {
-					username:
-						'einem Discord Account, der leider nicht mehr unter uns ist lol',
+					tag: 'n/a',
 				};
 			});
 
-		footer += ` - Die Umfrage wurde erstellt von ${pollCreator.username}#${pollCreator.discriminator} - Insgesamt gab es ${totalVotes} Stimmen!`;
+		footer += await lang(
+			'POLL_EXECUTE_RESULT_EMBED_FOOTER',
+			{
+				CREATOR: pollCreator.tag,
+				TOTALVOTES: totalVotes,
+			},
+			locale
+		);
 		embed.setFooter({ text: footer });
 		embed.setColor('AQUA');
 		embed.setTimestamp();
@@ -91,8 +118,11 @@ module.exports = {
 			components: [],
 		});
 
-		await sql.run('UPDATE polls SET open=? WHERE id=?', [false, id]);
-
-		interaction.reply({ content: 'Diese Umfrage wurde beendet!' });
-	},
-};
+		interaction.reply({
+			content: await lang('POLL_EXECUTE_REPLY_ENDED', {}, locale),
+		});
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+export { execute };

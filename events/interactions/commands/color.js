@@ -1,40 +1,42 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { MessageEmbed } from 'discord.js';
+import lang from '#lang';
 
-module.exports = {
-	// Creates a new SlashCommand
-	data: new SlashCommandBuilder()
+async function create() {
+	const command = new SlashCommandBuilder()
 		.setName('color')
-		.setDescription('Sendet ein Bild der angegeben Farbe!')
+		.setDescription('Sends an image of the color you want')
 		.addStringOption((option) =>
 			option
 				.setName('hex')
-				.setDescription(
-					'Der Hex Code der Farbe, welche du sehen möchtest. Bitte benutze das Format #RRGGBB'
-				)
+				.setDescription('Hex-code of the color. Use format #RRGGBB')
 				.setRequired(true)
-		),
-	async execute(interaction) {
-		try {
-			// Save color as #RRGGBB, regardless of the color being in the format #RRGGBB or just RRGGBB
-			const color =
-				'#' +
-				(interaction.options.getString('hex').startsWith('#')
-					? interaction.options.getString('hex').substring(1)
-					: interaction.options.getString('hex'));
+		);
 
-			// Creates an MessageEmbed with the #RRGGBB as a title and a picture/surface with that color
-			const colorEmbed = new MessageEmbed()
-				.setTitle(color)
-				.setColor(color)
-				.setThumbnail(
-					'https://singlecolorimage.com/get/' + color.substring(1) + '/400x400'
-				);
+	return command.toJSON();
+}
+async function execute(interaction) {
+	const locale = interaction.locale;
+	const hexRegEx = /#[0-9A-Fa-f]{6}/g;
+	try {
+		const color = interaction.options.getString('hex');
 
-			await interaction.reply({ embeds: [colorEmbed] });
-		} catch (error) {
-			// Catches any formatting mistakes by the executor and replys an error
-			await interaction.reply(`Hoppla, da ist etwas schief gelaufen!`);
-		}
-	},
-};
+		if (!hexRegEx.test(color))
+			return interaction.reply(
+				await lang('COLOR_EXECUTE_WRONG_FORMAT', {}, locale)
+			);
+
+		const colorEmbed = new MessageEmbed()
+			.setTitle(color)
+			.setColor(color)
+			.setThumbnail(
+				'https://singlecolorimage.com/get/' + color.substring(1) + '/400x400'
+			);
+
+		await interaction.reply({ embeds: [colorEmbed] });
+	} catch (error) {
+		errorMessage(interaction, error);
+	}
+}
+
+export { create, execute };
