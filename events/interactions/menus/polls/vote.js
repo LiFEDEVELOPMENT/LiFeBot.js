@@ -22,7 +22,7 @@ async function execute(interaction, id) {
 
 	// Reply to the vote
 	await interaction.reply({
-		content: await lang('POLL_VOTE_ACCEPTED', {}, interaction.locale),
+		content: await lang('POLL_EXECUTE_VOTE_ACCEPTED', {}, interaction.locale),
 		ephemeral: true,
 	});
 }
