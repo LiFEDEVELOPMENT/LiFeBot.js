@@ -1,4 +1,4 @@
 export default {
-	activeLanguages: ['de'],
+	activeLanguages: ['de', 'en-US', 'en-GB'],
 	defaultLanguage: 'de',
 };

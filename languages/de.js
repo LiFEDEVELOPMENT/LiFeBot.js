@@ -15,14 +15,6 @@ export default {
 	CLEAR_EXECUTE_API_LIMIT:
 		' Die Discord API erlaubt nur das löschen von Nachrichten, die weniger als zwei Wochen alt sind. Wenn du den gesamten Kanal löschen möchtest, klone diesen Kanal und lösche dann die alte Version.',
 	COLOR_EXECUTE_WRONG_FORMAT: 'Bitte gib eine Farbe im Format "#RRGGBB" an',
-	DEPLOY_COMMANDS_APP_START: 'Starte Aktualisierung der Bot (/) Commands!',
-	DEPLOY_COMMANDS_APP_SUCCESS:
-		'Aktualisierung der Bot (/) Commands erfolgreich abgeschlossen!',
-	DEPLOY_COMMANDS_GUILD_START:
-		'Starte Aktualisierung der Server (/) Comamnds für GUILDID!',
-	DEPLOY_COMMANDS_GUILD_SUCCESS:
-		'Aktualisierung der Server (/) Commands für GUILDID erfolgreich abgeschlossen!',
-	POLL_EXECUTE_RESULT_EMBED: 'Die Umfrageergebnisse - QUESTION:',
 	ERROR:
 		'Hoppla, da ist wohl etwas schief gelaufen. Ich habe einen Bugreport an den Ersteller dieses Bots geschickt. Solltest du den Bot selbst hosten, solltest du regelmäßig die GitHub-Page auf Updates überprüfen!',
 	FIRST_PAGE: 'Erste Seite!',
@@ -35,7 +27,7 @@ export default {
 		'Du hast nicht die Berechtigung, diesen User zu kicken!',
 	LAST_PAGE: 'Letzte Seite!',
 	MEME_EXECUTE_ADD_SUCCESS:
-		'Das Meme wurde erfolgreich hinzugefügt! Es hat die ID MEMEID',
+		'Das Meme wurde erfolgreich zur Datenbank hinzugefügt! Es hat die ID MEMEID',
 	MEME_EXECUTE_DELETE_ERROR:
 		'Hoppla! Auf diesem Server scheint es kein Meme mit der ID MEMEID zu geben!',
 	MEME_EXECUTE_DELETE_SUCCESS:
@@ -59,6 +51,7 @@ export default {
 	POLL_EXECUTE_ONE_WINNER: 'Antwort WINNING gewinnt',
 	POLL_EXECUTE_REPLY_ENDED: 'Diese Umfrage wurde beendet!',
 	POLL_EXECUTE_REPLY_TITLE: 'Question: **STRING**',
+	POLL_EXECUTE_RESULT_EMBED: 'Die Umfrageergebnisse - QUESTION:',
 	POLL_EXECUTE_RESULT_EMBED_FOOTER:
 		' - Die Umfrage wurde erstellt von CREATOR - Insgesamt gab es TOTALVOTES Stimmen!',
 	POLL_EXECUTE_VOTE_ACCEPTED:

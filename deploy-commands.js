@@ -31,21 +31,13 @@ const rest = new REST({ version: '9' }).setToken(token);
 	try {
 		// Check if the bot is in developer mode. If so, put commands into development guild, if not, put commands into global application commands
 		if (mode == 'DEV') {
-			console.log(
-				await lang('DEPLOY_COMMANDS_GUILD_START', {
-					GUILDID: guildId,
-				})
-			);
+			console.log(`Started refreshing guild (/) commands for ${guildId}`);
 			await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
 				body: commands,
 			});
-			console.log(
-				await lang('DEPLOY_COMMANDS_GUILD_SUCCESS', {
-					GUILDID: guildId,
-				})
-			);
+			console.log(`Successfully reloaded guild (/) commands for ${guildId}`);
 		} else {
-			console.log(await lang('DEPLOY_COMMANDS_APP_START', '', ''));
+			console.log('Started refreshing application (/) commands.');
 			await rest.put(Routes.applicationCommands(clientId), { body: commands });
 			console.log('Successfully reloaded application (/) commands.');
 		}
