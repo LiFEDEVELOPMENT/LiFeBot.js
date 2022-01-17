@@ -44,7 +44,7 @@ async function execute(interaction) {
 			.setColor('RED')
 			.setTimestamp();
 
-		// Check if the target can be banned by the executing user
+		// Check if the target can be kicked by the executing user
 		if (
 			!target.kickable ||
 			target.user.id == interaction.client.user.id ||

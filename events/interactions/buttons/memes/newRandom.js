@@ -8,7 +8,7 @@ async function execute(interaction) {
 
 	const memeEmbed = new MessageEmbed()
 		.setTitle(await lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
-		.setDescription(randomMeme.meme)
+		.setDescription(randomMeme.meme.toString())
 		.setFooter({ text: `ID: ${randomMeme.id}` })
 		.setColor('ORANGE');
 

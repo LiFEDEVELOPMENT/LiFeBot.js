@@ -31,11 +31,11 @@ async function charLimitList(guildid) {
 	let resultArray = [];
 	let result = '';
 	memes.forEach((element) => {
-		if ((result + element.meme).length > 2000) {
+		if ((result + element.meme.toString()).length > 2000) {
 			resultArray.push(result);
 			result = '';
 		}
-		result += '\n\n' + element.meme + ` **(${element.id})**`;
+		result += '\n\n' + element.toString() + ` **(${element.id})**`;
 	});
 	if (result != '') resultArray.push(result);
 	return resultArray;

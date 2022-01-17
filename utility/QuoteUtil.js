@@ -14,7 +14,7 @@ async function deleteQuote(id, guildid) {
 	if (id < 0) return false;
 
 	// Fetch all quotes with a matching guildid and check if the given id matches one
-	let = matchedQuote = await this.listQuotes(guildid);
+	let matchedQuote = await this.listQuotes(guildid);
 	if (matchedQuote.filter((quote) => quote.id == id).length < 1) return false;
 
 	await sql.run('DELETE FROM quotes WHERE id=?', id);
@@ -29,11 +29,11 @@ async function charLimitList(guildid) {
 	let resultArray = [];
 	let result = '';
 	quotes.forEach((element) => {
-		if ((result + element.quote).length > 2000) {
+		if ((result + element.quote.toString()).length > 2000) {
 			resultArray.push(result);
 			result = '';
 		}
-		result += '\n\n' + element.quote + ` **(${element.id})**`;
+		result += '\n\n' + element.quote.toString() + ` **(${element.id})**`;
 	});
 	if (result != '') resultArray.push(result);
 	return resultArray;

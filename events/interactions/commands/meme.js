@@ -111,7 +111,7 @@ async function deleteCommand(interaction) {
 		if ((await memeUtil.deleteMeme(toDeleteID, guildid)) == false)
 			return {
 				content: await lang(
-					'MEME_COMMAND_DELETE_ANSWER_FAIL',
+					'MEME_EXECUTE_DELETE_ERROR',
 					{ MEMEID: toDeleteID },
 					locale
 				),
@@ -119,7 +119,7 @@ async function deleteCommand(interaction) {
 			};
 
 		return await lang(
-			'MEME_COMMAND_DELETE_ANSWER_SUCCESS',
+			'MEME_EXECUTE_DELETE_SUCCESS',
 			{ MEMEID: toDeleteID },
 			locale
 		);
@@ -198,7 +198,7 @@ async function randomCommand(interaction) {
 
 		const memeEmbed = new MessageEmbed()
 			.setTitle(await lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
-			.setDescription(randomMeme.meme)
+			.setDescription(randomMeme.meme.toString())
 			.setFooter({
 				text: await lang(
 					'MEME_EXECUTE_RANDOM_EMBED_FOOTER',

@@ -70,7 +70,7 @@ async function execute(interaction) {
 	try {
 		const guildid = interaction.guild.id;
 		let answer = {
-			content: await lang.get('ERROR', {}, locale),
+			content: await lang('ERROR', {}, locale),
 			ephemeral: true,
 		};
 
@@ -220,7 +220,7 @@ async function listCommand(interaction) {
 
 		const nextButtonsDisabled = !(quoteList.length > 1);
 
-		actionRow = new MessageActionRow().addComponents(
+		const actionRow = new MessageActionRow().addComponents(
 			new MessageButton()
 				.setCustomId('quotes/firstPage')
 				.setStyle('PRIMARY')
@@ -273,7 +273,7 @@ async function randomCommand(interaction) {
 
 		const quoteEmbed = new MessageEmbed()
 			.setTitle(await lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
-			.setDescription(randomQuote.quote)
+			.setDescription(randomQuote.quote.toString())
 			.setFooter({
 				text: await lang(
 					'QUOTE_EXECUTE_RANDOM_EMBED_FOOTER',

@@ -48,6 +48,10 @@ export default {
 	LOGIN_CONFIRMATION: 'Bereit! Eingeloggt als USERTAG',
 	MEME_EXECUTE_ADD_SUCCESS:
 		'Das Meme wurde erfolgreich hinzugefügt! Es hat die ID MEMEID',
+	MEME_EXECUTE_DELETE_ERROR:
+		'Hoppla! Auf diesem Server scheint es kein Meme mit der ID MEMEID zu geben!',
+	MEME_EXECUTE_DELETE_SUCCESS:
+		'Das Meme mit der ID MEMEID wurde erfolgreich entfernt!',
 	MEME_EXECUTE_LIST_REPLY_NO_MEMES:
 		'Auf diesem Server scheint es keine Memes zu geben :(',
 	MEME_EXECUTE_LIST_EMBED_TITLE: 'Alle Memes von GUILDNAME - Page 1',

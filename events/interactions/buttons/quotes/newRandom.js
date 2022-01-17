@@ -22,7 +22,7 @@ async function execute(interaction) {
 
 		const quoteEmbed = new MessageEmbed()
 			.setTitle(await lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
-			.setDescription(randomQuote.quote)
+			.setDescription(randomQuote.quote.toString())
 			.setFooter({
 				text: await lang(
 					'QUOTE_EXECUTE_RANDOM_EMBED_FOOTER',
