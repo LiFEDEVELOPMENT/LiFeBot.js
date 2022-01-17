@@ -18,11 +18,7 @@ async function execute(interaction) {
 				: await lang('TAILS', {}, locale)
 		);
 	} catch (error) {
-		console.log(error);
-		await interaction.reply({
-			content: await lang('ERROR', {}, locale),
-			ephemeral: true,
-		});
+		errorMessage(interaction, error);
 	}
 }
 

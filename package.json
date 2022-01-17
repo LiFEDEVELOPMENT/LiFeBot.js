@@ -11,6 +11,7 @@
     "#sql": "./db/sql.js",
     "#langs/*": "./languages/*.js",
     "#lang": "./utility/Language.js",
+    "#errormessage": "./utility/ErrorMessage.js",
     "#util/*": "./utility/*.js",
     "#menus/*": "./events/interactions/menus/*.js",
     "#commands/*": "./events/interactions/commands/*.js",

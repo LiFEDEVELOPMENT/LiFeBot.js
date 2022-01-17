@@ -3,8 +3,8 @@ import quoteUtil from '#util/QuoteUtil';
 import lang from '#lang';
 
 async function execute(interaction) {
-	const locale = interaction.locale;
 	try {
+		const locale = interaction.locale;
 		const guildid = interaction.guild.id;
 		let randomQuote = await quoteUtil.randomQuote(interaction.guild.id);
 		let quoteCreator = await interaction.client.users
@@ -48,11 +48,7 @@ async function execute(interaction) {
 			components: [actionRow],
 		});
 	} catch (error) {
-		console.log(error);
-		await interaction.reply({
-			content: await lang('ERROR', {}, locale),
-			ephemeral: true,
-		});
+		errorMessage(interaction, error);
 	}
 }
 

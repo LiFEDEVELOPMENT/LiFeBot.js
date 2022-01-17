@@ -66,11 +66,7 @@ async function execute(interaction) {
 		await target.user.send(directMessage);
 		await interaction.reply({ embeds: [banEmbed] });
 	} catch (error) {
-		console.log(error);
-		await interaction.reply({
-			content: await lang('ERROR', {}, locale),
-			ephemeral: true,
-		});
+		errorMessage(interaction, error);
 	}
 }
 

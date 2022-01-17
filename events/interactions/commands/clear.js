@@ -52,11 +52,7 @@ async function execute(interaction) {
 			ephemeral: true,
 		});
 	} catch (error) {
-		console.log(error);
-		await interaction.reply({
-			content: await lang('ERROR', {}, locale),
-			ephemeral: true,
-		});
+		errorMessage(interaction, error);
 	}
 }
 

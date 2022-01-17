@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageEmbed, Util } from 'discord.js';
 import lang from '#lang';
+import errorMessage from '#errormessage';
 
 async function create() {
 	const command = new SlashCommandBuilder()
@@ -53,11 +54,7 @@ async function execute(interaction) {
 			ephemeral: true,
 		});
 	} catch (error) {
-		console.log(error);
-		await interaction.reply({
-			content: await lang('ERROR', {}, locale),
-			ephemeral: true,
-		});
+		errorMessage(interaction, error);
 	}
 }
 
