@@ -45,7 +45,11 @@ async function execute(interaction) {
 			.setTimestamp();
 
 		// Check if the target can be banned by the executing user
-		if (!target.kickable || target.user.id == interaction.client.user.id)
+		if (
+			!target.kickable ||
+			target.user.id == interaction.client.user.id ||
+			target.user.bot
+		)
 			return interaction.reply(
 				await lang('KICK_EXECUTE_HIERACHY_ERROR', {}, locale)
 			);
@@ -57,8 +61,8 @@ async function execute(interaction) {
 				await lang('KICK_EXECUTE_PERMISSION_ERROR', {}, locale)
 			);
 
-		await member.kick({ reason });
-		await member.user.send(directMessage);
+		await target.kick({ reason });
+		await target.user.send(directMessage);
 		await interaction.reply({ embeds: [kickEmbed] });
 	} catch (error) {
 		console.log(error);

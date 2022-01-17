@@ -45,7 +45,11 @@ async function execute(interaction) {
 			.setTimestamp();
 
 		// Check if the target can be banned by the executing user
-		if (!target.bannable || target.user.id == interaction.client.user.id)
+		if (
+			!target.bannable ||
+			target.user.id == interaction.client.user.id ||
+			target.user.bot
+		)
 			return interaction.reply(
 				await lang('BAN_EXECUTE_HIERACHY_ERROR', {}, locale)
 			);
@@ -57,8 +61,8 @@ async function execute(interaction) {
 				await lang('BAN_EXECUTE_PERMISSION_ERROR', {}, locale)
 			);
 
-		await member.ban({ reason });
-		await member.user.send(directMessage);
+		await target.ban({ reason });
+		await target.user.send(directMessage);
 		await interaction.reply({ embeds: [banEmbed] });
 	} catch (error) {
 		console.log(error);

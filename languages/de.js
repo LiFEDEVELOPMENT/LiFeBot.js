@@ -29,8 +29,6 @@ export default {
 		'Starte Aktualisierung der Server (/) Comamnds für GUILDID!',
 	DEPLOY_COMMANDS_GUILD_SUCCESS:
 		'Aktualisierung der Server (/) Commands für GUILDID erfolgreich abgeschlossen!',
-	DISCORD_LOST_ACCOUNT:
-		'einem Discord Account, der leider nicht mehr unter uns ist lol',
 	EMBED_TITLE_PAGE: 'TITLEPage NEWPAGE',
 	POLL_EXECUTE_RESULT_EMBED: 'Die Umfrageergebnisse - QUESTION:',
 	EMBED_TITLE_SPLIT: 'Page ',
