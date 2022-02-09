@@ -5,7 +5,7 @@
     "better-sqlite3": "^7.5.0",
     "discord-api-types": "^0.26.1",
     "discord.js": "^13.6.0",
-    "dotenv": "^14.3.2"
+    "dotenv": "^16.0.0"
   },
   "imports": {
     "#sql": "./db/sql.js",
