@@ -143,6 +143,12 @@ async function importCommand(interaction) {
 	const channelid = interaction.options.getString('channelid');
 	const channel = await interaction.guild.channels.cache.get(channelid);
 
+	if (!channel.isText())
+		return {
+			content: await lang('QUOTE_EXECUTE_IMPORT_NOTEXT', {}, locale),
+			ephemeral: true,
+		};
+
 	if (channel === undefined)
 		return {
 			content: await lang('QUOTE_EXECUTE_IMPORT_ERROR', {}, locale),
@@ -164,7 +170,7 @@ async function importCommand(interaction) {
 
 	return await lang(
 		'QUOTE_EXECUTE_IMPORT_SUCCESS',
-		{ CHANNELNAME: channelid },
+		{ CHANNELNAME: channel.name },
 		locale
 	);
 }

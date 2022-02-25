@@ -64,6 +64,8 @@ export default {
 	QUOTE_EXECUTE_DELETE_SUCCESS:
 		'Das Zitat mit der ID QUOTEID wurde erfolgreich entfernt!',
 	QUOTE_EXECUTE_IMPORT_ERROR: 'Das scheint keine gültige ChannelID zu sein!',
+	QUOTE_EXECUTE_IMPORT_NOTEXT:
+		'Das scheint nicht die ID eines TextChannels zu sein',
 	QUOTE_EXECUTE_IMPORT_SUCCESS:
 		'Alle Nachrichten aus #CHANNELNAME wurden als Zitat hinzugefügt!',
 	QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES:

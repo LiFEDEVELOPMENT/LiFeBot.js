@@ -57,6 +57,8 @@ export default {
 		"Whoops! It seem's like there is no quote with the ID of QUOTEID in this server!",
 	QUOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the quote QUOTEID!',
 	QUOTE_EXECUTE_IMPORT_ERROR: 'It seems like this is not a valid channel id!',
+	QUOTE_EXECUTE_IMPORT_NOTEXT:
+		'Whoops! It seems like this is not the ID of a text channel!',
 	QUOTE_EXECUTE_IMPORT_SUCCESS:
 		"All messages from #CHANNELNAME were imported as quotes and added to the bot's database!",
 	QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES: 'This server does not have any quotes :(',
