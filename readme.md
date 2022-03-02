@@ -21,7 +21,7 @@ Installing the bot
 
 Before you follow this, make sure you use NodeJS version 16.9.0 or higher and npm version 8 or higher. You can check the versions of both by running `npm version` in your command line
 
-- Grab the [latest release](https://github.com/LIFEBOTDEV/LiFeBot.js/releases) and unzip it
+- Grab the [latest release](https://github.com/LIFEDEVELOPMENT/LiFeBot.js/releases) and unzip it
 - In the command line, navigate into the unzipped folder
 - Run `npm install`
 - Run `echo "BOT_TOKEN=<YOUR TOKEN>" >> .env ; echo "CLIENTID=<YOUR CLIENT ID>" >> .env`
