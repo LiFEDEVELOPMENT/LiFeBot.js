@@ -7,7 +7,9 @@ export default async function sendMessage(interaction, error) {
 
 	interaction.client.channels.cache
 		.get(channel)
-		.send({ content: Util.escapeMarkdown(error.toString()) });
+		.send({
+			content: Util.escapeMarkdown(error.stack.toString().substring(0, 2000)),
+		});
 
 	interaction.reply({
 		content: await lang('ERROR', {}, locale),
