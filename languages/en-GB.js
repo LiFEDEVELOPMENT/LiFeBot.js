@@ -36,7 +36,7 @@ export default {
 	MISSING_STRING: 'Missing String!',
 	NEXT_PAGE: 'Next page!',
 	NOTE_EXECUTE_ADD_SUCCESS:
-		"Successfully added the note to the bot's database! It has the ID NOTEID",
+		"Successfully added the note to the bot's database! It has the ID NOTEID!",
 	NOTE_EXECUTE_DELETE_ERROR:
 		'Whoops! It seems like there is no note with an ID of NOTEID in this server!',
 	NOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the note NOTEID!',
