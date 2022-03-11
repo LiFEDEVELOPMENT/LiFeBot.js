@@ -85,7 +85,7 @@ export default {
 	addNote,
 	deleteNote,
 	listNotes,
-	listNotesKey: listNotesQuery,
+	listNotesQuery,
 	charLimitList,
-	charLimitListKey: charLimitListQuery,
+	charLimitListQuery,
 };
