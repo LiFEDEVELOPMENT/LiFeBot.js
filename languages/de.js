@@ -41,7 +41,7 @@ export default {
 	MISSING_STRING: 'Fehlender String!',
 	NEXT_PAGE: 'Nächste Seite!',
 	NOTE_EXECUTE_ADD_SUCCESS:
-		'Die Notiz wurder erfolgreich zur Datenbank hinzugefügt! Sie hat die ID NOTEID',
+		'Die Notiz wurder erfolgreich zur Datenbank hinzugefügt! Sie hat die ID NOTEID!',
 	NOTE_EXECUTE_DELETE_ERROR:
 		'Hoppla! Auf diesem Server scheint es keine Notiz mit der ID NOTEID zu geben!',
 	NOTE_EXECUTE_DELETE_SUCCESS:
