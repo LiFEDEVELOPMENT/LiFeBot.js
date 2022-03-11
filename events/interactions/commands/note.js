@@ -128,15 +128,15 @@ async function deleteCommand(interaction) {
 async function listCommand(interaction) {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
-	const key = interaction.options.getString('query');
+	const query = interaction.options.getString('query');
 	let noteList;
 
-	if (key === null) noteList = await noteUtil.charLimitList(guildid);
-	else noteList = await noteUtil.charLimitListQuery(guildid, key);
+	if (query === null) noteList = await noteUtil.charLimitList(guildid);
+	else noteList = await noteUtil.charLimitListQuery(guildid, query);
 
 	if (noteList[0] === undefined) {
 		let emptyString =
-			key === null
+			query === null
 				? await lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES', {}, locale)
 				: await lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY', {}, locale);
 		return { content: emptyString, ephemeral: true };
@@ -159,22 +159,22 @@ async function listCommand(interaction) {
 
 	const actionRow = new MessageActionRow().addComponents(
 		new MessageButton()
-			.setCustomId('notes/firstPage')
+			.setCustomId(`notes/firstPage-${query}`)
 			.setStyle('PRIMARY')
 			.setLabel('First page')
 			.setDisabled(true),
 		new MessageButton()
-			.setCustomId('notes/previousPage')
+			.setCustomId(`notes/previousPage-${query}`)
 			.setStyle('PRIMARY')
 			.setLabel('Previous Page')
 			.setDisabled(true),
 		new MessageButton()
-			.setCustomId('notes/nextPage')
+			.setCustomId(`notes/nextPage-${query}`)
 			.setStyle('PRIMARY')
 			.setLabel('Next Page')
 			.setDisabled(nextButtonsDisabled),
 		new MessageButton()
-			.setCustomId('notes/lastPage')
+			.setCustomId(`notes/lastPage-${query}`)
 			.setStyle('PRIMARY')
 			.setLabel('Last Page')
 			.setDisabled(nextButtonsDisabled)
