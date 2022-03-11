@@ -26,7 +26,7 @@ export default {
 	MEME_EXECUTE_ADD_SUCCESS:
 		"Successfully added the meme to the bot's database! It has the ID MEMEID",
 	MEME_EXECUTE_DELETE_ERROR:
-		"Whoops! It seem's like there is no meme with the ID of MEMEID in this server!",
+		'Whoops! It seems like there is no meme with the ID of MEMEID in this server!',
 	MEME_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the meme MEMEID!',
 	MEME_EXECUTE_LIST_EMBED_TITLE: 'All memes from GUILDNAME - Page 1',
 	MEME_EXECUTE_LIST_REPLY_NO_MEMES: 'It seems like this server has no memes :(',
@@ -35,6 +35,16 @@ export default {
 	MEME_EXECUTE_RANDOM_EMBED_FOOTER: 'ID: MEMEID',
 	MISSING_STRING: 'Missing String!',
 	NEXT_PAGE: 'Next page!',
+	NOTE_EXECUTE_ADD_SUCCESS:
+		"Successfully added the note to the bot's database! It has the ID NOTEID!",
+	NOTE_EXECUTE_DELETE_ERROR:
+		'Whoops! It seems like there is no note with an ID of NOTEID in this server!',
+	NOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the note NOTEID!',
+	NOTE_EXECUTE_LIST_EMBED_TITLE: 'All notes from GUILDNAME - Page 1',
+	NOTE_EXECUTE_LIST_REPLY_NO_NOTES:
+		'It seems like this server has not a single note :(',
+	NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY:
+		'It seems like there are not notes matching this query :(',
 	POLL_EXECUTE_BUTTON_STOP: 'Finish poll!',
 	POLL_EXECUTE_CLOSE_PROHIBITED:
 		'You are not allowed to stop this poll! You either need the permission "MANAGE_MESSAGES" or be the author of this poll!',
@@ -54,7 +64,7 @@ export default {
 	QUOTE_EXECUTE_ADD_SUCCESS:
 		"Successfully added the quote to the bot's database! It has the ID QUOTEID",
 	QUOTE_EXECUTE_DELETE_ERROR:
-		"Whoops! It seem's like there is no quote with the ID of QUOTEID in this server!",
+		'Whoops! It seems like there is no quote with the ID of QUOTEID in this server!',
 	QUOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the quote QUOTEID!',
 	QUOTE_EXECUTE_IMPORT_ERROR: 'It seems like this is not a valid channel id!',
 	QUOTE_EXECUTE_IMPORT_NOTEXT:

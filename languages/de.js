@@ -40,6 +40,17 @@ export default {
 	MEME_EXECUTE_RANDOM_EMBED_FOOTER: 'ID: MEMEID',
 	MISSING_STRING: 'Fehlender String!',
 	NEXT_PAGE: 'Nächste Seite!',
+	NOTE_EXECUTE_ADD_SUCCESS:
+		'Die Notiz wurder erfolgreich zur Datenbank hinzugefügt! Sie hat die ID NOTEID!',
+	NOTE_EXECUTE_DELETE_ERROR:
+		'Hoppla! Auf diesem Server scheint es keine Notiz mit der ID NOTEID zu geben!',
+	NOTE_EXECUTE_DELETE_SUCCESS:
+		'Die Notiz mit der ID NOTEID wurde erfolgreich entfernt!',
+	NOTE_EXECUTE_LIST_EMBED_TITLE: 'Alle Notizen von GUILDNAME - Page 1',
+	NOTE_EXECUTE_LIST_REPLY_NO_NOTES:
+		'Auf diesem Server scheint es keine Notizen zu geben :(',
+	NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY:
+		'Für diese Anfrage scheint es keine Notizen zu geben :(',
 	POLL_EXECUTE_BUTTON_STOP: 'Umfrage beenden!',
 	POLL_EXECUTE_CLOSE_PROHIBITED:
 		'Du hast nicht die Berechtigung, diese Umfrage zu beenden! Du brauchst die Berechtigung "MANAGE_MESSAGES" oder musst der Author dieser Umfrage sein!',
