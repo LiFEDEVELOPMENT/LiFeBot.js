@@ -5,7 +5,7 @@ export default async function getString(key, mapObject = {}, locale) {
 	let matchedString;
 	const activeLanguages = config.activeLanguages;
 	const defaultLanguage = config.defaultLanguage;
-	let language = activeLanguages.some((e) => e == locale)
+	let language = activeLanguages.some((e) => e === locale)
 		? locale
 		: defaultLanguage;
 	const languageDictionary = (await import(`#langs/${language}`)).default;

@@ -10,8 +10,8 @@ async function execute(interaction) {
 		let oldEmbed = interaction.message.embeds[0];
 		let oldTitle = oldEmbed.title.split('Page ');
 		let page =
-			parseInt(oldTitle[1] - 2) >= 0
-				? parseInt(oldTitle[1 - 2])
+			parseInt(oldTitle[1]) - 2 >= 0
+				? parseInt(oldTitle[1]) - 2
 				: quoteList.length - 1;
 		const previousButtonsDisabled = page < 1;
 		const nextButtonsDisabled = page === quoteList.length - 1;

@@ -27,7 +27,7 @@ async function execute(interaction, id) {
 		// Check if the user has the permission to end the poll
 		if (
 			!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) &&
-			!(interaction.user.id == pollData[0].authorid)
+			!(interaction.user.id === pollData[0].authorid)
 		)
 			return interaction.reply({
 				content: await lang('POLL_EXECUTE_CLOSE_PROHIBITED', {}, locale),
