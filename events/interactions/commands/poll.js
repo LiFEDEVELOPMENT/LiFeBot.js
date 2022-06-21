@@ -23,16 +23,16 @@ async function create() {
 				.setName('question')
 				.setDescription('The question you want to ask')
 				.setRequired(true)
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName('multiplechoicecount')
-				.setDescription(
-					'How many answers you want to allow simultaneously per user'
-				)
-				.addChoices(choices)
-				.setRequired(true)
 		);
+	// .addIntegerOption((option) =>
+	// 	option
+	// 		.setName('multiplechoicecount')
+	// 		.setDescription(
+	// 			'How many answers you want to allow simultaneously per user'
+	// 		)
+	// 		.setChoices(choices)
+	// 		.setRequired(true)
+	// );
 
 	for (let i = 1; i <= 10; i++) {
 		command.addStringOption((option) =>

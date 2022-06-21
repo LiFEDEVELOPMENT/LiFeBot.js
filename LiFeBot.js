@@ -24,9 +24,9 @@ const events = fs
 	await sql.run(
 		'CREATE TABLE IF NOT EXISTS pollvotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pollid INTEGER, userid BLOB, vote INTEGER)'
 	);
-    await sql.run(
-        'CREATE TABLE IF NOT EXISTS notes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, noteKey STRING, note STRING, author BLOB)'
-    );
+	await sql.run(
+		'CREATE TABLE IF NOT EXISTS notes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, noteKey STRING, note STRING, author BLOB)'
+	);
 })();
 
 (async function () {
