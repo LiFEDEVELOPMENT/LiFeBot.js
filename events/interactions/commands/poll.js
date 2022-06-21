@@ -87,7 +87,7 @@ async function execute(interaction) {
 				await lang(
 					'POLL_EXECUTE_MENU_PLACEHOLDER',
 					{
-						CHOICECOUNT: realChoiceCount,
+						CHOICECOUNT: maxChoices,
 					},
 					locale
 				)
