@@ -12,7 +12,7 @@ import errorMessage from '#errormessage';
 async function create() {
 	const choices = [];
 	for (let i = 1; i <= 10; i++) {
-		choices.push([`Only allow ${i} answer(s) per user`, i]);
+		choices.push({ name: `Only allow ${i} answer(s) per user`, value: i });
 	}
 
 	const command = new SlashCommandBuilder()
@@ -23,16 +23,14 @@ async function create() {
 				.setName('question')
 				.setDescription('The question you want to ask')
 				.setRequired(true)
+		)
+		.addIntegerOption((option) =>
+			option
+				.setName('multiplechoicecount')
+				.setDescription('The amount of multiple choices you want to allow')
+				.setChoices(...choices)
+				.setRequired(true)
 		);
-	// .addIntegerOption((option) =>
-	// 	option
-	// 		.setName('multiplechoicecount')
-	// 		.setDescription(
-	// 			'How many answers you want to allow simultaneously per user'
-	// 		)
-	// 		.setChoices(choices)
-	// 		.setRequired(true)
-	// );
 
 	for (let i = 1; i <= 10; i++) {
 		command.addStringOption((option) =>
