@@ -1,6 +1,4 @@
-async function execute(event) {
-	console.log(event);
-}
+async function execute(oldState, newState) {}
 
 const once = false;
 const name = 'voiceStateUpdate';

@@ -2,15 +2,17 @@ import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } from '@discordjs/builders';
-import {
-	MessageEmbed,
-	MessageActionRow,
-	MessageButton,
-	Util,
-} from 'discord.js';
 import lang from '#lang';
 import errorMessage from '#errormessage';
-import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice';
+import {
+	joinVoiceChannel,
+	getVoiceConnection,
+	createAudioResource,
+	createAudioPlayer,
+} from '@discordjs/voice';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import queue from '#util/Queue';
 
 async function create() {
 	const command = new SlashCommandBuilder()
@@ -29,6 +31,18 @@ async function create() {
 			.setDescription('Leaves the voice channel if it is in your voice channel')
 	);
 
+	command.addSubcommand(
+		new SlashCommandSubcommandBuilder()
+			.setName('play')
+			.setDescription('Plays a song')
+			.addStringOption((option) =>
+				option
+					.setName('song')
+					.setDescription('The song you want to play')
+					.setRequired(true)
+			)
+	);
+
 	return command.toJSON();
 }
 
@@ -41,6 +55,9 @@ async function execute(interaction) {
 		};
 
 		switch (interaction.options.getSubcommand()) {
+			case 'play':
+				answer = await playCommand(interaction);
+				break;
 			case 'join':
 				answer = await joinCommand(interaction);
 				break;
@@ -50,7 +67,29 @@ async function execute(interaction) {
 
 		await interaction.reply(answer);
 	} catch (error) {
-		errorMessage(interaction, error);
+		// errorMessage(interaction, error);
+		console.log(error);
+	}
+}
+
+async function playCommand(interaction) {
+	const locale = interaction.locale;
+	try {
+		const url = await queue.searchToUrl(interaction.options.getString('song'));
+		if (url == null) throw new Error('No url found');
+		const connection = joinVoiceChannel({
+			channelId: interaction.member.voice.channel.id,
+			guildId: interaction.guild.id,
+			adapterCreator: interaction.guild.voiceAdapterCreator,
+			selfDeaf: true,
+		});
+		const resource = createAudioResource(await queue.stream(url));
+		const player = createAudioPlayer();
+		player.play(resource);
+		connection.subscribe(player);
+		return await lang('VOICE_PLAY_SUCCESS', {}, locale);
+	} catch (error) {
+		console.log(error);
 	}
 }
 
@@ -63,6 +102,22 @@ async function joinCommand(interaction) {
 		adapterCreator: interaction.guild.voiceAdapterCreator,
 		selfDeaf: true,
 	});
+
+	const player = createAudioPlayer();
+
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
+
+	// const resource = createAudioResource(
+	// 	path.join(__dirname, '../../../utility/Song.mp3')
+	// );
+	const resource = createAudioResource(
+		await queue.stream('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+	);
+
+	player.play(resource);
+
+	connection.subscribe(player);
 
 	return await lang('VOICE_JOIN_SUCCESS', {}, locale);
 }
