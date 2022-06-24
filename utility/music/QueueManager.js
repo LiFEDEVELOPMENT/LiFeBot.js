@@ -2,6 +2,9 @@ import {} from 'dotenv/config';
 import ytdl from 'ytdl-core';
 import SpotifyWebApi from 'spotify-web-api-node';
 import search from 'yt-search';
+import Track from './Track.js';
+
+const queueMap = new Map();
 
 const spotifyApi = new SpotifyWebApi({
 	clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -10,15 +13,13 @@ const spotifyApi = new SpotifyWebApi({
 
 async function enqueue(url, interaction) {
 	if (url == '') throw new Error('No url provided');
+
+	if (!queueMap.has(interaction.guild.id)) {
+		queueMap.set(interaction.guild.id);
+	}
 }
 
 async function dequeue(interaction) {}
-
-async function stream(url) {
-	return ytdl(url, {
-		filter: 'audioonly',
-	});
-}
 
 async function searchToUrl(query) {
 	try {
@@ -47,4 +48,4 @@ async function generateSpotifyAccessToken() {
 	);
 }
 
-export default { enqueue, dequeue, stream, searchToUrl };
+export default { enqueue, dequeue, searchToUrl };
