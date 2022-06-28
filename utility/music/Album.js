@@ -1,20 +1,12 @@
-import Track from './Track.js';
+import TrackList from './TrackList.js';
 
-export default class Album {
+export default class Album extends TrackList {
 	constructor(tracks, title, artists, albumArt, year) {
-		this.tracks = tracks.tracks.items.map((item) => new Track(item));
+		super(tracks);
 		this.title = title;
 		this.artists = artists;
 		this.albumArt = albumArt;
 		this.year = year;
-	}
-
-	getTracks() {
-		return this.tracks;
-	}
-
-	getTrack(index) {
-		return this.tracks[index];
 	}
 
 	getTitle() {

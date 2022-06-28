@@ -1,24 +1,12 @@
-import Track from './Track.js';
+import TrackList from './TrackList.js';
 
-export default class Playlist {
-	constructor(tracks, title, author, description, image) {
-		this.tracks = tracks.items.map((item) => new Track(item.track));
+export default class Playlist extends TrackList {
+	constructor(tracks, title, author, description, image, shuffle) {
+		super(tracks);
 		this.title = title;
 		this.author = author;
 		this.description = description;
 		this.image = image;
-	}
-
-	getTracks() {
-		return this.tracks;
-	}
-
-	getTrack(index) {
-		return this.tracks[index];
-	}
-
-	getLength() {
-		return this.tracks.length;
 	}
 
 	getTitle() {

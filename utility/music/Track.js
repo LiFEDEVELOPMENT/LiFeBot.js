@@ -4,6 +4,7 @@ import search from 'yt-search';
 export default class Track {
 	constructor(track) {
 		this.track = track;
+		this.played = false;
 	}
 
 	getTitle() {
@@ -40,5 +41,13 @@ export default class Track {
 			filter: 'audioonly',
 			quality: 'highestaudio',
 		});
+	}
+
+	getPlayed() {
+		return this.played;
+	}
+
+	setPlayed(state) {
+		this.played = state;
 	}
 }
