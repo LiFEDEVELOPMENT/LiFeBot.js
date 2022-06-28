@@ -34,11 +34,11 @@ try {
 			body: commands,
 		});
 		console.log(`Successfully reloaded guild (/) commands for ${guildId}`);
-	} else {
-		console.log('Started refreshing application (/) commands.');
-		await rest.put(Routes.applicationCommands(clientId), { body: commands });
-		console.log('Successfully reloaded application (/) commands.');
+		return;
 	}
+	console.log('Started refreshing application (/) commands.');
+	await rest.put(Routes.applicationCommands(clientId), { body: commands });
+	console.log('Successfully reloaded application (/) commands.');
 } catch (error) {
 	console.error(error);
 }
