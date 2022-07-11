@@ -5,7 +5,8 @@ import errorMessage from '#errormessage';
 async function create() {
 	const command = new SlashCommandBuilder()
 		.setName('coinflip')
-		.setDescription('Flips a coin');
+		.setDescription('Flips a coin')
+		.setDMPermission(true);
 
 	return command.toJSON();
 }

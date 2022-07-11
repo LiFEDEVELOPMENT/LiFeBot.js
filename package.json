@@ -1,31 +1,29 @@
 {
-  "dependencies": {
-    "@discordjs/builders": "^0.15.0",
-    "@discordjs/rest": "^0.5.0",
-    "better-sqlite3": "^7.5.3",
-    "discord-api-types": "^0.34.0",
-    "discord.js": "^13.8.0",
-    "dotenv": "^16.0.1"
-  },
-  "imports": {
-    "#sql": "./db/sql.js",
-    "#langs/*": "./languages/*.js",
-    "#lang": "./utility/Language.js",
-    "#errormessage": "./utility/ErrorMessage.js",
-    "#util/*": "./utility/*.js",
-    "#menus/*": "./events/interactions/menus/*.js",
-    "#commands/*": "./events/interactions/commands/*.js",
-    "#buttons/*": "./events/interactions/buttons/*.js",
-    "#events/*": "./events/*"
-  },
-  "name": "lifebot.js",
-  "version": "1.0.0",
-  "main": "LiFeBot.js",
-  "keywords": [
-    "discord-bot"
-  ],
-  "author": "Linus Potocnik",
-  "license": "MIT",
-  "description": "",
-  "type": "module"
+	"dependencies": {
+		"@discordjs/builders": "^0.15.0",
+		"better-sqlite3": "^7.6.0",
+		"discord.js": "^13.8.1",
+		"dotenv": "^16.0.1"
+	},
+	"imports": {
+		"#sql": "./db/sql.js",
+		"#langs/*": "./languages/*.js",
+		"#lang": "./utility/Language.js",
+		"#errormessage": "./utility/ErrorMessage.js",
+		"#util/*": "./utility/*.js",
+		"#menus/*": "./events/interactions/menus/*.js",
+		"#commands/*": "./events/interactions/commands/*.js",
+		"#buttons/*": "./events/interactions/buttons/*.js",
+		"#events/*": "./events/*"
+	},
+	"name": "lifebot.js",
+	"version": "0.9.0",
+	"main": "LiFeBot.js",
+	"keywords": [
+		"discord-bot"
+	],
+	"author": "Linus Potocnik",
+	"license": "MIT",
+	"description": "",
+	"type": "module"
 }

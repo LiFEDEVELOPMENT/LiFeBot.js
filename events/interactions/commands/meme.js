@@ -17,7 +17,8 @@ async function create() {
 		.setName('meme')
 		.setDescription(
 			'Meme command group. Contains subcommands for adding, deleting and displaying memes'
-		);
+		)
+		.setDMPermission(false);
 
 	command.addSubcommand(
 		new SlashCommandSubcommandBuilder()

@@ -17,7 +17,8 @@ async function create() {
 		.setName('note')
 		.setDescription(
 			'Note command group. Contains subcommands for adding, deleting and displaying notes.'
-		);
+		)
+		.setDMPermission(false);
 
 	command.addSubcommand(
 		new SlashCommandSubcommandBuilder()

@@ -4,7 +4,6 @@
 
 - Installing the bot
 - Finding your bot's token
-- Finding your bot's ID
 - Inviting your bot
 - Installing NodeJS/npm
 - Updating NodeJS
@@ -24,8 +23,7 @@ Before you follow this, make sure you use NodeJS version 16.9.0 or higher and np
 - Grab the [latest release](https://github.com/LIFEDEVELOPMENT/LiFeBot.js/releases) and unzip it
 - In the command line, navigate into the unzipped folder
 - Run `npm install`
-- Run `echo "BOT_TOKEN=<YOUR TOKEN>" >> .env ; echo "CLIENTID=<YOUR CLIENT ID>" >> .env`
-- Run `node deploy-commands.js`
+- Run `echo "BOT_TOKEN=<YOUR TOKEN>" >> .env<`
 - Run `node LiFeBot.js`
 </details>
 
@@ -45,21 +43,6 @@ Finding your bot token
 
 NOTE: Do NOT share this token with anyone!
 
-</details>
-
----
-
-<details>
-<summary>
-Finding your bot's ID
-</summary>
-<br>
-
-Make sure that you share a server with the bot you created. If this is not the case, go to the Invite section of this tutorial.
-
-- Enable the developer mode in Discord. Go to Settings > Advanced and enable it there
-- Right click the bot in the server list
-- Click on `Copy ID`
 </details>
 
 ---
