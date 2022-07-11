@@ -7,8 +7,8 @@ async function addQuote(guildid, quote, time, author) {
 	await sql.run(preparedSQL, [guildid, quote, time.toString(), author]);
 
 	// Fetches the last (just generated) object of the quotes table and retrieves its id.
-	let quotes = await sql.query('SELECT * FROM quotes');
-	return quotes[quotes.length - 1].id;
+	let quotes = await sql.query('SELECT * FROM quotes ORDER BY id DESC LIMIT 1');
+	return quotes[0].id;
 }
 async function deleteQuote(id, guildid) {
 	if (id < 0) return false;
@@ -21,8 +21,8 @@ async function deleteQuote(id, guildid) {
 	return true;
 }
 async function listQuotes(guildid) {
-	let quotes = await sql.query('SELECT * FROM quotes');
-	return quotes.filter((quote) => quote.guildid == guildid);
+	let quotes = await sql.query('SELECT * FROM quotes WHERE guildid=?', guildid);
+	return quotes;
 }
 async function charLimitList(guildid) {
 	let quotes = await this.listQuotes(guildid);

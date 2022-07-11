@@ -6,8 +6,8 @@ async function addMeme(guildid, meme) {
 	await sql.run(preparedSQL, [guildid, meme]);
 
 	// Fetches the last (just generated) object of the memes table and retrieves its id.
-	let memes = await sql.query('SELECT * FROM memes');
-	return memes[memes.length - 1].id;
+	let memes = await sql.query('SELECT * FROM memes ORDER BY id DESC LIMIT 1');
+	return memes[0].id;
 }
 
 async function deleteMeme(id, guildid) {
@@ -22,8 +22,8 @@ async function deleteMeme(id, guildid) {
 }
 
 async function listMemes(guildid) {
-	let memes = await sql.query('SELECT * FROM memes');
-	return memes.filter((meme) => meme.guildid == guildid);
+	let memes = await sql.query('SELECT * FROM memes WHERE guildid=?', guildid);
+	return memes;
 }
 
 async function charLimitList(guildid) {
@@ -35,7 +35,7 @@ async function charLimitList(guildid) {
 			resultArray.push(result);
 			result = '';
 		}
-		result += '\n\n' + element.toString() + ` **(${element.id})**`;
+		result += '\n\n' + element.meme.toString() + ` **(${element.id})**`;
 	});
 	if (result != '') resultArray.push(result);
 	return resultArray;
