@@ -12,7 +12,8 @@ async function create() {
 				.setName('hex')
 				.setDescription('Hex-code of the color. Use format #RRGGBB')
 				.setRequired(true)
-		);
+		)
+		.setDMPermission(true);
 
 	return command.toJSON();
 }

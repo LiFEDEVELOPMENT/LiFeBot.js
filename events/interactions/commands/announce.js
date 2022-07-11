@@ -20,7 +20,8 @@ async function create() {
 			option
 				.setName('role')
 				.setDescription('The role you want to notify about your announcement')
-		);
+		)
+		.setDMPermission(false);
 
 	return command.toJSON();
 }

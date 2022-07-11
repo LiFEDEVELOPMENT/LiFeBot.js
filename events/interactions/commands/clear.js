@@ -12,7 +12,8 @@ async function create() {
 				.setName('amount')
 				.setDescription('The amount of messages you want to delete')
 				.setRequired(true)
-		);
+		)
+		.setDMPermission(false);
 
 	return command.toJSON();
 }

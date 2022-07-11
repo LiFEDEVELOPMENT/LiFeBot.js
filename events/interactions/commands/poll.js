@@ -30,7 +30,8 @@ async function create() {
 				.setDescription('The amount of multiple choices you want to allow')
 				.setChoices(...choices)
 				.setRequired(true)
-		);
+		)
+		.setDMPermission(false);
 
 	for (let i = 1; i <= 10; i++) {
 		command.addStringOption((option) =>

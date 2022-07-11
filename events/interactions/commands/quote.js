@@ -18,7 +18,8 @@ async function create() {
 		.setName('quote')
 		.setDescription(
 			'Quote command group. Contains subcommands for adding, deleting and displaying quotes'
-		);
+		)
+		.setDMPermission(false);
 
 	command.addSubcommand(
 		new SlashCommandSubcommandBuilder()

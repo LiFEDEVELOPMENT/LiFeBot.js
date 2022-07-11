@@ -15,7 +15,8 @@ async function create() {
 		)
 		.addStringOption((option) =>
 			option.setName('reason').setDescription('The reason for the kick')
-		);
+		)
+		.setDMPermission(false);
 
 	return command.toJSON();
 }
