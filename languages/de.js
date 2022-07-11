@@ -87,6 +87,4 @@ export default {
 	QUOTE_EXECUTE_RANDOM_EMBED_FOOTER:
 		'Erstellt am DATE von CREATOR | ID: QUOTEID',
 	TAILS: 'Zahl',
-	VOICE_JOIN_SUCCESS: 'Channel beigetreten!',
-	VOICE_LEAVE_SUCCESS: 'Channel verlassen!',
 };

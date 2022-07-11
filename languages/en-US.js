@@ -77,6 +77,4 @@ export default {
 	QUOTE_EXECUTE_RANDOM_EMBED_TITLE: 'Random quote!',
 	QUOTE_EXECUTE_RANDOM_EMBED_FOOTER: 'Created on DATE by CREATOR | ID: QUOTEID',
 	TAILS: 'Tails',
-	VOICE_JOIN_SUCCESS: 'Joined your channel!',
-	VOICE_LEAVE_SUCCESS: 'Left your channel!',
 };
