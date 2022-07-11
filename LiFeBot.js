@@ -5,15 +5,16 @@ import { Client, Intents } from 'discord.js';
 
 // Create a new Client
 const client = new Client({
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
+	intents: [Intents.FLAGS.GUILDS],
 });
-
-const events = fs
-	.readdirSync('./events')
-	.filter((file) => file.endsWith('.js'));
 
 // Open DB-Connection and create necessary tables
 await sql.initialize();
+
+// Fetch all events from the event-folder
+const events = fs
+	.readdirSync('./events')
+	.filter((file) => file.endsWith('.js'));
 
 // Check for an event and execute the corresponding file in ./events
 for (let event of events) {
