@@ -10,6 +10,7 @@ async function addQuote(guildid, quote, time, author) {
 	let quotes = await sql.query('SELECT * FROM quotes ORDER BY id DESC LIMIT 1');
 	return quotes[0].id;
 }
+
 async function deleteQuote(id, guildid) {
 	if (id < 0) return false;
 
@@ -20,10 +21,12 @@ async function deleteQuote(id, guildid) {
 	await sql.run('DELETE FROM quotes WHERE id=?', id);
 	return true;
 }
+
 async function listQuotes(guildid) {
 	let quotes = await sql.query('SELECT * FROM quotes WHERE guildid=?', guildid);
 	return quotes;
 }
+
 async function charLimitList(guildid) {
 	let quotes = await this.listQuotes(guildid);
 	let resultArray = [];
@@ -38,6 +41,7 @@ async function charLimitList(guildid) {
 	if (result != '') resultArray.push(result);
 	return resultArray;
 }
+
 async function randomQuote(guildid) {
 	// Retrieves a list of all quotes of the given guild and picks a random one
 	const guildQuotes = await this.listQuotes(guildid);

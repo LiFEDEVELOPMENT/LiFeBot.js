@@ -18,9 +18,12 @@ Installing the bot
 Before you follow this, make sure that you have Docker installed.
 
 - Grab the [docker compose file](https://gist.github.com/LinusPotocnik/0b6c47888b70755d6e87333da4155d4d) and put it in a directory of your choice (where you want to run the bot)
-- In the command line, navigate into this folder
-- Run `echo "BOT_TOKEN=<YOUR TOKEN>" >> .env<`
+- In the command line, navigate into that directory
+- Run `echo "BOT_TOKEN=<YOUR TOKEN>" >> .env`
 - Run `docker compose up`
+
+The bot will now run and automatically check for updates every 24hrs
+
 </details>
 
 ---
