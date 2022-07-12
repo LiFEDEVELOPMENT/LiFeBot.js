@@ -5,10 +5,7 @@
 - Installing the bot
 - Finding your bot's token
 - Inviting your bot
-- Installing NodeJS/npm
-- Updating NodeJS
-- Updating npm
-- Installing Git on Windows
+- Installing Docker
 
 ---
 
@@ -18,13 +15,12 @@ Installing the bot
 </summary>
 <br>
 
-Before you follow this, make sure you use NodeJS version 16.9.0 or higher and npm version 8 or higher. You can check the versions of both by running `npm version` in your command line
+Before you follow this, make sure that you have Docker installed.
 
-- Grab the [latest release](https://github.com/LIFEDEVELOPMENT/LiFeBot.js/releases) and unzip it
-- In the command line, navigate into the unzipped folder
-- Run `npm install`
+- Grab the [docker compose file](https://gist.github.com/LinusPotocnik/0b6c47888b70755d6e87333da4155d4d) and put it in a directory of your choice (where you want to run the bot)
+- In the command line, navigate into this folder
 - Run `echo "BOT_TOKEN=<YOUR TOKEN>" >> .env<`
-- Run `node LiFeBot.js`
+- Run `docker compose up`
 </details>
 
 ---
@@ -66,79 +62,16 @@ Make sure that you have already created a bot application. If not, follow the st
 
 <details>
 <summary>
-Installing NodeJS and npm
-</summary>
-<details>
-<summary>
-Windows and macOS
+Installing Docker
 </summary>
 <br>
 
-- Go to the [NodeJS website](https://nodejs.org/en/) and download the current version
-- Install the downloaded file. This installation includes npm
-</details>
-<details>
-<summary>
-Linux
-</summary>
-<br>
+- On Windows and macOS, you can simply install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- On Linux, I prefer using the installation script.
 
-- Update Linux
-  `sudo apt-get update -y`
-- Download node with curl
-  `curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -`
-  (change the 16 to a different version if you wish to install a version of node that is not v16)
-- Install node
-  `sudo apt install nodejs`
-- Verify installation
-`node -v`
-</details>
-</details>
+```
+$ curl -fsSL https://get.docker.com -o get-docker.sh
+$ sudo sh get-docker.sh
+```
 
----
-
-<details>
-<summary>
-Updating NodeJS
-</summary>
-<br>
-
-If you have an older version of NodeJS you can update it.
-If you are on a Windows machine, use all commands without a sudo and execute the terminal with administrator permissions.
-
-- `npm cache clean -f`
-- `sudo npm install -g n`
-- `sudo n latest`
-</details>
-
----
-
-<details>
-<summary>
-Updating npm
-</summary>
-<details>
-<summary>
-macOS and Linux
-</summary>
-<br>
-
-- `sudo npm install -g npm@latest`
-</details>
-
-For Windows, please follow the [official npm guide for Windows](https://docs.npmjs.com/try-the-latest-stable-version-of-npm#upgrading-on-windows)
-
-</details>
-
----
-
-<details>
-<summary>
-Installing Git on Windows
-</summary>
-<br>
-
-- Head to the [official git website](https://git-scm.com/download/win) to download the Windows installer
-- Install the downloaded file
-- Start the git bash terminal instead of cmd and use it to perform git commands
 </details>
