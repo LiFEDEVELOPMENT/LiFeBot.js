@@ -9,6 +9,8 @@ updates:
     directory: '/' # Location of package manifests
     schedule:
       interval: 'daily'
-    ignore:
-      - dependency-name: 'sqlite3'
-        versions: ['5.0.x']
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
