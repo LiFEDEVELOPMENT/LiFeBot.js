@@ -6,7 +6,7 @@
 		"dotenv": "^16.0.1"
 	},
 	"imports": {
-		"#sql": "./db/sql.js",
+		"#sql": "./utility/sql.js",
 		"#langs/*": "./languages/*.js",
 		"#lang": "./utility/Language.js",
 		"#errormessage": "./utility/ErrorMessage.js",
