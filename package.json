@@ -16,8 +16,9 @@
 		"#events/*": "./events/*"
 	},
 	"scripts": {
-		"test": "NODE_ENV=TEST node .",
-		"dev": "bash dev.sh"
+		"start": "node LiFeBot.js",
+		"dev": "bash ./scripts/dev.sh",
+		"test": "NODE_ENV=TEST node LiFeBot.js"
 	},
 	"name": "lifebot.js",
 	"version": "0.9.0",
@@ -26,7 +27,7 @@
 		"discord-bot"
 	],
 	"author": "Linus Potocnik",
-	"license": "MIT",
+	"license": "GPL-3.0-or-later",
 	"description": "",
 	"type": "module"
 }
