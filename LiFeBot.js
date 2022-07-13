@@ -31,3 +31,8 @@ for (let event of events) {
 
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);
+
+if (process.env.NODE_ENV === 'TEST')
+	setTimeout(() => {
+		process.exit(0);
+	}, 30000);
