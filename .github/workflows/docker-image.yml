@@ -24,7 +24,7 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
         env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN } }
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
     timeout-minutes: 1
 
   codeql:
