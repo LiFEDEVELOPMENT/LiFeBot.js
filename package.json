@@ -16,6 +16,9 @@
 		"#buttons/*": "./events/interactions/buttons/*.js",
 		"#events/*": "./events/*"
 	},
+	"scripts": {
+		"test": "NODE_ENV=TEST node ."
+	},
 	"name": "lifebot.js",
 	"version": "0.9.0",
 	"main": "LiFeBot.js",
