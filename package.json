@@ -2,8 +2,7 @@
 	"dependencies": {
 		"@discordjs/builders": "^0.15.0",
 		"better-sqlite3": "^7.6.0",
-		"discord.js": "^13.8.1",
-		"dotenv": "^16.0.1"
+		"discord.js": "^13.8.1"
 	},
 	"imports": {
 		"#sql": "./utility/sql.js",
@@ -17,7 +16,9 @@
 		"#events/*": "./events/*"
 	},
 	"scripts": {
-		"test": "NODE_ENV=TEST node ."
+		"start": "node LiFeBot.js",
+		"dev": "bash ./scripts/dev.sh",
+		"test": "NODE_ENV=TEST node LiFeBot.js"
 	},
 	"name": "lifebot.js",
 	"version": "0.9.0",
@@ -26,7 +27,7 @@
 		"discord-bot"
 	],
 	"author": "Linus Potocnik",
-	"license": "MIT",
+	"license": "GPL-3.0-or-later",
 	"description": "",
 	"type": "module"
 }

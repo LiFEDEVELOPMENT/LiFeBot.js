@@ -1,4 +1,3 @@
-import {} from 'dotenv/config';
 import fs from 'fs';
 
 async function execute(client) {
