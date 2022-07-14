@@ -9,10 +9,10 @@ import {
 	Util,
 } from 'discord.js';
 import noteUtil from '#util/NotesUtil';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function create() {
+const create = () => {
 	const command = new SlashCommandBuilder()
 		.setName('note')
 		.setDescription(
@@ -27,13 +27,13 @@ async function create() {
 			.addStringOption((option) =>
 				option
 					.setName('notekey')
-					.setDescription('The name for your note.')
+					.setDescription('The subject of your note.')
 					.setRequired(true)
 			)
 			.addStringOption((option) =>
 				option
 					.setName('note')
-					.setDescription('The note you want to add')
+					.setDescription('The note you want to add.')
 					.setRequired(true)
 			)
 	);
@@ -65,92 +65,84 @@ async function create() {
 	);
 
 	return command.toJSON();
-}
+};
 
-async function execute(interaction) {
-	const locale = interaction.locale;
+const execute = (interaction) => {
 	try {
+		const locale = interaction.locale;
 		let answer = {
-			contet: await lang('ERROR', {}, locale),
+			contet: lang('ERROR', locale),
 			ephemeral: true,
 		};
 
 		switch (interaction.options.getSubcommand()) {
 			case 'add':
-				answer = await addCommand(interaction);
+				answer = addCommand(interaction);
 				break;
 			case 'delete':
-				answer = await deleteCommand(interaction);
+				answer = deleteCommand(interaction);
 				break;
 			case 'list':
-				answer = await listCommand(interaction);
+				answer = listCommand(interaction);
 		}
 
-		if (!interaction.deferred) await interaction.reply(answer);
-		else await interaction.editReply(answer);
+		if (!interaction.deferred) interaction.reply(answer);
+		else interaction.editReply(answer);
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
-async function addCommand(interaction) {
+const addCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const notekey = Util.escapeMarkdown(interaction.options.getString('notekey'));
 	const note = Util.escapeMarkdown(interaction.options.getString('note'));
 	const author = interaction.user.id;
 
-	const noteID = await noteUtil.addNote(guildid, notekey, note, author);
-	return lang('NOTE_EXECUTE_ADD_SUCCESS', { NOTEID: noteID }, locale);
-}
+	const noteID = noteUtil.addNote(guildid, notekey, note, author);
+	return lang('NOTE_EXECUTE_ADD_SUCCESS', locale, { NOTEID: noteID });
+};
 
-async function deleteCommand(interaction) {
+const deleteCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const toDeleteID = interaction.options.getInteger('id');
 
-	if ((await noteUtil.deleteNote(toDeleteID, guildid)) == false)
+	if (noteUtil.deleteNote(toDeleteID, guildid) === false)
 		return {
-			content: await lang(
-				'NOTE_EXECUTE_DELETE_ERROR',
-				{ NOTEID: toDeleteID },
-				locale
-			),
+			content: lang('NOTE_EXECUTE_DELETE_ERROR', locale, {
+				NOTEID: toDeleteID,
+			}),
 			ephemeral: true,
 		};
 
-	return await lang(
-		'NOTE_EXECUTE_DELETE_SUCCESS',
-		{ NOTEID: toDeleteID },
-		locale
-	);
-}
+	return lang('NOTE_EXECUTE_DELETE_SUCCESS', locale, { NOTEID: toDeleteID });
+};
 
-async function listCommand(interaction) {
+const listCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const query = interaction.options.getString('query');
 	let noteList;
 
-	if (query === null) noteList = await noteUtil.charLimitList(guildid);
-	else noteList = await noteUtil.charLimitListQuery(guildid, query);
+	if (query === null) noteList = noteUtil.charLimitList(guildid);
+	else noteList = noteUtil.charLimitListQuery(guildid, query);
 
 	if (noteList[0] === undefined) {
 		let emptyString =
 			query === null
-				? await lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES', {}, locale)
-				: await lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY', {}, locale);
+				? lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES', locale)
+				: lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY', locale);
 		return { content: emptyString, ephemeral: true };
 	}
 
 	const noteEmbed = new MessageEmbed()
 		.setTitle(
 			Util.escapeMarkdown(
-				await lang(
-					'NOTE_EXECUTE_LIST_EMBED_TITLE',
-					{ GUILDNAME: interaction.guild.name },
-					locale
-				)
+				lang('NOTE_EXECUTE_LIST_EMBED_TITLE', locale, {
+					GUILDNAME: interaction.guild.name,
+				})
 			)
 		)
 		.setDescription(noteList[0])
@@ -182,6 +174,6 @@ async function listCommand(interaction) {
 	);
 
 	return { embeds: [noteEmbed], components: [actionRow] };
-}
+};
 
 export { create, execute };

@@ -2,13 +2,13 @@ import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
 import noteUtil from '#util/NotesUtil';
 import errorMessage from '#errormessage';
 
-async function execute(interaction, query) {
+const execute = (interaction, query) => {
 	try {
 		let notesList;
 		notesList =
 			query === null
-				? await noteUtil.charLimitList(interaction.guild.id)
-				: await noteUtil.charLimitListQuery(interaction.guild.id, query);
+				? noteUtil.charLimitList(interaction.guild.id)
+				: noteUtil.charLimitListQuery(interaction.guild.id, query);
 		let oldEmbed = interaction.message.embeds[0];
 		let oldTitle = oldEmbed.title.split('Page ');
 		let page = 0;
@@ -43,13 +43,13 @@ async function execute(interaction, query) {
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		await interaction.update({
+		interaction.update({
 			embeds: [newEmbed],
 			components: [actionRow],
 		});
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
 export { execute };

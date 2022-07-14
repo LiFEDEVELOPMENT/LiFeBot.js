@@ -1,6 +1,6 @@
 import sql from '#sql';
 
-async function registerNewPoll(
+const registerNewPoll = (
 	guildid,
 	authorid,
 	maxAnswers,
@@ -15,21 +15,21 @@ async function registerNewPoll(
 	answer8,
 	answer9,
 	answer10
-) {
+) => {
 	// Prepare arguments for sql statement
 	let sqlParams = Array.from(arguments);
 
 	// Prepaare sql statement and run it with prepared arguments
 	let preparedSQL =
 		'INSERT INTO polls (guildid,authorid,maxAnswers,question,answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,answer10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-	await sql.run(preparedSQL, sqlParams);
+	sql.run(preparedSQL, sqlParams);
 
 	// Return the id of the newly generated poll-entry
-	let sqlResult = await sql.query('SELECT * FROM polls');
+	let sqlResult = sql.query('SELECT * FROM polls');
 	return sqlResult[sqlResult.length - 1].id;
-}
+};
 
-async function fetchAllMessages(
+const fetchAllMessages = async (
 	channel,
 	options = {
 		reverseArray: true,
@@ -37,7 +37,7 @@ async function fetchAllMessages(
 		botOnly: false,
 		pinnedOnly: false,
 	}
-) {
+) => {
 	//https://github.com/iColtz/discord-fetch-all
 	const { reverseArray, userOnly, botOnly, pinnedOnly } = options;
 	let messages = [];
@@ -65,6 +65,6 @@ async function fetchAllMessages(
 		messages = messages.concat(Array.from(fetchedMessages.values()));
 		lastID = fetchedMessages.lastKey();
 	}
-}
+};
 
 export default { registerNewPoll, fetchAllMessages };

@@ -1,13 +1,12 @@
 {
 	"dependencies": {
 		"@discordjs/builders": "^0.15.0",
-		"better-sqlite3": "^7.6.0",
+		"better-sqlite3": "^7.6.1",
 		"discord.js": "^13.8.1"
 	},
 	"imports": {
 		"#sql": "./utility/sql.js",
 		"#langs/*": "./languages/*.js",
-		"#lang": "./utility/Language.js",
 		"#errormessage": "./utility/ErrorMessage.js",
 		"#util/*": "./utility/*.js",
 		"#menus/*": "./events/interactions/menus/*.js",

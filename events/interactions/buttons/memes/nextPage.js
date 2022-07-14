@@ -1,9 +1,9 @@
 import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
 import memeUtil from '#util/MemeUtil';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function execute(interaction) {
+const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
 		const memeList = memeUtil.charLimitList(interaction.guild.id);
@@ -25,31 +25,31 @@ async function execute(interaction) {
 			new MessageButton()
 				.setCustomId('memes/firstPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('FIRST_PAGE', {}, locale))
+				.setLabel(lang('FIRST_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
 				.setCustomId('memes/previousPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
+				.setLabel(lang('PREVIOUS_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
 				.setCustomId('memes/nextPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('NEXT_PAGE', {}, locale))
+				.setLabel(lang('NEXT_PAGE', locale))
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
 				.setCustomId('memes/lastPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('LAST_PAGE', {}, locale))
+				.setLabel(lang('LAST_PAGE', locale))
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		await interaction.update({
+		interaction.update({
 			embeds: [newEmbed],
 			components: [actionRow],
 		});
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 export { execute };

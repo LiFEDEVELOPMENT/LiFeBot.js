@@ -1,4 +1,4 @@
-async function execute(interaction) {
+const execute = async (interaction) => {
 	if (interaction.isCommand())
 		return (await import(`#commands/${interaction.commandName}`)).execute(
 			interaction
@@ -18,7 +18,7 @@ async function execute(interaction) {
 			metadata[1]
 		);
 	}
-}
+};
 
 const once = false;
 const name = 'interactionCreate';

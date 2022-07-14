@@ -10,10 +10,10 @@ import {
 } from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
 import utilities from '#util/Utilities';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function create() {
+const create = () => {
 	const command = new SlashCommandBuilder()
 		.setName('quote')
 		.setDescription(
@@ -70,75 +70,69 @@ async function create() {
 	);
 
 	return command.toJSON();
-}
+};
 
-async function execute(interaction) {
-	const locale = interaction.locale;
+const execute = async (interaction) => {
 	try {
+		const locale = interaction.locale;
 		const guildid = interaction.guild.id;
 		let answer = {
-			content: await lang('ERROR', {}, locale),
+			content: lang('ERROR', locale),
 			ephemeral: true,
 		};
 
 		switch (interaction.options.getSubcommand()) {
 			case 'add':
-				answer = await addCommand(interaction, guildid);
+				answer = addCommand(interaction, guildid);
 				break;
 			case 'delete':
-				answer = await deleteCommand(interaction, guildid);
+				answer = deleteCommand(interaction, guildid);
 				break;
 			case 'import':
 				answer = await importCommand(interaction, guildid);
 				break;
 			case 'list':
-				answer = await listCommand(interaction, guildid);
+				answer = listCommand(interaction, guildid);
 				break;
 			case 'random':
 				answer = await randomCommand(interaction, guildid);
 		}
 
-		if (!interaction.deferred) await interaction.reply(answer);
-		else await interaction.editReply(answer);
+		if (!interaction.deferred) interaction.reply(answer);
+		else interaction.editReply(answer);
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
-async function addCommand(interaction) {
+const addCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const quote = Util.escapeMarkdown(interaction.options.getString('quote'));
 	const time = Date.now();
 	const author = interaction.user.id;
 
-	const quoteID = await quoteUtil.addQuote(guildid, quote, time, author);
-	return await lang('QUOTE_EXECUTE_ADD_SUCCESS', { QUOTEID: quoteID }, locale);
-}
+	const quoteID = quoteUtil.addQuote(guildid, quote, time, author);
+	return lang('QUOTE_EXECUTE_ADD_SUCCESS', locale, { QUOTEID: quoteID });
+};
 
-async function deleteCommand(interaction) {
+const deleteCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const toDeleteID = interaction.options.getInteger('id');
 
-	if ((await quoteUtil.deleteQuote(toDeleteID, guildid)) == false)
+	if (quoteUtil.deleteQuote(toDeleteID, guildid) === false)
 		return {
-			content: await lang(
-				'QUOTE_EXECUTE_DELETE_ERROR',
-				{ QUOTEID: toDeleteID },
-				locale
-			),
+			content: lang('QUOTE_EXECUTE_DELETE_ERROR', locale, {
+				QUOTEID: toDeleteID,
+			}),
 			ephemeral: true,
 		};
 
-	return await lang(
-		'QUOTE_EXECUTE_DELETE_SUCCESS',
-		{ QUOTEID: toDeleteID },
-		locale
-	);
-}
+	return lang('QUOTE_EXECUTE_DELETE_SUCCESS', locale, { QUOTEID: toDeleteID });
+};
 
-async function importCommand(interaction) {
+const importCommand = async (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const channelid = interaction.options.getString('channelid');
@@ -146,13 +140,13 @@ async function importCommand(interaction) {
 
 	if (!channel.isText())
 		return {
-			content: await lang('QUOTE_EXECUTE_IMPORT_NOTEXT', {}, locale),
+			content: lang('QUOTE_EXECUTE_IMPORT_NOTEXT', locale),
 			ephemeral: true,
 		};
 
 	if (channel === undefined)
 		return {
-			content: await lang('QUOTE_EXECUTE_IMPORT_ERROR', {}, locale),
+			content: lang('QUOTE_EXECUTE_IMPORT_ERROR', locale),
 			ephemeral: true,
 		};
 
@@ -161,7 +155,7 @@ async function importCommand(interaction) {
 	let messages = await utilities.fetchAllMessages(channel);
 
 	for (let message of messages) {
-		await quoteUtil.addQuote(
+		quoteUtil.addQuote(
 			guildid,
 			message.content,
 			message.createdTimestamp,
@@ -169,33 +163,29 @@ async function importCommand(interaction) {
 		);
 	}
 
-	return await lang(
-		'QUOTE_EXECUTE_IMPORT_SUCCESS',
-		{ CHANNELNAME: channel.name },
-		locale
-	);
-}
+	return lang('QUOTE_EXECUTE_IMPORT_SUCCESS', locale, {
+		CHANNELNAME: channel.name,
+	});
+};
 
-async function listCommand(interaction) {
+const listCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	let quoteList = await quoteUtil.charLimitList(guildid);
+	let quoteList = quoteUtil.charLimitList(guildid);
 
-	if (quoteList[0] == undefined)
+	if (quoteList[0] === undefined)
 		return {
-			content: await lang('QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES', {}, locale),
+			content: lang('QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES', locale),
 			ephemeral: true,
 		};
 
 	const quoteEmbed = new MessageEmbed()
 		.setTitle(
 			Util.escapeMarkdown(
-				await lang(
-					'QUOTE_EXECUTE_LIST_EMBED_TITLE',
-					{ GUILDNAME: interaction.guild.name },
-					locale
-				)
+				lang('QUOTE_EXECUTE_LIST_EMBED_TITLE', locale, {
+					GUILDNAME: interaction.guild.name,
+				})
 			)
 		)
 		.setDescription(quoteList[0])
@@ -207,33 +197,38 @@ async function listCommand(interaction) {
 		new MessageButton()
 			.setCustomId('quotes/firstPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('FIRST_PAGE', {}, locale))
+			.setLabel(lang('FIRST_PAGE', locale))
 			.setDisabled(true),
 		new MessageButton()
 			.setCustomId('quotes/previousPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
+			.setLabel(lang('PREVIOUS_PAGE', locale))
 			.setDisabled(true),
 		new MessageButton()
 			.setCustomId('quotes/nextPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('NEXT_PAGE', {}, locale))
+			.setLabel(lang('NEXT_PAGE', locale))
 			.setDisabled(nextButtonsDisabled),
 		new MessageButton()
 			.setCustomId('quotes/lastPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('LAST_PAGE', {}, locale))
+			.setLabel(lang('LAST_PAGE', locale))
 			.setDisabled(nextButtonsDisabled)
 	);
 
 	return { embeds: [quoteEmbed], components: [actionRow] };
-}
+};
 
-async function randomCommand(interaction) {
+const randomCommand = async (interaction) => {
 	const locale = interaction.locale;
 
-	const guildid = interaction.guild.id;
-	let randomQuote = await quoteUtil.randomQuote(interaction.guild.id);
+	let randomQuote = quoteUtil.randomQuote(interaction.guild.id);
+	if (randomQuote === undefined)
+		return {
+			content: lang('QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES', locale),
+			ephemeral: true,
+		};
+
 	let quoteCreator = await interaction.client.users
 		.fetch(randomQuote.author)
 		.catch(() => {
@@ -248,18 +243,14 @@ async function randomCommand(interaction) {
 	});
 
 	const quoteEmbed = new MessageEmbed()
-		.setTitle(await lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
+		.setTitle(lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', locale))
 		.setDescription(randomQuote.quote.toString())
 		.setFooter({
-			text: await lang(
-				'QUOTE_EXECUTE_RANDOM_EMBED_FOOTER',
-				{
-					DATE: date,
-					CREATOR: quoteCreator.username,
-					QUOTEID: randomQuote.id,
-				},
-				guildid
-			),
+			text: lang('QUOTE_EXECUTE_RANDOM_EMBED_FOOTER', locale, {
+				DATE: date,
+				CREATOR: quoteCreator.username,
+				QUOTEID: randomQuote.id,
+			}),
 		})
 		.setColor('YELLOW');
 
@@ -267,9 +258,9 @@ async function randomCommand(interaction) {
 		new MessageButton()
 			.setCustomId('quotes/newRandom')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', {}, locale))
+			.setLabel(lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', locale))
 	);
 	return { embeds: [quoteEmbed], components: [actionRow] };
-}
+};
 
 export { create, execute };

@@ -1,12 +1,12 @@
 import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function execute(interaction) {
+const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
-		let quoteList = await quoteUtil.charLimitList(interaction.guild.id);
+		let quoteList = quoteUtil.charLimitList(interaction.guild.id);
 		let oldEmbed = interaction.message.embeds[0];
 		let oldTitle = oldEmbed.title.split('Page ');
 		let page =
@@ -25,32 +25,32 @@ async function execute(interaction) {
 			new MessageButton()
 				.setCustomId('quotes/firstPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('FIRST_PAGE', {}, locale))
+				.setLabel(lang('FIRST_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
 				.setCustomId('quotes/previousPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
+				.setLabel(lang('PREVIOUS_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
 			new MessageButton()
 				.setCustomId('quotes/nextPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('NEXT_PAGE', {}, locale))
+				.setLabel(lang('NEXT_PAGE', locale))
 				.setDisabled(nextButtonsDisabled),
 			new MessageButton()
 				.setCustomId('quotes/lastPage')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('LAST_PAGE', {}, locale))
+				.setLabel(lang('LAST_PAGE', locale))
 				.setDisabled(nextButtonsDisabled)
 		);
 
-		await interaction.update({
+		interaction.update({
 			embeds: [newEmbed],
 			components: [actionRow],
 		});
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
 export { execute };

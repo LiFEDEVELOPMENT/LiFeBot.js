@@ -1,13 +1,12 @@
 import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function execute(interaction) {
+const execute = async (interaction) => {
 	try {
 		const locale = interaction.locale;
-		const guildid = interaction.guild.id;
-		let randomQuote = await quoteUtil.randomQuote(interaction.guild.id);
+		let randomQuote = quoteUtil.randomQuote(interaction.guild.id);
 		let quoteCreator = await interaction.client.users
 			.fetch(randomQuote.author)
 			.catch(() => {
@@ -22,10 +21,10 @@ async function execute(interaction) {
 		});
 
 		const quoteEmbed = new MessageEmbed()
-			.setTitle(await lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
+			.setTitle(lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', locale))
 			.setDescription(randomQuote.quote.toString())
 			.setFooter({
-				text: await lang(
+				text: lang(
 					'QUOTE_EXECUTE_RANDOM_EMBED_FOOTER',
 					{
 						DATE: date,
@@ -41,7 +40,7 @@ async function execute(interaction) {
 			new MessageButton()
 				.setCustomId('quotes/newRandom')
 				.setStyle('PRIMARY')
-				.setLabel(await lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', {}, locale))
+				.setLabel(lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', locale))
 		);
 
 		interaction.update({
@@ -51,6 +50,6 @@ async function execute(interaction) {
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
 export { execute };
