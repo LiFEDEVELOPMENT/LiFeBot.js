@@ -1,16 +1,16 @@
 import { Util } from 'discord.js';
-import lang from '#lang';
+import lang from '#util/Lang';
 
-export default async function sendMessage(interaction, error) {
+export default (interaction, error) => {
 	const locale = interaction.locale;
-	const channel = '930852152614748190';
+	const channelID = '930852152614748190';
 
-	interaction.client.channels.cache.get(channel).send({
+	interaction.client.channels.cache.get(channelID).send({
 		content: Util.escapeMarkdown(error.stack.toString().substring(0, 2000)),
 	});
 
 	interaction.reply({
-		content: await lang('ERROR', {}, locale),
+		content: lang('ERROR', locale),
 		ephemeral: true,
 	});
-}
+};

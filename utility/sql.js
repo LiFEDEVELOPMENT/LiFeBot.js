@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 const db = new Database('./db/LiFeDB.db');
 
-function initialize() {
+const initialize = () => {
 	run(
 		'CREATE TABLE IF NOT EXISTS quotes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, quote STRING, time STRING, author BLOB)'
 	);
@@ -17,14 +17,14 @@ function initialize() {
 	run(
 		'CREATE TABLE IF NOT EXISTS notes(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guildid BLOB, noteKey STRING, note STRING, author BLOB)'
 	);
-}
+};
 
-function query(sql, placeholders = []) {
+const query = (sql, placeholders = []) => {
 	return db.prepare(sql).all(placeholders);
-}
+};
 
-function run(sql, placeholders = []) {
+const run = (sql, placeholders = []) => {
 	db.prepare(sql).run(placeholders);
-}
+};
 
 export default { initialize, query, run };

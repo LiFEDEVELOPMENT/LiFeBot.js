@@ -8,7 +8,7 @@ const client = new Client({
 });
 
 // Open DB-Connection and create necessary tables
-await sql.initialize();
+sql.initialize();
 
 // Fetch all events from the event-folder
 const events = fs

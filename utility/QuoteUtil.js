@@ -1,34 +1,34 @@
 import sql from '#sql';
 
-async function addQuote(guildid, quote, time, author) {
+const addQuote = (guildid, quote, time, author) => {
 	// Prepares a SQL statement and inserts the given quote into the quotes table of the db
 	let preparedSQL =
 		'INSERT INTO quotes (guildid,quote,time,author) VALUES (?,?,?,?)';
-	await sql.run(preparedSQL, [guildid, quote, time.toString(), author]);
+	sql.run(preparedSQL, [guildid, quote, time.toString(), author]);
 
 	// Fetches the last (just generated) object of the quotes table and retrieves its id.
-	let quotes = await sql.query('SELECT * FROM quotes ORDER BY id DESC LIMIT 1');
+	let quotes = sql.query('SELECT * FROM quotes ORDER BY id DESC LIMIT 1');
 	return quotes[0].id;
-}
+};
 
-async function deleteQuote(id, guildid) {
+const deleteQuote = (id, guildid) => {
 	if (id < 0) return false;
 
 	// Fetch all quotes with a matching guildid and check if the given id matches one
-	let matchedQuote = await this.listQuotes(guildid);
-	if (matchedQuote.filter((quote) => quote.id == id).length < 1) return false;
+	let matchedQuote = listQuotes(guildid);
+	if (matchedQuote.filter((quote) => quote.id === id).length < 1) return false;
 
-	await sql.run('DELETE FROM quotes WHERE id=?', id);
+	sql.run('DELETE FROM quotes WHERE id=?', id);
 	return true;
-}
+};
 
-async function listQuotes(guildid) {
-	let quotes = await sql.query('SELECT * FROM quotes WHERE guildid=?', guildid);
+const listQuotes = (guildid) => {
+	let quotes = sql.query('SELECT * FROM quotes WHERE guildid=?', guildid);
 	return quotes;
-}
+};
 
-async function charLimitList(guildid) {
-	let quotes = await this.listQuotes(guildid);
+const charLimitList = (guildid) => {
+	let quotes = listQuotes(guildid);
 	let resultArray = [];
 	let result = '';
 	quotes.forEach((element) => {
@@ -40,14 +40,14 @@ async function charLimitList(guildid) {
 	});
 	if (result != '') resultArray.push(result);
 	return resultArray;
-}
+};
 
-async function randomQuote(guildid) {
+const randomQuote = (guildid) => {
 	// Retrieves a list of all quotes of the given guild and picks a random one
-	const guildQuotes = await this.listQuotes(guildid);
+	const guildQuotes = listQuotes(guildid);
 	const random = Math.floor(Math.random() * guildQuotes.length);
 	return guildQuotes[random];
-}
+};
 
 export default {
 	addQuote,

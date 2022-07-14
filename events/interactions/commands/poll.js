@@ -6,10 +6,10 @@ import {
 	Util,
 } from 'discord.js';
 import util from '#util/Utilities';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function create() {
+const create = () => {
 	const choices = [];
 	for (let i = 1; i <= 10; i++) {
 		choices.push({ name: `Only allow ${i} answer(s) per user`, value: i });
@@ -43,11 +43,11 @@ async function create() {
 	}
 
 	return command.toJSON();
-}
+};
 
-async function execute(interaction) {
-	const locale = interaction.locale;
+const execute = (interaction) => {
 	try {
+		const locale = interaction.locale;
 		const guildid = interaction.guild.id;
 		const question = Util.escapeMarkdown(
 			interaction.options.getString('question')
@@ -70,7 +70,7 @@ async function execute(interaction) {
 		}
 
 		// Register a new poll
-		let id = await util.registerNewPoll(
+		let id = util.registerNewPoll(
 			guildid,
 			interaction.user.id,
 			maxChoices,
@@ -83,19 +83,15 @@ async function execute(interaction) {
 			.setCustomId(`polls/vote-${id}`)
 			.setMaxValues(maxChoices)
 			.setPlaceholder(
-				await lang(
-					'POLL_EXECUTE_MENU_PLACEHOLDER',
-					{
-						CHOICECOUNT: maxChoices,
-					},
-					locale
-				)
+				lang('POLL_EXECUTE_MENU_PLACEHOLDER', locale, {
+					CHOICECOUNT: maxChoices,
+				})
 			);
 
 		// Prepare the stop Button
 		let closeButton = new MessageButton()
 			.setCustomId(`polls/close-${id}`)
-			.setLabel(await lang('POLL_EXECUTE_BUTTON_STOP', {}, locale))
+			.setLabel(lang('POLL_EXECUTE_BUTTON_STOP', locale))
 			.setStyle('DANGER');
 
 		// Fill the options into the SelectionMenu
@@ -109,16 +105,12 @@ async function execute(interaction) {
 
 		// Create the message with the poll
 		interaction.reply({
-			content: await lang(
-				'POLL_EXECUTE_REPLY_TITLE',
-				{ STRING: question },
-				locale
-			),
+			content: lang('POLL_EXECUTE_REPLY_TITLE', locale, { STRING: question }),
 			components: [menuRow, buttonRow],
 		});
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
 export { create, execute };

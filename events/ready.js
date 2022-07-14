@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-async function execute(client) {
+const execute = async (client) => {
 	const commands = fs
 		.readdirSync('./events/interactions/commands')
 		.filter((file) => file.endsWith('.js'))
@@ -10,7 +10,7 @@ async function execute(client) {
 
 	for (let command of commands) {
 		const commandFile = await import(`#commands/${command}`);
-		commandsArray.push(await commandFile.create());
+		commandsArray.push(commandFile.create());
 	}
 
 	if (process.env.MODE === 'DEV')
@@ -18,7 +18,7 @@ async function execute(client) {
 	else client.application.commands.set(commandsArray);
 
 	console.log(`Ready! Logged in as ${client.user.tag}`);
-}
+};
 
 const once = true;
 const name = 'ready';

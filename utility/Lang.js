@@ -7,7 +7,7 @@ for (let language of config.activeLanguages) {
 	dictionaries[language] = dictionary.default;
 }
 
-export default (lang, key, textReplacements = {}) => {
+export default (key, lang, textReplacements = {}) => {
 	if (!dictionaries[lang]) return `${lang}/${key}`;
 
 	let string = dictionaries[lang][key];
@@ -15,7 +15,7 @@ export default (lang, key, textReplacements = {}) => {
 	// Replace parameters in text
 	let regEx = new RegExp(Object.keys(textReplacements).join('|'), 'gi');
 	if (Object.keys(textReplacements).length != 0)
-		string = string.replace(regEx, function (match) {
+		string = string.replace(regEx, (match) => {
 			return textReplacements[match];
 		});
 

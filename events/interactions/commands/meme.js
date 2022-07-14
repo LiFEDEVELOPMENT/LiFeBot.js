@@ -9,10 +9,10 @@ import {
 	Util,
 } from 'discord.js';
 import memeUtil from '#util/MemeUtil';
-import lang from '#lang';
+import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
-async function create() {
+const create = () => {
 	const command = new SlashCommandBuilder()
 		.setName('meme')
 		.setDescription(
@@ -57,90 +57,83 @@ async function create() {
 	);
 
 	return command.toJSON();
-}
-async function execute(interaction) {
-	const locale = interaction.locale;
+};
+
+const execute = (interaction) => {
 	try {
+		const locale = interaction.locale;
 		const guildid = interaction.guild.id;
 		let answer = {
-			content: await lang('ERROR', {}, locale),
+			content: lang('ERROR', locale),
 			ephemeral: true,
 		};
 
 		switch (interaction.options.getSubcommand()) {
 			case 'add':
-				answer = await addCommand(interaction, guildid);
+				answer = addCommand(interaction, guildid);
 				break;
 			case 'delete':
-				answer = await deleteCommand(interaction, guildid);
+				answer = deleteCommand(interaction, guildid);
 				break;
 			case 'list':
-				answer = await listCommand(interaction, guildid);
+				answer = listCommand(interaction, guildid);
 				break;
 			case 'random':
-				answer = await randomCommand(interaction, guildid);
+				answer = randomCommand(interaction, guildid);
 		}
 
-		if (!interaction.deferred) await interaction.reply(answer);
-		else await interaction.editReply(answer);
+		if (!interaction.deferred) interaction.reply(answer);
+		else interaction.editReply(answer);
 	} catch (error) {
 		errorMessage(interaction, error);
 	}
-}
+};
 
-async function addCommand(interaction) {
+const addCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
 	const meme = Util.escapeMarkdown(interaction.options.getString('meme'));
 
-	const memeID = await memeUtil.addMeme(guildid, meme);
-	return await lang('MEME_EXECUTE_ADD_SUCCESS', { MEMEID: memeID }, locale);
-}
+	const memeID = memeUtil.addMeme(guildid, meme);
+	return lang('MEME_EXECUTE_ADD_SUCCESS', locale, { MEMEID: memeID });
+};
 
-async function deleteCommand(interaction) {
+const deleteCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
 	const toDeleteID = interaction.options.getInteger('id');
 
-	if ((await memeUtil.deleteMeme(toDeleteID, guildid)) == false)
+	if (memeUtil.deleteMeme(toDeleteID, guildid) === false)
 		return {
-			content: await lang(
-				'MEME_EXECUTE_DELETE_ERROR',
-				{ MEMEID: toDeleteID },
-				locale
-			),
+			content: lang('MEME_EXECUTE_DELETE_ERROR', locale, {
+				MEMEID: toDeleteID,
+			}),
 			ephemeral: true,
 		};
 
-	return await lang(
-		'MEME_EXECUTE_DELETE_SUCCESS',
-		{ MEMEID: toDeleteID },
-		locale
-	);
-}
+	return lang('MEME_EXECUTE_DELETE_SUCCESS', locale, { MEMEID: toDeleteID });
+};
 
-async function listCommand(interaction) {
+const listCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	const memeList = await memeUtil.charLimitList(guildid);
+	const memeList = memeUtil.charLimitList(guildid);
 
 	if (memeList[0] === undefined)
 		return {
-			content: await lang('MEME_EXECUTE_LIST_REPLY_NO_MEMES', {}, locale),
+			content: lang('MEME_EXECUTE_LIST_REPLY_NO_MEMES', locale),
 			ephemeral: true,
 		};
 
 	const memeEmbed = new MessageEmbed()
 		.setTitle(
 			Util.escapeMarkdown(
-				await lang(
-					'MEME_EXECUTE_LIST_EMBED_TITLE',
-					{ GUILDNAME: interaction.guild.name },
-					locale
-				)
+				lang('MEME_EXECUTE_LIST_EMBED_TITLE', locale, {
+					GUILDNAME: interaction.guild.name,
+				})
 			)
 		)
 		.setDescription(memeList[0])
@@ -152,43 +145,47 @@ async function listCommand(interaction) {
 		new MessageButton()
 			.setCustomId('memes/firstPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('FIRST_PAGE', {}, locale))
+			.setLabel(lang('FIRST_PAGE', locale))
 			.setDisabled(true),
 		new MessageButton()
 			.setCustomId('memes/previousPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('PREVIOUS_PAGE', {}, locale))
+			.setLabel(lang('PREVIOUS_PAGE', locale))
 			.setDisabled(true),
 		new MessageButton()
 			.setCustomId('memes/nextPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('NEXT_PAGE', {}, locale))
+			.setLabel(lang('NEXT_PAGE', locale))
 			.setDisabled(nextButtonsDisabled),
 		new MessageButton()
 			.setCustomId('memes/lastPage')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('LAST_PAGE', {}, locale))
+			.setLabel(lang('LAST_PAGE', locale))
 			.setDisabled(nextButtonsDisabled)
 	);
 
 	return { embeds: [memeEmbed], components: [actionRow] };
-}
+};
 
-async function randomCommand(interaction) {
+const randomCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	const randomMeme = await memeUtil.randomMeme(guildid);
+	const randomMeme = memeUtil.randomMeme(guildid);
+
+	if (randomMeme === undefined)
+		return {
+			content: lang('MEME_EXECUTE_LIST_REPLY_NO_MEMES', locale),
+			ephemeral: true,
+		};
 
 	const memeEmbed = new MessageEmbed()
-		.setTitle(await lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', {}, locale))
+		.setTitle(lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', locale))
 		.setDescription(randomMeme.meme.toString())
 		.setFooter({
-			text: await lang(
-				'MEME_EXECUTE_RANDOM_EMBED_FOOTER',
-				{ MEMEID: randomMeme.id },
-				guildid
-			),
+			text: lang('MEME_EXECUTE_RANDOM_EMBED_FOOTER', locale, {
+				MEMEID: randomMeme.id,
+			}),
 		})
 		.setColor('ORANGE');
 
@@ -196,9 +193,9 @@ async function randomCommand(interaction) {
 		new MessageButton()
 			.setCustomId('memes/newRandom')
 			.setStyle('PRIMARY')
-			.setLabel(await lang('MEME_EXECUTE_RANDOM_ANOTHER_MEME', {}, locale))
+			.setLabel(lang('MEME_EXECUTE_RANDOM_ANOTHER_MEME', locale))
 	);
 	return { embeds: [memeEmbed], components: [actionRow] };
-}
+};
 
 export { create, execute };
