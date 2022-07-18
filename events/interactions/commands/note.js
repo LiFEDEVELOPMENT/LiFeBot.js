@@ -8,6 +8,7 @@ import {
 	SlashCommandSubcommandBuilder,
 } from 'discord.js';
 import sqlUtil from '#util/SQLUtil';
+import util from '#util/Utilities';
 import lang from '#util/Lang';
 
 import errorMessage from '#errormessage';
@@ -101,7 +102,7 @@ const addCommand = (interaction) => {
 	const author = interaction.user.id;
 
 	const noteID = sqlUtil.createEntry('notes', guildid, notekey, note, author);
-	return lang('NOTE_EXECUTE_ADD_SUCCESS', locale, { NOTEID: noteID });
+	return lang('NOTE_EXECUTE_ADD_SUCCESS', locale, { ENTRYID: noteID });
 };
 
 const deleteCommand = (interaction) => {
@@ -112,65 +113,17 @@ const deleteCommand = (interaction) => {
 	if (sqlUtil.deleteEntry('notes', toDeleteID, guildid) === false)
 		return {
 			content: lang('NOTE_EXECUTE_DELETE_ERROR', locale, {
-				NOTEID: toDeleteID,
+				ENTRYID: toDeleteID,
 			}),
 			ephemeral: true,
 		};
 
-	return lang('NOTE_EXECUTE_DELETE_SUCCESS', locale, { NOTEID: toDeleteID });
+	return lang('NOTE_EXECUTE_DELETE_SUCCESS', locale, { ENTRYID: toDeleteID });
 };
 
 const listCommand = (interaction) => {
-	const locale = interaction.locale;
-	const guildid = interaction.guild.id;
 	const query = interaction.options.getString('query');
-	let noteList = sqlUtil.charLimitList('notes', guildid, query);
-
-	if (noteList[0] === undefined) {
-		let emptyString =
-			query === null
-				? lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES', locale)
-				: lang('NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY', locale);
-		return { content: emptyString, ephemeral: true };
-	}
-
-	const noteEmbed = new EmbedBuilder()
-		.setTitle(
-			escapeMarkdown(
-				lang('NOTE_EXECUTE_LIST_EMBED_TITLE', locale, {
-					GUILDNAME: interaction.guild.name,
-				})
-			)
-		)
-		.setDescription(noteList[0])
-		.setTimestamp();
-
-	const nextButtonsDisabled = !(noteList.length > 1);
-
-	const actionRow = new ActionRowBuilder().addComponents(
-		new ButtonBuilder()
-			.setCustomId(`notes/firstPage-${query}`)
-			.setStyle(ButtonStyle.Primary)
-			.setLabel('First page')
-			.setDisabled(true),
-		new ButtonBuilder()
-			.setCustomId(`notes/previousPage-${query}`)
-			.setStyle(ButtonStyle.Primary)
-			.setLabel('Previous Page')
-			.setDisabled(true),
-		new ButtonBuilder()
-			.setCustomId(`notes/nextPage-${query}`)
-			.setStyle(ButtonStyle.Primary)
-			.setLabel('Next Page')
-			.setDisabled(nextButtonsDisabled),
-		new ButtonBuilder()
-			.setCustomId(`notes/lastPage-${query}`)
-			.setStyle(ButtonStyle.Primary)
-			.setLabel('Last Page')
-			.setDisabled(nextButtonsDisabled)
-	);
-
-	return { embeds: [noteEmbed], components: [actionRow] };
+	return util.buildList('notes', 1, interaction, query);
 };
 
 export { create, execute };

@@ -27,29 +27,27 @@ export default {
 		'Du hast nicht die Berechtigung, diesen User zu kicken!',
 	LAST_PAGE: 'Letzte Seite!',
 	MEME_EXECUTE_ADD_SUCCESS:
-		'Das Meme wurde erfolgreich zur Datenbank hinzugefügt! Es hat die ID MEMEID',
+		'Das Meme wurde erfolgreich zur Datenbank hinzugefügt! Es hat die ID ENTRYID',
 	MEME_EXECUTE_DELETE_ERROR:
-		'Hoppla! Auf diesem Server scheint es kein Meme mit der ID MEMEID zu geben!',
+		'Hoppla! Auf diesem Server scheint es kein Meme mit der ID ENTRYID zu geben!',
 	MEME_EXECUTE_DELETE_SUCCESS:
-		'Das Meme mit der ID MEMEID wurde erfolgreich entfernt!',
-	MEME_EXECUTE_LIST_EMBED_TITLE: 'Alle Memes von GUILDNAME - Page 1',
-	MEME_EXECUTE_LIST_REPLY_NO_MEMES:
-		'Auf diesem Server scheint es keine Memes zu geben :(',
-	MEME_EXECUTE_RANDOM_ANOTHER_MEME: 'Noch ein Meme!',
-	MEME_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Meme!',
-	MEME_EXECUTE_RANDOM_EMBED_FOOTER: 'ID: MEMEID',
+		'Das Meme mit der ID ENTRYID wurde erfolgreich entfernt!',
+	MEMES_LIST_TITLE: 'Alle Memes von GUILDNAME - Page INDEX',
+	MEMES_NO_ENTRIES: 'Auf diesem Server scheint es keine Memes zu geben :(',
+	MEMES_NEW_RANDOM: 'Noch ein Meme!',
+	MEMES_RANDOM_TITLE: 'Zufälliges Meme!',
+	MEMES_RANDOM_FOOTER: 'ID: ENTRYID',
 	MISSING_STRING: 'Fehlender String!',
 	NEXT_PAGE: 'Nächste Seite!',
 	NOTE_EXECUTE_ADD_SUCCESS:
-		'Die Notiz wurder erfolgreich zur Datenbank hinzugefügt! Sie hat die ID NOTEID!',
+		'Die Notiz wurder erfolgreich zur Datenbank hinzugefügt! Sie hat die ID ENTRYID!',
 	NOTE_EXECUTE_DELETE_ERROR:
-		'Hoppla! Auf diesem Server scheint es keine Notiz mit der ID NOTEID zu geben!',
+		'Hoppla! Auf diesem Server scheint es keine Notiz mit der ID ENTRYID zu geben!',
 	NOTE_EXECUTE_DELETE_SUCCESS:
-		'Die Notiz mit der ID NOTEID wurde erfolgreich entfernt!',
-	NOTE_EXECUTE_LIST_EMBED_TITLE: 'Alle Notizen von GUILDNAME - Page 1',
-	NOTE_EXECUTE_LIST_REPLY_NO_NOTES:
-		'Auf diesem Server scheint es keine Notizen zu geben :(',
-	NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY:
+		'Die Notiz mit der ID ENTRYID wurde erfolgreich entfernt!',
+	NOTES_LIST_TITLE: 'Alle Notizen von GUILDNAME - Page INDEX',
+	NOTES_NO_ENTRIES: 'Auf diesem Server scheint es keine Notizen zu geben :(',
+	NOTES_NO_ENTRIES_QUERY:
 		'Für diese Anfrage scheint es keine Notizen zu geben :(',
 	POLL_EXECUTE_BUTTON_STOP: 'Umfrage beenden!',
 	POLL_EXECUTE_CLOSE_PROHIBITED:
@@ -67,24 +65,22 @@ export default {
 		' - Die Umfrage wurde erstellt von CREATOR - Insgesamt gab es TOTALVOTES Stimmen von TOTALVOTERS Teilnehmern!',
 	POLL_EXECUTE_VOTE_ACCEPTED:
 		'Deine Stimme wurde gewertet! Du kannst deine Stimme aber bis zur Beendigung dieser Umfrage jederzeit ändern!',
-	PREVIOUS_PAGE: 'Vorherige Seite!',
+	PREV_PAGE: 'Vorherige Seite!',
 	QUOTE_EXECUTE_ADD_SUCCESS:
-		'Das Zitat wurde erfolgreich hinzugefügt! Es hat die ID QUOTEID',
+		'Das Zitat wurde erfolgreich hinzugefügt! Es hat die ID ENTRYID',
 	QUOTE_EXECUTE_DELETE_ERROR:
-		'Hoppla! Auf diesem Server scheint es kein Zitat mit der ID QUOTEID zu geben!',
+		'Hoppla! Auf diesem Server scheint es kein Zitat mit der ID ENTRYID zu geben!',
 	QUOTE_EXECUTE_DELETE_SUCCESS:
-		'Das Zitat mit der ID QUOTEID wurde erfolgreich entfernt!',
+		'Das Zitat mit der ID ENTRYID wurde erfolgreich entfernt!',
 	QUOTE_EXECUTE_IMPORT_ERROR: 'Das scheint keine gültige ChannelID zu sein!',
 	QUOTE_EXECUTE_IMPORT_NOTEXT:
 		'Das scheint nicht die ID eines TextChannels zu sein',
 	QUOTE_EXECUTE_IMPORT_SUCCESS:
 		'Alle Nachrichten aus #CHANNELNAME wurden als Zitat hinzugefügt!',
-	QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES:
-		'Auf diesem Server scheint es keine Zitate zu geben :(',
-	QUOTE_EXECUTE_LIST_EMBED_TITLE: 'Alle Zitate von GUILDNAME - Page 1',
-	QUOTE_EXECUTE_RANDOM_BUTTON_TITLE: 'Noch ein Zitat!',
-	QUOTE_EXECUTE_RANDOM_EMBED_TITLE: 'Zufälliges Zitat!',
-	QUOTE_EXECUTE_RANDOM_EMBED_FOOTER:
-		'Erstellt am DATE von CREATOR | ID: QUOTEID',
+	QUOTES_NO_ENTRIES: 'Auf diesem Server scheint es keine Zitate zu geben :(',
+	QUOTES_LIST_TITLE: 'Alle Zitate von GUILDNAME - Page INDEX',
+	QUOTES_NEW_RANDOM: 'Noch ein Zitat!',
+	QUOTES_RANDOM_TITLE: 'Zufälliges Zitat!',
+	QUOTES_RANDOM_FOOTER: 'Erstellt am DATE von CREATOR | ID: ENTRYID',
 	TAILS: 'Zahl',
 };

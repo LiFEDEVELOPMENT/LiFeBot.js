@@ -19,7 +19,7 @@
 		"test": "NODE_ENV=TEST node LiFeBot.js"
 	},
 	"name": "lifebot.js",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"main": "LiFeBot.js",
 	"keywords": [
 		"discord-bot"

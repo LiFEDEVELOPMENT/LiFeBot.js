@@ -5,18 +5,13 @@ const execute = async (interaction) => {
 		);
 
 	const metadata = interaction.customId.split('-');
+	const name = metadata.shift();
 
 	if (interaction.isButton())
-		return (await import(`#buttons/${metadata[0]}`)).execute(
-			interaction,
-			metadata[1]
-		);
+		return (await import(`#buttons/${name}`)).execute(interaction, ...metadata);
 
 	if (interaction.isSelectMenu())
-		return (await import(`#menus/${metadata[0]}`)).execute(
-			interaction,
-			metadata[1]
-		);
+		return (await import(`#menus/${name}`)).execute(interaction, ...metadata);
 };
 
 const once = false;

@@ -15,6 +15,31 @@ const createEntry = (type, ...args) => {
 	return createdObject[0].id;
 };
 
+const createEntries = (type, ...args) => {
+	let preparedSQL = {
+		quotes: 'INSERT INTO quotes (guildid,quote,time,author) VALUES (?,?,?,?)',
+	};
+
+	// Create a values placeholder tupel with enough placeholders for the number of arguments
+	// It has the form ",(?,?,?,...,?)"
+	let tupel = `,(${args[0]
+		.map((item) => '?,')
+		.join('')
+		.slice(0, -1)})`;
+
+	let sqlValues = [];
+
+	for (let arg of args) {
+		preparedSQL[type] += tupel;
+		sqlValues.push(...arg);
+	}
+
+	// Remove the last placeholder tupel as the default string already has one tupel
+	preparedSQL[type] = preparedSQL[type].slice(0, -tupel.length);
+
+	sql.run(preparedSQL[type], sqlValues);
+};
+
 const deleteEntry = (type, id, guildid) => {
 	let preparedSQL = {
 		memes: 'DELETE FROM memes WHERE id = ?',
@@ -38,10 +63,11 @@ const listEntries = (type, guildid, query) => {
 		notes: 'SELECT * FROM notes WHERE guildid = ?',
 		quotes: 'SELECT * FROM quotes WHERE guildid = ?',
 		noteWithQuery:
-			'SELECT *, INSTR(noteKey, ?) ksv, INSTR(note, ?) nsv FROM notes WHERE ksv > 0 OR nsv > 0',
+			'SELECT *, INSTR(noteKey, ?) ksv, INSTR(note, ?) nsv FROM notes WHERE guildid = ? AND (ksv > 0 OR nsv > 0)',
 	};
 
-	if (query) return sql.query(preparedSQL[noteWithQuery], [query, query]);
+	if (query)
+		return sql.query(preparedSQL['noteWithQuery'], [query, query, guildid]);
 	return sql.query(preparedSQL[type], [guildid]);
 };
 
@@ -83,6 +109,7 @@ const randomEntry = (type, guildid) => {
 
 export default {
 	createEntry,
+	createEntries,
 	deleteEntry,
 	listEntries,
 	charLimitList,

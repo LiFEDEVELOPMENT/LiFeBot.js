@@ -9,7 +9,7 @@ import {
 	SlashCommandSubcommandBuilder,
 } from 'discord.js';
 import sqlUtil from '#util/SQLUtil';
-import Util from '#util/Utilities';
+import util from '#util/Utilities';
 
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
@@ -114,7 +114,7 @@ const addCommand = (interaction) => {
 	const author = interaction.user.id;
 
 	const quoteID = sqlUtil.createEntry('quotes', guildid, quote, time, author);
-	return lang('QUOTE_EXECUTE_ADD_SUCCESS', locale, { QUOTEID: quoteID });
+	return lang('QUOTE_EXECUTE_ADD_SUCCESS', locale, { ENTRYID: quoteID });
 };
 
 const deleteCommand = (interaction) => {
@@ -125,12 +125,12 @@ const deleteCommand = (interaction) => {
 	if (sqlUtil.deleteEntry('quotes', toDeleteID, guildid) === false)
 		return {
 			content: lang('QUOTE_EXECUTE_DELETE_ERROR', locale, {
-				QUOTEID: toDeleteID,
+				ENTRYID: toDeleteID,
 			}),
 			ephemeral: true,
 		};
 
-	return lang('QUOTE_EXECUTE_DELETE_SUCCESS', locale, { QUOTEID: toDeleteID });
+	return lang('QUOTE_EXECUTE_DELETE_SUCCESS', locale, { ENTRYID: toDeleteID });
 };
 
 const importCommand = async (interaction) => {
@@ -153,17 +153,20 @@ const importCommand = async (interaction) => {
 
 	interaction.deferReply();
 
-	let messages = await Util.fetchAllMessages(channel);
+	let messages = await util.fetchAllMessages(channel);
+
+	let messageArray = [];
 
 	for (let message of messages) {
-		sqlUtil.createEntry(
-			'quotes',
+		messageArray.push([
 			guildid,
 			message.content,
 			message.createdTimestamp,
-			message.author.id
-		);
+			message.author.id,
+		]);
 	}
+
+	sqlUtil.createEntries('quotes', ...messageArray);
 
 	return lang('QUOTE_EXECUTE_IMPORT_SUCCESS', locale, {
 		CHANNELNAME: channel.name,
@@ -171,98 +174,11 @@ const importCommand = async (interaction) => {
 };
 
 const listCommand = (interaction) => {
-	const locale = interaction.locale;
-
-	const guildid = interaction.guild.id;
-	let quoteList = sqlUtil.charLimitList('quotes', guildid);
-
-	if (quoteList[0] === undefined)
-		return {
-			content: lang('QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES', locale),
-			ephemeral: true,
-		};
-
-	const quoteEmbed = new EmbedBuilder()
-		.setTitle(
-			escapeMarkdown(
-				lang('QUOTE_EXECUTE_LIST_EMBED_TITLE', locale, {
-					GUILDNAME: interaction.guild.name,
-				})
-			)
-		)
-		.setDescription(quoteList[0])
-		.setTimestamp();
-
-	const nextButtonsDisabled = !(quoteList.length > 1);
-
-	const actionRow = new ActionRowBuilder().addComponents(
-		new ButtonBuilder()
-			.setCustomId('quotes/firstPage')
-			.setStyle(ButtonStyle.Primary)
-			.setLabel(lang('FIRST_PAGE', locale))
-			.setDisabled(true),
-		new ButtonBuilder()
-			.setCustomId('quotes/previousPage')
-			.setStyle(ButtonStyle.Primary)
-			.setLabel(lang('PREVIOUS_PAGE', locale))
-			.setDisabled(true),
-		new ButtonBuilder()
-			.setCustomId('quotes/nextPage')
-			.setStyle(ButtonStyle.Primary)
-			.setLabel(lang('NEXT_PAGE', locale))
-			.setDisabled(nextButtonsDisabled),
-		new ButtonBuilder()
-			.setCustomId('quotes/lastPage')
-			.setStyle(ButtonStyle.Primary)
-			.setLabel(lang('LAST_PAGE', locale))
-			.setDisabled(nextButtonsDisabled)
-	);
-
-	return { embeds: [quoteEmbed], components: [actionRow] };
+	return util.buildList('quotes', 1, interaction);
 };
 
 const randomCommand = async (interaction) => {
-	const locale = interaction.locale;
-
-	let randomQuote = sqlUtil.randomEntry('quotes', interaction.guild.id);
-	if (randomQuote === undefined)
-		return {
-			content: lang('QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES', locale),
-			ephemeral: true,
-		};
-
-	let quoteCreator = await interaction.client.users
-		.fetch(randomQuote.author)
-		.catch(() => {
-			return {
-				username: 'n/a',
-			};
-		});
-	let date = new Date(randomQuote.time).toLocaleDateString('de-DE', {
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric',
-	});
-
-	const quoteEmbed = new EmbedBuilder()
-		.setTitle(lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', locale))
-		.setDescription(randomQuote.quote.toString())
-		.setFooter({
-			text: lang('QUOTE_EXECUTE_RANDOM_EMBED_FOOTER', locale, {
-				DATE: date,
-				CREATOR: quoteCreator.username,
-				QUOTEID: randomQuote.id,
-			}),
-		})
-		.setColor('Yellow');
-
-	const actionRow = new ActionRowBuilder().addComponents(
-		new ButtonBuilder()
-			.setCustomId('quotes/newRandom')
-			.setStyle(ButtonStyle.Primary)
-			.setLabel(lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', locale))
-	);
-	return { embeds: [quoteEmbed], components: [actionRow] };
+	return util.buildRandom('quotes', interaction);
 };
 
 export { create, execute };

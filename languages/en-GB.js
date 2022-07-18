@@ -24,26 +24,25 @@ export default {
 	KICK_EXECUTE_PERMISSION_ERROR: 'You are not allowed to kick this user!',
 	LAST_PAGE: 'Last page!',
 	MEME_EXECUTE_ADD_SUCCESS:
-		"Successfully added the meme to the bot's database! It has the ID MEMEID",
+		"Successfully added the meme to the bot's database! It has the ID ENTRYID",
 	MEME_EXECUTE_DELETE_ERROR:
-		'Whoops! It seems like there is no meme with the ID of MEMEID in this server!',
-	MEME_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the meme MEMEID!',
-	MEME_EXECUTE_LIST_EMBED_TITLE: 'All memes from GUILDNAME - Page 1',
-	MEME_EXECUTE_LIST_REPLY_NO_MEMES: 'It seems like this server has no memes :(',
-	MEME_EXECUTE_RANDOM_ANOTHER_MEME: 'Another meme!',
-	MEME_EXECUTE_RANDOM_EMBED_TITLE: 'Random meme!',
-	MEME_EXECUTE_RANDOM_EMBED_FOOTER: 'ID: MEMEID',
+		'Whoops! It seems like there is no meme with the ID of ENTRYID in this server!',
+	MEME_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the meme ENTRYID!',
+	MEMES_LIST_TITLE: 'All memes from GUILDNAME - Page INDEX',
+	MEMES_NO_ENTRIES: 'It seems like this server has no memes :(',
+	MEMES_NEW_RANDOM: 'Another meme!',
+	MEMES_RANDOM_TITLE: 'Random meme!',
+	MEMES_RANDOM_FOOTER: 'ID: ENTRYID',
 	MISSING_STRING: 'Missing String!',
 	NEXT_PAGE: 'Next page!',
 	NOTE_EXECUTE_ADD_SUCCESS:
-		"Successfully added the note to the bot's database! It has the ID NOTEID!",
+		"Successfully added the note to the bot's database! It has the ID ENTRYID!",
 	NOTE_EXECUTE_DELETE_ERROR:
-		'Whoops! It seems like there is no note with an ID of NOTEID in this server!',
-	NOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the note NOTEID!',
-	NOTE_EXECUTE_LIST_EMBED_TITLE: 'All notes from GUILDNAME - Page 1',
-	NOTE_EXECUTE_LIST_REPLY_NO_NOTES:
-		'It seems like this server has not a single note :(',
-	NOTE_EXECUTE_LIST_REPLY_NO_NOTES_QUERY:
+		'Whoops! It seems like there is no note with an ID of ENTRYID in this server!',
+	NOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the note ENTRYID!',
+	NOTES_LIST_TITLE: 'All notes from GUILDNAME - Page INDEX',
+	NOTES_NO_ENTRIES: 'It seems like this server has not a single note :(',
+	NOTES_NO_ENTRIES_QUERY:
 		'It seems like there are not notes matching this query :(',
 	POLL_EXECUTE_BUTTON_STOP: 'Finish poll!',
 	POLL_EXECUTE_CLOSE_PROHIBITED:
@@ -60,21 +59,21 @@ export default {
 		' - This poll was created by CREATOR - It had a total of TOTALVOTES votes by TOTALVOTERS participants!',
 	POLL_EXECUTE_VOTE_ACCEPTED:
 		'You vote was counted! You can change your mind at any point in time until this poll ends!',
-	PREVIOUS_PAGE: 'Previous page!',
+	PREV_PAGE: 'Previous page!',
 	QUOTE_EXECUTE_ADD_SUCCESS:
-		"Successfully added the quote to the bot's database! It has the ID QUOTEID",
+		"Successfully added the quote to the bot's database! It has the ID ENTRYID",
 	QUOTE_EXECUTE_DELETE_ERROR:
-		'Whoops! It seems like there is no quote with the ID of QUOTEID in this server!',
-	QUOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the quote QUOTEID!',
+		'Whoops! It seems like there is no quote with the ID of ENTRYID in this server!',
+	QUOTE_EXECUTE_DELETE_SUCCESS: 'Successfully deleted the quote ENTRYID!',
 	QUOTE_EXECUTE_IMPORT_ERROR: 'It seems like this is not a valid channel id!',
 	QUOTE_EXECUTE_IMPORT_NOTEXT:
 		'Whoops! It seems like this is not the ID of a text channel!',
 	QUOTE_EXECUTE_IMPORT_SUCCESS:
 		"All messages from #CHANNELNAME were imported as quotes and added to the bot's database!",
-	QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES: 'This server does not have any quotes :(',
-	QUOTE_EXECUTE_LIST_EMBED_TITLE: 'All quotes of GUILDNAME - Page 1',
-	QUOTE_EXECUTE_RANDOM_BUTTON_TITLE: 'Another quote!',
-	QUOTE_EXECUTE_RANDOM_EMBED_TITLE: 'Random quote!',
-	QUOTE_EXECUTE_RANDOM_EMBED_FOOTER: 'Created on DATE by CREATOR | ID: QUOTEID',
+	QUOTES_NO_ENTRIES: 'This server does not have any quotes :(',
+	QUOTES_LIST_TITLE: 'All quotes of GUILDNAME - Page INDEX',
+	QUOTES_NEW_RANDOM: 'Another quote!',
+	QUOTES_RANDOM_TITLE: 'Random quote!',
+	QUOTES_RANDOM_FOOTER: 'Created on DATE by CREATOR | ID: ENTRYID',
 	TAILS: 'Tails',
 };

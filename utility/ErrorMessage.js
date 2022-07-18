@@ -9,8 +9,14 @@ export default (interaction, error) => {
 		content: escapeMarkdown(error.stack.toString().substring(0, 2000)),
 	});
 
-	interaction.reply({
-		content: lang('ERROR', locale),
-		ephemeral: true,
-	});
+	if (!interaction.deferred)
+		interaction.reply({
+			content: lang('ERROR', locale),
+			ephemeral: true,
+		});
+	else
+		interaction.editReply({
+			content: lang('ERROR', locale),
+			ephemeral: true,
+		});
 };
