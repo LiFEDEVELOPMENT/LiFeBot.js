@@ -1,4 +1,9 @@
-import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
+import {
+	ActionRowBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+	ButtonBuilder,
+} from 'discord.js';
 import memeUtil from '#util/MemeUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
@@ -16,30 +21,30 @@ const execute = (interaction) => {
 		const previousButtonsDisabled = page < 1;
 		const nextButtonsDisabled = page === memeList.length - 1;
 
-		const newEmbed = new MessageEmbed()
+		const newEmbed = new EmbedBuilder()
 			.setTitle(oldTitle[0] + `Page ${page + 1}`)
 			.setDescription(memeList[page])
 			.setTimestamp();
 
-		const actionRow = new MessageActionRow().addComponents(
-			new MessageButton()
+		const actionRow = new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
 				.setCustomId('memes/firstPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('FIRST_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId('memes/previousPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('PREVIOUS_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId('memes/nextPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('NEXT_PAGE', locale))
 				.setDisabled(nextButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId('memes/lastPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('LAST_PAGE', locale))
 				.setDisabled(nextButtonsDisabled)
 		);

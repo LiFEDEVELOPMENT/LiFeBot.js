@@ -1,8 +1,7 @@
 {
 	"dependencies": {
-		"@discordjs/builders": "^0.15.0",
 		"better-sqlite3": "^7.6.1",
-		"discord.js": "^13.8.1"
+		"discord.js": "^14.0.1"
 	},
 	"imports": {
 		"#sql": "./utility/sql.js",
@@ -20,7 +19,7 @@
 		"test": "NODE_ENV=TEST node LiFeBot.js"
 	},
 	"name": "lifebot.js",
-	"version": "0.9.0",
+	"version": "1.0.0",
 	"main": "LiFeBot.js",
 	"keywords": [
 		"discord-bot"

@@ -57,7 +57,7 @@ export default {
 	POLL_EXECUTE_REPLY_TITLE: 'Question: **STRING**',
 	POLL_EXECUTE_RESULT_EMBED: 'Die Umfrageergebnisse - QUESTION:',
 	POLL_EXECUTE_RESULT_EMBED_FOOTER:
-		' - This poll was created by CREATOR - It had a total of TOTALVOTES votes!',
+		' - This poll was created by CREATOR - It had a total of TOTALVOTES votes by TOTALVOTERS participants!',
 	POLL_EXECUTE_VOTE_ACCEPTED:
 		'You vote was counted! You can change your mind at any point in time until this poll ends!',
 	PREVIOUS_PAGE: 'Previous page!',

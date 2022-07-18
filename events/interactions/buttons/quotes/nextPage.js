@@ -1,4 +1,9 @@
-import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
+import {
+	ActionRowBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+	ButtonBuilder,
+} from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
@@ -16,30 +21,30 @@ const execute = (interaction) => {
 		const previousButtonsDisabled = page < 1;
 		const nextButtonsDisabled = page === quoteList.length - 1;
 
-		const newEmbed = new MessageEmbed()
+		const newEmbed = new EmbedBuilder()
 			.setTitle(oldTitle[0] + `Page ${page + 1}`)
 			.setDescription(quoteList[page])
 			.setTimestamp();
 
-		const actionRow = new MessageActionRow().addComponents(
-			new MessageButton()
+		const actionRow = new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
 				.setCustomId('quotes/firstPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('FIRST_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId('quotes/previousPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('PREVIOUS_PAGE', locale))
 				.setDisabled(previousButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId('quotes/nextPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('NEXT_PAGE', locale))
 				.setDisabled(nextButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId('quotes/lastPage')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('LAST_PAGE', locale))
 				.setDisabled(nextButtonsDisabled)
 		);

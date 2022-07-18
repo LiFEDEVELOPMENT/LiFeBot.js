@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
@@ -27,7 +26,7 @@ const execute = (interaction) => {
 		if (!hexRegEx.test(color))
 			return interaction.reply(lang('COLOR_EXECUTE_WRONG_FORMAT', locale));
 
-		const colorEmbed = new MessageEmbed()
+		const colorEmbed = new EmbedBuilder()
 			.setTitle(color)
 			.setColor(color)
 			.setThumbnail(

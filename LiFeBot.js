@@ -1,10 +1,10 @@
 import fs from 'fs';
 import sql from '#sql';
-import { Client, Intents } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 
 // Create a new Client
 const client = new Client({
-	intents: [Intents.FLAGS.GUILDS],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
 });
 
 // Open DB-Connection and create necessary tables

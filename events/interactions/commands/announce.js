@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed, Util } from 'discord.js';
+import { EmbedBuilder, escapeMarkdown, SlashCommandBuilder } from 'discord.js';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
@@ -30,16 +29,14 @@ const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
 		const options = interaction.options;
-		const announceMessage = Util.escapeMarkdown(
-			options.getString('announcement')
-		);
+		const announceMessage = escapeMarkdown(options.getString('announcement'));
 		const roleString = options.getRole('role') ?? ' ';
-		const announceTitle = Util.escapeMarkdown(
+		const announceTitle = escapeMarkdown(
 			options.getString('title') ?? lang('ANNOUNCE_EXECUTE_EMBED_TITLE', locale)
 		);
 
-		const announceEmbed = new MessageEmbed()
-			.setColor('RED')
+		const announceEmbed = new EmbedBuilder()
+			.setColor('Red')
 			.setTitle(announceTitle)
 			.setDescription(announceMessage)
 			.setFooter({

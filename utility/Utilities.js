@@ -1,23 +1,8 @@
 import sql from '#sql';
 
-const registerNewPoll = (
-	guildid,
-	authorid,
-	maxAnswers,
-	question,
-	answer1,
-	answer2,
-	answer3,
-	answer4,
-	answer5,
-	answer6,
-	answer7,
-	answer8,
-	answer9,
-	answer10
-) => {
+const registerNewPoll = (...args) => {
 	// Prepare arguments for sql statement
-	let sqlParams = Array.from(arguments);
+	let sqlParams = Array.from(args);
 
 	// Prepaare sql statement and run it with prepared arguments
 	let preparedSQL =
@@ -47,6 +32,7 @@ const fetchAllMessages = async (
 			limit: 100,
 			...(lastID && { before: lastID }),
 		});
+
 		if (fetchedMessages.size === 0) {
 			if (reverseArray) {
 				messages = messages.reverse();

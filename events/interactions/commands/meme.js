@@ -1,15 +1,15 @@
 import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+	escapeMarkdown,
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
-} from '@discordjs/builders';
-import {
-	MessageEmbed,
-	MessageActionRow,
-	MessageButton,
-	Util,
 } from 'discord.js';
 import memeUtil from '#util/MemeUtil';
 import lang from '#util/Lang';
+
 import errorMessage from '#errormessage';
 
 const create = () => {
@@ -93,7 +93,7 @@ const addCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	const meme = Util.escapeMarkdown(interaction.options.getString('meme'));
+	const meme = escapeMarkdown(interaction.options.getString('meme'));
 
 	const memeID = memeUtil.addMeme(guildid, meme);
 	return lang('MEME_EXECUTE_ADD_SUCCESS', locale, { MEMEID: memeID });
@@ -128,9 +128,9 @@ const listCommand = (interaction) => {
 			ephemeral: true,
 		};
 
-	const memeEmbed = new MessageEmbed()
+	const memeEmbed = new EmbedBuilder()
 		.setTitle(
-			Util.escapeMarkdown(
+			escapeMarkdown(
 				lang('MEME_EXECUTE_LIST_EMBED_TITLE', locale, {
 					GUILDNAME: interaction.guild.name,
 				})
@@ -141,25 +141,25 @@ const listCommand = (interaction) => {
 
 	const nextButtonsDisabled = !(memeList.length > 1);
 
-	const actionRow = new MessageActionRow().addComponents(
-		new MessageButton()
+	const actionRow = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
 			.setCustomId('memes/firstPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('FIRST_PAGE', locale))
 			.setDisabled(true),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('memes/previousPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('PREVIOUS_PAGE', locale))
 			.setDisabled(true),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('memes/nextPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('NEXT_PAGE', locale))
 			.setDisabled(nextButtonsDisabled),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('memes/lastPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('LAST_PAGE', locale))
 			.setDisabled(nextButtonsDisabled)
 	);
@@ -179,7 +179,7 @@ const randomCommand = (interaction) => {
 			ephemeral: true,
 		};
 
-	const memeEmbed = new MessageEmbed()
+	const memeEmbed = new EmbedBuilder()
 		.setTitle(lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', locale))
 		.setDescription(randomMeme.meme.toString())
 		.setFooter({
@@ -187,12 +187,12 @@ const randomCommand = (interaction) => {
 				MEMEID: randomMeme.id,
 			}),
 		})
-		.setColor('ORANGE');
+		.setColor('Orange');
 
-	const actionRow = new MessageActionRow().addComponents(
-		new MessageButton()
+	const actionRow = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
 			.setCustomId('memes/newRandom')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('MEME_EXECUTE_RANDOM_ANOTHER_MEME', locale))
 	);
 	return { embeds: [memeEmbed], components: [actionRow] };

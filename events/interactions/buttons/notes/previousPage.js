@@ -1,6 +1,6 @@
 import noteUtil from '#util/NotesUtil';
 import errorMessage from '#errormessage';
-import { MessageActionRow, MessageEmbed } from 'discord.js';
+import { ActionRowBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 
 const execute = (interaction, query) => {
 	try {
@@ -14,34 +14,34 @@ const execute = (interaction, query) => {
 		let page =
 			parseInt(oldTitle[1] - 2) >= 0
 				? parseInt(oldTitle[1 - 2])
-				: noteList.length - 1;
-		const previousButtonsDisabled = noteList.length < 1;
-		const nextButtonsDisabled = page === noteList.length - 1;
+				: notesList.length - 1;
+		const previousButtonsDisabled = notesList.length < 1;
+		const nextButtonsDisabled = page === notesList.length - 1;
 
-		const newEmbed = new MessageEmbed()
+		const newEmbed = new EmbedBuilder()
 			.setTitle(oldTitle[0] + `page${page + 1}`)
-			.setDescription(noteList[page])
+			.setDescription(notesList[page])
 			.setTimestamp();
 
-		const actionRow = new MessageActionRow.addComponents(
-			new MessageButton()
+		const actionRow = new ActionRowBuilder.addComponents(
+			new ButtonBuilder()
 				.setCustomId(`notes/firstPage-${query}`)
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel('First page')
 				.setDisabled(previousButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId(`notes/previousPage-${query}`)
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel('Previous Page')
 				.setDisabled(previousButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId(`notes/nextPage-${query}`)
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel('Next Page')
 				.setDisabled(nextButtonsDisabled),
-			new MessageButton()
+			new ButtonBuilder()
 				.setCustomId(`notes/lastPage-${query}`)
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel('Last Page')
 				.setDisabled(nextButtonsDisabled)
 		);

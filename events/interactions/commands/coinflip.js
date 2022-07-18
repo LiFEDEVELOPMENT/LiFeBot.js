@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from 'discord.js';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 

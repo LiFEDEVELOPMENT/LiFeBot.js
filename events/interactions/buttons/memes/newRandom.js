@@ -1,4 +1,9 @@
-import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+} from 'discord.js';
 import memeUtil from '#util/MemeUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
@@ -8,16 +13,16 @@ const execute = (interaction) => {
 		const locale = interaction.locale;
 		const randomMeme = memeUtil.randomMeme(interaction.guild.id);
 
-		const memeEmbed = new MessageEmbed()
+		const memeEmbed = new EmbedBuilder()
 			.setTitle(lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', locale))
 			.setDescription(randomMeme.meme.toString())
 			.setFooter({ text: `ID: ${randomMeme.id}` })
-			.setColor('ORANGE');
+			.setColor('Orange');
 
-		const actionRow = new MessageActionRow().addComponents(
-			new MessageButton()
+		const actionRow = new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
 				.setCustomId('memes/newRandom')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('MEME_EXECUTE_RANDOM_ANOTHER_MEME', locale))
 		);
 

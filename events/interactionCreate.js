@@ -1,5 +1,5 @@
 const execute = async (interaction) => {
-	if (interaction.isCommand())
+	if (interaction.isChatInputCommand())
 		return (await import(`#commands/${interaction.commandName}`)).execute(
 			interaction
 		);
@@ -12,12 +12,11 @@ const execute = async (interaction) => {
 			metadata[1]
 		);
 
-	if (interaction.isSelectMenu()) {
+	if (interaction.isSelectMenu())
 		return (await import(`#menus/${metadata[0]}`)).execute(
 			interaction,
 			metadata[1]
 		);
-	}
 };
 
 const once = false;

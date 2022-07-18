@@ -19,7 +19,7 @@ const execute = (interaction, id) => {
 
 	// Reply to the vote
 	interaction.reply({
-		content: lang('POLL_EXECUTE_VOTE_ACCEPTED', {}, interaction.locale),
+		content: lang('POLL_EXECUTE_VOTE_ACCEPTED', interaction.locale),
 		ephemeral: true,
 	});
 };

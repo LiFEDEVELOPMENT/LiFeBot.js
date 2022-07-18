@@ -1,5 +1,4 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { Permissions } from 'discord.js';
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
@@ -24,7 +23,7 @@ const execute = async (interaction) => {
 		const amount = interaction.options.getNumber('amount');
 
 		// Check if the user is allowed to delete messages
-		if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
+		if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages))
 			return interaction.reply({
 				content: lang('CLEAR_EXECUTE_ERROR_PERMISSION', locale),
 				ephemeral: true,
