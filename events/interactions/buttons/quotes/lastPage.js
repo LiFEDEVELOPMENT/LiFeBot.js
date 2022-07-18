@@ -4,14 +4,14 @@ import {
 	EmbedBuilder,
 	ButtonBuilder,
 } from 'discord.js';
-import quoteUtil from '#util/QuoteUtil';
+import sqlUtil from '#util/SQLUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
 const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
-		let quoteList = quoteUtil.charLimitList(interaction.guild.id);
+		let quoteList = sqlUtil.charLimitList('quotes', interaction.guild.id);
 		let oldEmbed = interaction.message.embeds[0];
 		let oldTitle = oldEmbed.title.split('Page ');
 		let page = quoteList.length - 1;

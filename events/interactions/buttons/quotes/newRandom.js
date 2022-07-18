@@ -4,14 +4,14 @@ import {
 	EmbedBuilder,
 	ButtonBuilder,
 } from 'discord.js';
-import quoteUtil from '#util/QuoteUtil';
+import sqlUtil from '#util/SQLUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
 const execute = async (interaction) => {
 	try {
 		const locale = interaction.locale;
-		let randomQuote = quoteUtil.randomQuote(interaction.guild.id);
+		let randomQuote = sqlUtil.randomEntry('quotes', interaction.guild.id);
 		let quoteCreator = await interaction.client.users
 			.fetch(randomQuote.author)
 			.catch(() => {

@@ -4,14 +4,14 @@ import {
 	EmbedBuilder,
 	ButtonBuilder,
 } from 'discord.js';
-import memeUtil from '#util/MemeUtil';
+import sqlUtil from '#util/SQLUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
 const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
-		const memeList = memeUtil.charLimitList(interaction.guild.id);
+		const memeList = sqlUtil.charLimitList('memes', interaction.guild.id);
 		const oldEmbed = interaction.message.embeds[0];
 		const oldTitle = oldEmbed.title.split('Page ');
 		const page =

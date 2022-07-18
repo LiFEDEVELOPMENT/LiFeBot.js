@@ -7,7 +7,7 @@ import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } from 'discord.js';
-import noteUtil from '#util/NotesUtil';
+import sqlUtil from '#util/SQLUtil';
 import lang from '#util/Lang';
 
 import errorMessage from '#errormessage';
@@ -100,7 +100,7 @@ const addCommand = (interaction) => {
 	const note = escapeMarkdown(interaction.options.getString('note'));
 	const author = interaction.user.id;
 
-	const noteID = noteUtil.addNote(guildid, notekey, note, author);
+	const noteID = sqlUtil.createEntry('notes', guildid, notekey, note, author);
 	return lang('NOTE_EXECUTE_ADD_SUCCESS', locale, { NOTEID: noteID });
 };
 
@@ -109,7 +109,7 @@ const deleteCommand = (interaction) => {
 	const guildid = interaction.guild.id;
 	const toDeleteID = interaction.options.getInteger('id');
 
-	if (noteUtil.deleteNote(toDeleteID, guildid) === false)
+	if (sqlUtil.deleteEntry('notes', toDeleteID, guildid) === false)
 		return {
 			content: lang('NOTE_EXECUTE_DELETE_ERROR', locale, {
 				NOTEID: toDeleteID,
@@ -124,10 +124,7 @@ const listCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
 	const query = interaction.options.getString('query');
-	let noteList;
-
-	if (query === null) noteList = noteUtil.charLimitList(guildid);
-	else noteList = noteUtil.charLimitListQuery(guildid, query);
+	let noteList = sqlUtil.charLimitList('notes', guildid, query);
 
 	if (noteList[0] === undefined) {
 		let emptyString =

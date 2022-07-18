@@ -1,13 +1,10 @@
 import sql from '#sql';
 
 const registerNewPoll = (...args) => {
-	// Prepare arguments for sql statement
-	let sqlParams = Array.from(args);
-
 	// Prepaare sql statement and run it with prepared arguments
 	let preparedSQL =
 		'INSERT INTO polls (guildid,authorid,maxAnswers,question,answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,answer10) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-	sql.run(preparedSQL, sqlParams);
+	sql.run(preparedSQL, args);
 
 	// Return the id of the newly generated poll-entry
 	let sqlResult = sql.query('SELECT * FROM polls');
