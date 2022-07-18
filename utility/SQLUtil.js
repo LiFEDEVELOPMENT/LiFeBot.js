@@ -63,10 +63,11 @@ const listEntries = (type, guildid, query) => {
 		notes: 'SELECT * FROM notes WHERE guildid = ?',
 		quotes: 'SELECT * FROM quotes WHERE guildid = ?',
 		noteWithQuery:
-			'SELECT *, INSTR(noteKey, ?) ksv, INSTR(note, ?) nsv FROM notes WHERE ksv > 0 OR nsv > 0',
+			'SELECT *, INSTR(noteKey, ?) ksv, INSTR(note, ?) nsv FROM notes WHERE guildid = ? AND (ksv > 0 OR nsv > 0)',
 	};
 
-	if (query) return sql.query(preparedSQL[noteWithQuery], [query, query]);
+	if (query)
+		return sql.query(preparedSQL['noteWithQuery'], [query, query, guildid]);
 	return sql.query(preparedSQL[type], [guildid]);
 };
 
