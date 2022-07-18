@@ -7,7 +7,7 @@ import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } from 'discord.js';
-import memeUtil from '#util/MemeUtil';
+import sqlUtil from '#util/SQLUtil';
 import lang from '#util/Lang';
 
 import errorMessage from '#errormessage';
@@ -95,7 +95,7 @@ const addCommand = (interaction) => {
 	const guildid = interaction.guild.id;
 	const meme = escapeMarkdown(interaction.options.getString('meme'));
 
-	const memeID = memeUtil.addMeme(guildid, meme);
+	const memeID = sqlUtil.createEntry('memes', guildid, meme);
 	return lang('MEME_EXECUTE_ADD_SUCCESS', locale, { MEMEID: memeID });
 };
 
@@ -105,7 +105,7 @@ const deleteCommand = (interaction) => {
 	const guildid = interaction.guild.id;
 	const toDeleteID = interaction.options.getInteger('id');
 
-	if (memeUtil.deleteMeme(toDeleteID, guildid) === false)
+	if (sqlUtil.deleteEntry('memes', toDeleteID, guildid) === false)
 		return {
 			content: lang('MEME_EXECUTE_DELETE_ERROR', locale, {
 				MEMEID: toDeleteID,
@@ -120,7 +120,7 @@ const listCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	const memeList = memeUtil.charLimitList(guildid);
+	const memeList = sqlUtil.charLimitList('memes', guildid);
 
 	if (memeList[0] === undefined)
 		return {
@@ -171,7 +171,7 @@ const randomCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	const randomMeme = memeUtil.randomMeme(guildid);
+	const randomMeme = sqlUtil.randomEntry('memes', guildid);
 
 	if (randomMeme === undefined)
 		return {

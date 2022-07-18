@@ -8,7 +8,7 @@ import {
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
 } from 'discord.js';
-import quoteUtil from '#util/QuoteUtil';
+import sqlUtil from '#util/SQLUtil';
 import Util from '#util/Utilities';
 
 import lang from '#util/Lang';
@@ -113,7 +113,7 @@ const addCommand = (interaction) => {
 	const time = Date.now();
 	const author = interaction.user.id;
 
-	const quoteID = quoteUtil.addQuote(guildid, quote, time, author);
+	const quoteID = sqlUtil.createEntry('quotes', guildid, quote, time, author);
 	return lang('QUOTE_EXECUTE_ADD_SUCCESS', locale, { QUOTEID: quoteID });
 };
 
@@ -122,7 +122,7 @@ const deleteCommand = (interaction) => {
 	const guildid = interaction.guild.id;
 	const toDeleteID = interaction.options.getInteger('id');
 
-	if (quoteUtil.deleteQuote(toDeleteID, guildid) === false)
+	if (sqlUtil.deleteEntry('quotes', toDeleteID, guildid) === false)
 		return {
 			content: lang('QUOTE_EXECUTE_DELETE_ERROR', locale, {
 				QUOTEID: toDeleteID,
@@ -156,7 +156,8 @@ const importCommand = async (interaction) => {
 	let messages = await Util.fetchAllMessages(channel);
 
 	for (let message of messages) {
-		quoteUtil.addQuote(
+		sqlUtil.createEntry(
+			'quotes',
 			guildid,
 			message.content,
 			message.createdTimestamp,
@@ -173,7 +174,7 @@ const listCommand = (interaction) => {
 	const locale = interaction.locale;
 
 	const guildid = interaction.guild.id;
-	let quoteList = quoteUtil.charLimitList(guildid);
+	let quoteList = sqlUtil.charLimitList('quotes', guildid);
 
 	if (quoteList[0] === undefined)
 		return {
@@ -223,7 +224,7 @@ const listCommand = (interaction) => {
 const randomCommand = async (interaction) => {
 	const locale = interaction.locale;
 
-	let randomQuote = quoteUtil.randomQuote(interaction.guild.id);
+	let randomQuote = sqlUtil.randomEntry('quotes', interaction.guild.id);
 	if (randomQuote === undefined)
 		return {
 			content: lang('QUOTE_EXECUTE_LIST_REPLY_NO_QUOTES', locale),

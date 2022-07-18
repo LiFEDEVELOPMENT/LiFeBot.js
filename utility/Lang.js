@@ -14,7 +14,7 @@ export default (key, lang, textReplacements = {}) => {
 
 	// Replace parameters in text
 	let regEx = new RegExp(Object.keys(textReplacements).join('|'), 'gi');
-	if (Object.keys(textReplacements).length != 0)
+	if (Object.keys(textReplacements).length !== 0)
 		string = string.replace(regEx, (match) => {
 			return textReplacements[match];
 		});

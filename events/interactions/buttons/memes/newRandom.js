@@ -4,14 +4,14 @@ import {
 	ButtonStyle,
 	EmbedBuilder,
 } from 'discord.js';
-import memeUtil from '#util/MemeUtil';
+import sqlUtil from '#util/SQLUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
 const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
-		const randomMeme = memeUtil.randomMeme(interaction.guild.id);
+		const randomMeme = sqlUtil.randomEntry('memes', interaction.guild.id);
 
 		const memeEmbed = new EmbedBuilder()
 			.setTitle(lang('MEME_EXECUTE_RANDOM_EMBED_TITLE', locale))

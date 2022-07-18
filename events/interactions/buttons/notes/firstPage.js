@@ -4,16 +4,12 @@ import {
 	EmbedBuilder,
 	ButtonBuilder,
 } from 'discord.js';
-import noteUtil from '#util/NotesUtil';
+import sqlUtil from '#util/SQLUtil';
 import errorMessage from '#errormessage';
 
 const execute = (interaction, query) => {
 	try {
-		let notesList;
-		notesList =
-			query === null
-				? noteUtil.charLimitList(interaction.guild.id)
-				: noteUtil.charLimitListQuery(interaction.guild.id, query);
+		let notesList = sqlUtil.charLimitList('notes', interaction.guild.id, query);
 		let oldEmbed = interaction.message.embeds[0];
 		let oldTitle = oldEmbed.title.split('Page ');
 		let page = 0;

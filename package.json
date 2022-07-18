@@ -1,10 +1,10 @@
 {
 	"dependencies": {
-		"better-sqlite3": "^7.6.1",
-		"discord.js": "^14.0.1"
+		"better-sqlite3": "^7.6.2",
+		"discord.js": "^14.0.2"
 	},
 	"imports": {
-		"#sql": "./utility/sql.js",
+		"#sql": "./utility/SQL.js",
 		"#langs/*": "./languages/*.js",
 		"#errormessage": "./utility/ErrorMessage.js",
 		"#util/*": "./utility/*.js",
