@@ -155,15 +155,18 @@ const importCommand = async (interaction) => {
 
 	let messages = await Util.fetchAllMessages(channel);
 
+	let messageArray = [];
+
 	for (let message of messages) {
-		sqlUtil.createEntry(
-			'quotes',
+		messageArray.push([
 			guildid,
 			message.content,
 			message.createdTimestamp,
-			message.author.id
-		);
+			message.author.id,
+		]);
 	}
+
+	sqlUtil.createEntries('quotes', ...messageArray);
 
 	return lang('QUOTE_EXECUTE_IMPORT_SUCCESS', locale, {
 		CHANNELNAME: channel.name,
