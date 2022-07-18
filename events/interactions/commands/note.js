@@ -1,15 +1,15 @@
 import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+	escapeMarkdown,
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
-} from '@discordjs/builders';
-import {
-	MessageEmbed,
-	MessageActionRow,
-	MessageButton,
-	Util,
 } from 'discord.js';
 import noteUtil from '#util/NotesUtil';
 import lang from '#util/Lang';
+
 import errorMessage from '#errormessage';
 
 const create = () => {
@@ -96,8 +96,8 @@ const execute = (interaction) => {
 const addCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
-	const notekey = Util.escapeMarkdown(interaction.options.getString('notekey'));
-	const note = Util.escapeMarkdown(interaction.options.getString('note'));
+	const notekey = escapeMarkdown(interaction.options.getString('notekey'));
+	const note = escapeMarkdown(interaction.options.getString('note'));
 	const author = interaction.user.id;
 
 	const noteID = noteUtil.addNote(guildid, notekey, note, author);
@@ -137,9 +137,9 @@ const listCommand = (interaction) => {
 		return { content: emptyString, ephemeral: true };
 	}
 
-	const noteEmbed = new MessageEmbed()
+	const noteEmbed = new EmbedBuilder()
 		.setTitle(
-			Util.escapeMarkdown(
+			escapeMarkdown(
 				lang('NOTE_EXECUTE_LIST_EMBED_TITLE', locale, {
 					GUILDNAME: interaction.guild.name,
 				})
@@ -150,25 +150,25 @@ const listCommand = (interaction) => {
 
 	const nextButtonsDisabled = !(noteList.length > 1);
 
-	const actionRow = new MessageActionRow().addComponents(
-		new MessageButton()
+	const actionRow = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
 			.setCustomId(`notes/firstPage-${query}`)
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel('First page')
 			.setDisabled(true),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId(`notes/previousPage-${query}`)
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel('Previous Page')
 			.setDisabled(true),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId(`notes/nextPage-${query}`)
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel('Next Page')
 			.setDisabled(nextButtonsDisabled),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId(`notes/lastPage-${query}`)
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel('Last Page')
 			.setDisabled(nextButtonsDisabled)
 	);

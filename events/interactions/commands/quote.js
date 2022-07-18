@@ -1,15 +1,16 @@
 import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	ChannelType,
+	EmbedBuilder,
+	escapeMarkdown,
 	SlashCommandBuilder,
 	SlashCommandSubcommandBuilder,
-} from '@discordjs/builders';
-import {
-	MessageEmbed,
-	MessageActionRow,
-	MessageButton,
-	Util,
 } from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
-import utilities from '#util/Utilities';
+import Util from '#util/Utilities';
+
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
@@ -108,7 +109,7 @@ const execute = async (interaction) => {
 const addCommand = (interaction) => {
 	const locale = interaction.locale;
 	const guildid = interaction.guild.id;
-	const quote = Util.escapeMarkdown(interaction.options.getString('quote'));
+	const quote = escapeMarkdown(interaction.options.getString('quote'));
 	const time = Date.now();
 	const author = interaction.user.id;
 
@@ -138,7 +139,7 @@ const importCommand = async (interaction) => {
 	const channelid = interaction.options.getString('channelid');
 	const channel = await interaction.guild.channels.cache.get(channelid);
 
-	if (!channel.isText())
+	if (channel.type !== ChannelType.GuildText)
 		return {
 			content: lang('QUOTE_EXECUTE_IMPORT_NOTEXT', locale),
 			ephemeral: true,
@@ -152,7 +153,7 @@ const importCommand = async (interaction) => {
 
 	interaction.deferReply();
 
-	let messages = await utilities.fetchAllMessages(channel);
+	let messages = await Util.fetchAllMessages(channel);
 
 	for (let message of messages) {
 		quoteUtil.addQuote(
@@ -180,9 +181,9 @@ const listCommand = (interaction) => {
 			ephemeral: true,
 		};
 
-	const quoteEmbed = new MessageEmbed()
+	const quoteEmbed = new EmbedBuilder()
 		.setTitle(
-			Util.escapeMarkdown(
+			escapeMarkdown(
 				lang('QUOTE_EXECUTE_LIST_EMBED_TITLE', locale, {
 					GUILDNAME: interaction.guild.name,
 				})
@@ -193,25 +194,25 @@ const listCommand = (interaction) => {
 
 	const nextButtonsDisabled = !(quoteList.length > 1);
 
-	const actionRow = new MessageActionRow().addComponents(
-		new MessageButton()
+	const actionRow = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
 			.setCustomId('quotes/firstPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('FIRST_PAGE', locale))
 			.setDisabled(true),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('quotes/previousPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('PREVIOUS_PAGE', locale))
 			.setDisabled(true),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('quotes/nextPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('NEXT_PAGE', locale))
 			.setDisabled(nextButtonsDisabled),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('quotes/lastPage')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('LAST_PAGE', locale))
 			.setDisabled(nextButtonsDisabled)
 	);
@@ -242,7 +243,7 @@ const randomCommand = async (interaction) => {
 		year: 'numeric',
 	});
 
-	const quoteEmbed = new MessageEmbed()
+	const quoteEmbed = new EmbedBuilder()
 		.setTitle(lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', locale))
 		.setDescription(randomQuote.quote.toString())
 		.setFooter({
@@ -252,12 +253,12 @@ const randomCommand = async (interaction) => {
 				QUOTEID: randomQuote.id,
 			}),
 		})
-		.setColor('YELLOW');
+		.setColor('Yellow');
 
-	const actionRow = new MessageActionRow().addComponents(
-		new MessageButton()
+	const actionRow = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
 			.setCustomId('quotes/newRandom')
-			.setStyle('PRIMARY')
+			.setStyle(ButtonStyle.Primary)
 			.setLabel(lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', locale))
 	);
 	return { embeds: [quoteEmbed], components: [actionRow] };

@@ -1,4 +1,9 @@
-import { MessageActionRow, MessageEmbed, MessageButton } from 'discord.js';
+import {
+	ActionRowBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+	ButtonBuilder,
+} from 'discord.js';
 import quoteUtil from '#util/QuoteUtil';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
@@ -20,26 +25,22 @@ const execute = async (interaction) => {
 			year: 'numeric',
 		});
 
-		const quoteEmbed = new MessageEmbed()
+		const quoteEmbed = new EmbedBuilder()
 			.setTitle(lang('QUOTE_EXECUTE_RANDOM_EMBED_TITLE', locale))
 			.setDescription(randomQuote.quote.toString())
 			.setFooter({
-				text: lang(
-					'QUOTE_EXECUTE_RANDOM_EMBED_FOOTER',
-					{
-						DATE: date,
-						CREATOR: quoteCreator.username,
-						QUOTEID: randomQuote.id,
-					},
-					locale
-				),
+				text: lang('QUOTE_EXECUTE_RANDOM_EMBED_FOOTER', locale, {
+					DATE: date,
+					CREATOR: quoteCreator.username,
+					QUOTEID: randomQuote.id,
+				}),
 			})
-			.setColor('YELLOW');
+			.setColor('Yellow');
 
-		const actionRow = new MessageActionRow().addComponents(
-			new MessageButton()
+		const actionRow = new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
 				.setCustomId('quotes/newRandom')
-				.setStyle('PRIMARY')
+				.setStyle(ButtonStyle.Primary)
 				.setLabel(lang('QUOTE_EXECUTE_RANDOM_BUTTON_TITLE', locale))
 		);
 

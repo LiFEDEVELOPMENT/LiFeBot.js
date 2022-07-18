@@ -1,5 +1,9 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed, Permissions, Util } from 'discord.js';
+import {
+	EmbedBuilder,
+	escapeMarkdown,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from 'discord.js';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
@@ -20,30 +24,29 @@ const create = () => {
 
 	return command.toJSON();
 };
+
 const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
 		const options = interaction.options;
 		const moderator = interaction.member;
-		const target = interaction.guild.members.cache.get(
-			options.getUser('target').id
-		);
+		const target = options.getMember('target');
 
 		const reason =
 			options.getString('reason') ?? lang('BAN_EXECUTE_NO_REASON', locale);
 		const directMessage = `You were banned from **${
 			interaction.guild.name
-		}**.\nReason: ${Util.escapeMarkdown(reason)}`;
+		}**.\nReason: ${escapeMarkdown(reason)}`;
 
-		const banEmbed = new MessageEmbed()
+		const banEmbed = new EmbedBuilder()
 			.setTitle(target.user.tag)
 			.setDescription(
 				lang('BAN_EXECUTE_EMBED_DESCRIPTION', locale, {
-					BANREASON: Util.escapeMarkdown(reason),
+					BANREASON: escapeMarkdown(reason),
 				})
 			)
 			.setFooter({ text: moderator.displayName })
-			.setColor('RED')
+			.setColor('Red')
 			.setTimestamp();
 
 		// Check if the target can be banned by the executing user
@@ -56,7 +59,7 @@ const execute = (interaction) => {
 
 		if (
 			moderator.roles.highest.position <= target.roles.highest.position ||
-			!moderator.permissions.has(Permissions.FLAGS.BAN_MEMBERS)
+			!moderator.permissions.has(PermissionFlagsBits.BanMembers)
 		)
 			return interaction.reply(lang('BAN_EXECUTE_PERMISSION_ERROR', locale));
 

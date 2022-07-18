@@ -1,5 +1,9 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { MessageEmbed, Permissions } from 'discord.js';
+import {
+	EmbedBuilder,
+	escapeMarkdown,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from 'discord.js';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
 
@@ -34,17 +38,17 @@ const execute = (interaction) => {
 			options.getString('reason') ?? lang('KICK_EXECUTE_NO_REASON', locale);
 		const directMessage = `You got kicked from **${
 			interaction.guild.name
-		}**.\nReason: ${Util.escapeMarkdown(reason)}`;
+		}**.\nReason: ${escapeMarkdown(reason)}`;
 
-		const kickEmbed = new MessageEmbed()
+		const kickEmbed = new EmbedBuilder()
 			.setTitle(target.user.tag)
 			.setDescription(
 				lang('KICK_EXECUTE_EMBED_DESCRIPTION', locale, {
-					KICKREASON: Util.escapeMarkdown(reason),
+					KICKREASON: escapeMarkdown(reason),
 				})
 			)
 			.setFooter({ text: moderator.displayName })
-			.setColor('RED')
+			.setColor('Red')
 			.setTimestamp();
 
 		// Check if the target can be kicked by the executing user
@@ -57,7 +61,7 @@ const execute = (interaction) => {
 
 		if (
 			moderator.roles.highest.position <= target.roles.highest.position ||
-			!moderator.permissions.has(Permissions.FLAGS.KICK_MEMBERS)
+			!moderator.permissions.has(PermissionFlagsBits.KickMembers)
 		)
 			return interaction.reply(lang('KICK_EXECUTE_PERMISSION_ERROR', locale));
 

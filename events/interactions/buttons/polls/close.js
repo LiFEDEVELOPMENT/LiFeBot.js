@@ -1,4 +1,4 @@
-import { MessageEmbed, Permissions, Util } from 'discord.js';
+import { EmbedBuilder, escapeMarkdown, PermissionFlagsBits } from 'discord.js';
 import sql from '#sql';
 import lang from '#util/Lang';
 import errorMessage from '#errormessage';
@@ -8,6 +8,9 @@ const execute = async (interaction, id) => {
 		const locale = interaction.locale;
 		const pollData = sql.query(`SELECT * FROM polls WHERE id=${id}`);
 		const voteData = sql.query(`SELECT * FROM pollvotes WHERE pollid=${id}`);
+		const pollParticipants = sql.query(
+			`SELECT COUNT(*) AS votes FROM (SELECT userid FROM pollvotes WHERE pollid=${id} GROUP BY userid)`
+		);
 		let votes = {
 			0: 0,
 			1: 0,
@@ -24,7 +27,7 @@ const execute = async (interaction, id) => {
 
 		// Check if the user has the permission to end the poll
 		if (
-			!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) &&
+			!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages) &&
 			!(interaction.user.id === pollData[0].authorid)
 		)
 			return interaction.reply({
@@ -38,30 +41,30 @@ const execute = async (interaction, id) => {
 			totalVotes++;
 		}
 
-		// Create a new MessageEmbed and put the poll's question in the title
-		let embed = new MessageEmbed().setTitle(
-			lang(
-				'POLL_EXECUTE_RESULT_EMBED',
-				{
-					QUESTION: pollData[0].question,
-				},
-				locale
-			)
+		// Create a new EmbedBuilder and put the poll's question in the title
+		let embed = new EmbedBuilder().setTitle(
+			lang('POLL_EXECUTE_RESULT_EMBED', locale, {
+				QUESTION: pollData[0].question,
+			})
 		);
 
 		let pollAsArray = Object.values(pollData[0]);
+
+		let embedFields = [];
 
 		for (let i = 6; i < 16; i++) {
 			let currentAnswer = pollAsArray[i];
 
 			if (currentAnswer === '') break;
 
-			embed.addField(
-				Util.escapeMarkdown(currentAnswer),
-				votes[i - 6].toString(),
-				true
-			);
+			embedFields.push({
+				name: escapeMarkdown(currentAnswer),
+				value: votes[i - 6].toString(),
+				inline: true,
+			});
 		}
+
+		embed.addFields(embedFields);
 
 		// Footer
 		let arr = Object.values(votes);
@@ -79,14 +82,10 @@ const execute = async (interaction, id) => {
 
 		let footer =
 			winningAnswers.length === 1
-				? lang('POLL_EXECUTE_ONE_WINNER', { WINNING: winningAnswers }, locale)
-				: lang(
-						'POLL_EXEUCUTE_MULTIPLE_WINNERS',
-						{
-							WINNING: winningAnswers,
-						},
-						locale
-				  );
+				? lang('POLL_EXECUTE_ONE_WINNER', locale, { WINNING: winningAnswers })
+				: lang('POLL_EXEUCUTE_MULTIPLE_WINNERS', locale, {
+						WINNING: winningAnswers,
+				  });
 
 		let pollCreator = await interaction.client.users
 			.fetch(pollData[0].authorid)
@@ -96,16 +95,13 @@ const execute = async (interaction, id) => {
 				};
 			});
 
-		footer += lang(
-			'POLL_EXECUTE_RESULT_EMBED_FOOTER',
-			{
-				CREATOR: pollCreator.tag,
-				TOTALVOTES: totalVotes,
-			},
-			locale
-		);
+		footer += lang('POLL_EXECUTE_RESULT_EMBED_FOOTER', locale, {
+			CREATOR: pollCreator.tag,
+			TOTALVOTES: totalVotes,
+			TOTALVOTERS: pollParticipants[0].votes,
+		});
 		embed.setFooter({ text: footer });
-		embed.setColor('AQUA');
+		embed.setColor('Aqua');
 		embed.setTimestamp();
 
 		interaction.message.edit({

@@ -1,12 +1,14 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-	MessageSelectMenu,
-	MessageActionRow,
-	MessageButton,
-	Util,
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	escapeMarkdown,
+	SelectMenuBuilder,
+	SlashCommandBuilder,
 } from 'discord.js';
 import util from '#util/Utilities';
 import lang from '#util/Lang';
+
 import errorMessage from '#errormessage';
 
 const create = () => {
@@ -49,9 +51,7 @@ const execute = (interaction) => {
 	try {
 		const locale = interaction.locale;
 		const guildid = interaction.guild.id;
-		const question = Util.escapeMarkdown(
-			interaction.options.getString('question')
-		);
+		const question = escapeMarkdown(interaction.options.getString('question'));
 		const maxChoices = interaction.options.getInteger('multiplechoicecount');
 		let choices = [];
 
@@ -79,7 +79,7 @@ const execute = (interaction) => {
 		);
 
 		// Prepare the SelectionMenu
-		let selectMenu = new MessageSelectMenu()
+		let selectMenu = new SelectMenuBuilder()
 			.setCustomId(`polls/vote-${id}`)
 			.setMaxValues(maxChoices)
 			.setPlaceholder(
@@ -89,19 +89,19 @@ const execute = (interaction) => {
 			);
 
 		// Prepare the stop Button
-		let closeButton = new MessageButton()
+		let closeButton = new ButtonBuilder()
 			.setCustomId(`polls/close-${id}`)
 			.setLabel(lang('POLL_EXECUTE_BUTTON_STOP', locale))
-			.setStyle('DANGER');
+			.setStyle(ButtonStyle.Danger);
 
 		// Fill the options into the SelectionMenu
 		for (let j = 0; j < realChoiceCount; j++) {
 			selectMenu.addOptions({ label: choices[j], value: j.toString() });
 		}
 
-		// Prepare two ActionRows for the SelectionMenu and the Button
-		let menuRow = new MessageActionRow().addComponents(selectMenu);
-		let buttonRow = new MessageActionRow().addComponents(closeButton);
+		// Prepare two ActionRowBuilders for the SelectionMenu and the Button
+		let menuRow = new ActionRowBuilder().addComponents(selectMenu);
+		let buttonRow = new ActionRowBuilder().addComponents(closeButton);
 
 		// Create the message with the poll
 		interaction.reply({

@@ -64,7 +64,7 @@ export default {
 	POLL_EXECUTE_REPLY_TITLE: 'Question: **STRING**',
 	POLL_EXECUTE_RESULT_EMBED: 'Die Umfrageergebnisse - QUESTION:',
 	POLL_EXECUTE_RESULT_EMBED_FOOTER:
-		' - Die Umfrage wurde erstellt von CREATOR - Insgesamt gab es TOTALVOTES Stimmen!',
+		' - Die Umfrage wurde erstellt von CREATOR - Insgesamt gab es TOTALVOTES Stimmen von TOTALVOTERS Teilnehmern!',
 	POLL_EXECUTE_VOTE_ACCEPTED:
 		'Deine Stimme wurde gewertet! Du kannst deine Stimme aber bis zur Beendigung dieser Umfrage jederzeit ändern!',
 	PREVIOUS_PAGE: 'Vorherige Seite!',
