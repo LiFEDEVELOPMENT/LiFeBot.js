@@ -147,7 +147,9 @@ const buildRandom = async (type, interaction) => {
 	}
 
 	if (random.time) {
-		date = new Date(random.time).toLocaleDateString('de-DE', {
+		const localeDate =
+			locale.length == 5 ? locale : `${locale}-${locale.toUpperCase()}`;
+		date = new Date(random.time).toLocaleDateString(localeDate, {
 			day: '2-digit',
 			month: '2-digit',
 			year: 'numeric',
