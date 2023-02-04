@@ -13,7 +13,7 @@ export default {
 		'Du hast nicht die Berechtigung, Nachrichten zu löschen!',
 	CLEAR_EXECUTE_SUCCESS: 'Es wurden AMOUNT Nachricht(en) gelöscht.',
 	CLEAR_EXECUTE_API_LIMIT:
-		' Die Discord API erlaubt nur das löschen von Nachrichten, die weniger als zwei Wochen alt sind. Wenn du den gesamten Kanal löschen möchtest, klone diesen Kanal und lösche dann die alte Version.',
+		' Die Discord API erlaubt nur das löschen von Nachrichten, die weniger als zwei Wochen alt sind. Wenn du den gesamten Kanal löschen möchtest, klone diesen Kanal und lösche dann den alten Kanal.',
 	COLOR_EXECUTE_WRONG_FORMAT: 'Bitte gib eine Farbe im Format "#RRGGBB" an',
 	ERROR:
 		'Hoppla, da ist wohl etwas schief gelaufen. Ich habe einen Bugreport an den Ersteller dieses Bots geschickt. Solltest du den Bot selbst hosten, solltest du regelmäßig die GitHub-Page auf Updates überprüfen!',

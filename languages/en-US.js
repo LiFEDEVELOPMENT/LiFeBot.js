@@ -11,7 +11,7 @@ export default {
 		'You are not allowed to delete messages on this server!',
 	CLEAR_EXECUTE_SUCCESS: 'I deleted AMOUNT messages for you.',
 	CLEAR_EXECUTE_API_LIMIT:
-		" Discord's API restricts the deletion of messages to those less than two weeks old. If you want to delete all messages in this channel, clone this channel and delete the old version",
+		" Discord's API restricts the deletion of messages to those less than two weeks old. If you want to delete all messages in this channel, clone this channel and delete the old one",
 	COLOR_EXECUTE_WRONG_FORMAT: 'Please provide a color in the format #RRGGBB',
 	ERROR:
 		"Whoops, something went wrong. I reported the error to the creator of this bot. If you are hosting the bot yourself, you should check this bot's GitHub page for updates regularly!",
