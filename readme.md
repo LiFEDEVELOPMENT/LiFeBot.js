@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- Installing the bot
+- Hosting the bot
 - Finding your bot's token
 - Inviting your bot
 - Installing Docker
@@ -11,7 +11,7 @@
 
 <details>
 <summary>
-Installing the bot
+Hosting the bot
 </summary>
 <br>
 
