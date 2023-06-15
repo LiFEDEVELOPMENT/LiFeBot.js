@@ -31,6 +31,8 @@ for (let event of events) {
 // Login with the environment data
 client.login(process.env.BOT_TOKEN);
 
+// Exit the process after 30 seconds if the environment is set to TEST
+// Used for catching basic crashes before deploying to production
 if (process.env.NODE_ENV === 'TEST')
 	setTimeout(() => {
 		process.exit(0);
