@@ -1,6 +1,6 @@
 {
 	"dependencies": {
-		"better-sqlite3": "^8.4.0",
+		"better-sqlite3": "^8.5.1",
 		"discord.js": "^14.11.0"
 	},
 	"imports": {
